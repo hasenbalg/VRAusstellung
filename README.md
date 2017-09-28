@@ -23,3 +23,6 @@ Exponate muessen sich raeume teilen
 - exponat hat vieeeel platz
 - pie menu nav????
 - exponat links, nav rechts?
+- alle masse modular scale
+- alles schwarz/weiss
+- av scrubbing mit dem touch button, minimale bedienelemente
