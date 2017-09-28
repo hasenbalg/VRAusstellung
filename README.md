@@ -43,4 +43,4 @@ Exponate muessen sich raeume teilen
 - alles schwarz/weiss
 - av scrubbing mit dem touch button, minimale bedienelemente
 
-![skizze raum](skizzen/raum.jpg)
+![skizze raum](IMG_20170928_235603.jpg)
