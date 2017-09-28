@@ -42,3 +42,5 @@ Exponate muessen sich raeume teilen
 - alle masse modular scale
 - alles schwarz/weiss
 - av scrubbing mit dem touch button, minimale bedienelemente
+
+![skizze raum](skizzen/raum.jpg)
