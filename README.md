@@ -2,6 +2,21 @@
 fuer teistler
 ## Ueberlegungen zu museeum/ kunstausstellung
 
+### rollenverteilung
+besucher / aussteller
+
+#### aussteller
+- waehlt ausstellungsstuecke aus
+- ordnet sie sinnvoll an
+- recherchiert sie
+- rueckt sie in szene
+
+#### besucher
+- konsumiert rechercheergebnis
+- guckt ausstellungsstuecke an
+- bewegt sich durch die gallerie
+- recherchiert selbst weiter / rueckt exponat in kontext
+
 ### Was ist bei richtigen ausstellungen kool?
 - Musik
 - lichtlicht
@@ -16,6 +31,7 @@ Exponate muessen sich raeume teilen
 - provisorischer charakter
 
 ### was stell ich mir vor?
+- minimal
 - schwarzer hintergrund 
 - dreipunktbeleuchtung
 - keine waende, nur 2 tuerrahmen (analog zu raum)
