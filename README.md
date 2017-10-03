@@ -21,7 +21,7 @@ besucher / aussteller
 - Musik
 - lichtlicht
 - audioaudio guide
--struktur durch architektur vorgegeben
+- struktur durch architektur vorgegeben
 
 ### Was is nich kool?
 Exponate muessen sich raeume teilen
@@ -32,7 +32,7 @@ Exponate muessen sich raeume teilen
 
 ### was stell ich mir vor?
 - minimal
-- schwarzer hintergrund 
+- schwarzer hintergrund
 - dreipunktbeleuchtung
 - keine waende, nur 2 tuerrahmen (analog zu raum)
 - texte im hud
@@ -43,4 +43,18 @@ Exponate muessen sich raeume teilen
 - alles schwarz/weiss
 - av scrubbing mit dem touch button, minimale bedienelemente
 
-![skizze raum](IMG_20170928_235603.jpg)
+![skizze raum](Bilder/IMG_20170928_235603.jpg)
+
+![skizze raum](Bilder/ausstellung.png)
+
+![skizze raum](Bilder/ausstellung2.png)
+
+![skizze raum](Bilder/ausstellung_video.png)
+
+
+## Quellen
+ - Low Poly Elephant, Matt Beker, https://www.blendswap.com/blends/view/83789
+
+ - Elefanter, https://da.wikipedia.org/wiki/Elefanter
+
+ - Elefant (2).jpg, Caitlin from Hertfordshire UK, https://commons.wikimedia.org/wiki/File:Elefant_(2).jpg
