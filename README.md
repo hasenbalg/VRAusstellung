@@ -1,47 +1,47 @@
 # VRAusstellung
-fuer teistler
+
 ## Ueberlegungen zu museeum/ kunstausstellung
 
-### rollenverteilung
-besucher / aussteller
+### Rollenverteilung/ Wer
+Besucher / Aussteller
 
-#### aussteller
-- waehlt ausstellungsstuecke aus
+#### Aussteller
+- waehlt Ausstellungsstuecke aus
 - ordnet sie sinnvoll an
 - recherchiert sie
 - rueckt sie in szene
 
-#### besucher
-- konsumiert rechercheergebnis
+#### Besucher
+- konsumiert Rechercheergebnis
 - guckt ausstellungsstuecke an
 - bewegt sich durch die gallerie
 - recherchiert selbst weiter / rueckt exponat in kontext
 
 ### Was ist bei richtigen ausstellungen kool?
 - Musik
-- lichtlicht
-- audioaudio guide
-- struktur durch architektur vorgegeben
+- Lichtlicht
+- Audio-Guide
+- Struktur durch Architektur vorgegeben
 
 ### Was is nich kool?
-Exponate muessen sich raeume teilen
-- andereandere menschen
-- schlechtschlecht beschriftet
+Exponate muessen sich Raeume teilen
+- andere Menschen
+- Exponate sind schlecht beschriftet
 - unuebersichtlich
-- provisorischer charakter
+- provisorischer Charakter
 
-### was stell ich mir vor?
+### Was stell ich mir vor?
 - minimal
-- schwarzer hintergrund
-- dreipunktbeleuchtung
-- keine waende, nur 2 tuerrahmen (analog zu raum)
-- texte im hud
-- exponat hat vieeeel platz
-- pie menu nav????
-- exponat links, nav rechts?
-- alle masse modular scale
+- schwarzer Hintergrund
+- Dreipunktbeleuchtung
+- keine Waende, nur 2 Tuerrahmen (analog zu Raum)
+- Texte im HUD
+- Exponat hat vieeeel Platz
+- Pie-Menu als Nav????
+- Exponat links, Nav rechts?
+- alle Masse nach modular scale
 - alles schwarz/weiss
-- av scrubbing mit dem touch button, minimale bedienelemente
+- AV scrubbing mit dem Touch-Button, minimale Bedienelemente
 
 ![skizze raum](Bilder/IMG_20170928_235603.jpg)
 
@@ -51,6 +51,10 @@ Exponate muessen sich raeume teilen
 
 ![skizze raum](Bilder/ausstellung_video.png)
 
+## Konzept
+- Schnoerkellose Ausstellungsflaeche, simple UI, nichts soll vom Exponat ablenken.
+- Einfach austauschbare Inhalte ueber Web-UI oder WPF
+
 
 ## Quellen
  - Low Poly Elephant, Matt Beker, https://www.blendswap.com/blends/view/83789
@@ -58,3 +62,9 @@ Exponate muessen sich raeume teilen
  - Elefanter, https://da.wikipedia.org/wiki/Elefanter
 
  - Elefant (2).jpg, Caitlin from Hertfordshire UK, https://commons.wikimedia.org/wiki/File:Elefant_(2).jpg
+
+ - Wood Planks 028, Poliigon, https://www.poliigon.com/texture/2271
+
+ - Marble 13, Poliigon, https://www.poliigon.com/texture/1098
+
+ - Fingerprints 004, Poliigon, https://www.poliigon.com/texture/1578
