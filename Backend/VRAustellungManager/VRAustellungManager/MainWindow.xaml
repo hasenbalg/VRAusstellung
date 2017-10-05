@@ -1,0 +1,57 @@
+﻿<Window x:Class="VRAustellungManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VRAustellungManager"
+        mc:Ignorable="d"
+        Title="VR Ausstellung Manager" Height="350" Width="525">
+    <Window.Resources>
+        <DataTemplate x:Key="DataTemplate_Level2">
+            <Button Content="{Binding}" Height="40" Width="50" Margin="4,4,4,4"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="DataTemplate_Level1">
+            <ItemsControl ItemsSource="{Binding}" ItemTemplate="{DynamicResource DataTemplate_Level2}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </DataTemplate>
+
+    </Window.Resources>
+    <Grid>
+        <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                
+                <Grid>
+                    <ItemsControl x:Name="lst" ItemTemplate="{DynamicResource DataTemplate_Level1}"/>
+                </Grid>
+
+
+                <StackPanel Grid.Column="1">
+                    <Label Content="Name"/>
+                    <TextBox x:Name="Name"/>
+
+                    <Label Content="Beschreibung"/>
+                    <TextBox x:Name="Description" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+                    <Label Content="Datei"/>
+
+
+                    <Button Content="OK"/>
+                    <Button Content="Aendern"/>
+                </StackPanel>
+            </Grid>
+
+
+        </StackPanel>
+    </Grid>
+</Window>
