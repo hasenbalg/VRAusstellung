@@ -1,0 +1,14 @@
+D:\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\VRAustellungManager.exe.config
+D:\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\VRAustellungManager.exe
+D:\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\VRAustellungManager.pdb
+D:\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.csprojResolveAssemblyReference.cache
+D:\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\MainWindow.g.cs
+D:\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\App.g.cs
+D:\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager_MarkupCompile.cache
+D:\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager_MarkupCompile.lref
+D:\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\MainWindow.baml
+D:\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.g.resources
+D:\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.Properties.Resources.resources
+D:\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.csproj.GenerateResource.Cache
+D:\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.exe
+D:\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.pdb
