@@ -8,7 +8,7 @@
         Title="VR Ausstellung Manager" Height="350" Width="525">
     <Window.Resources>
         <DataTemplate x:Key="DataTemplate_Level2">
-            <Button Content="{Binding}" Height="40" Width="50" Margin="4,4,4,4"/>
+            <Button Content="{Binding title}" Height="40" Width="50" Margin="4,4,4,4" Click="PieceButton_Click"/>
         </DataTemplate>
 
         <DataTemplate x:Key="DataTemplate_Level1">
@@ -21,37 +21,71 @@
             </ItemsControl>
         </DataTemplate>
 
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="MinWidth" Value="90" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="Padding" Value="5" />
+        </Style>
+
+       
+
     </Window.Resources>
     <Grid>
         <StackPanel>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                
+            <StackPanel>
+                <TextBox x:Name="ExebName" Text="Titel der Ausstellung"/>
+                <TextBlock>
+                    Ausstellungsgroesse:
+                    <TextBox x:Name="GridWidthTextBox" Text="3"/> × <TextBox Text="3" x:Name="GridHeightTextBox" />
+                    <Button Content="OK" x:Name="GridDimensionsChanged_Button" Click="GridDimensionsChanged_Button_Click"/>
+                </TextBlock>
                 <Grid>
-                    <ItemsControl x:Name="lst" ItemTemplate="{DynamicResource DataTemplate_Level1}"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Image x:Name="Logo" MaxWidth="100" MaxHeight="100" Grid.Column="0"/>
+                    <StackPanel Grid.Column="1">
+                <Label Content="Logo der Ausstellung"/>
+                        <TextBlock x:Name="ImageFilePath" Text="C://irgendwas"/>
+                        <Button Content="Bilddatei auswaehlen" x:Name="ExebLogo_Button" Click="ExebLogo_ButtonClick"/>
+                        <Button Content="OK" x:Name="ExebName_Button"/>
+                    </StackPanel>
+                </Grid>
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.5*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid>
+                        <ItemsControl x:Name="PiecesGrid" ItemTemplate="{DynamicResource DataTemplate_Level1}"/>
+                    </Grid>
+
+
+                    <StackPanel Grid.Column="1">
+                        <TextBlock x:Name="IdTextBlock" Visibility="Collapsed"/>
+                        <Label Content="Name"/>
+                        <TextBox x:Name="NameTextBox"/>
+
+                        <Label Content="Beschreibung"/>
+                        <TextBox x:Name="DescriptionTextBox" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+                        <Label Content="Datei"/>
+                        <TextBlock x:Name="PieceFileUrlTextBlock"/>
+                        <Button Content="Ausstellungsstueck auswaehlen" x:Name="ExebPiece_Button" Click="ExebLogo_ButtonClick"/>
+
+                        <Button Content="OK" Visibility="Hidden" x:Name="NewPieceOKButton" Click="NewPieceOKButton_Click"/>
+                        <Button Content="Aendern" x:Name="EditPieceOKButton" Click="EditPieceOKButton_Click"/>
+                        <Button Content="Abbrechen" x:Name="CancleButton" Click="CancleButton_Click"/>
+                    </StackPanel>
                 </Grid>
 
 
-                <StackPanel Grid.Column="1">
-                    <Label Content="Name"/>
-                    <TextBox x:Name="Name"/>
-
-                    <Label Content="Beschreibung"/>
-                    <TextBox x:Name="Description" TextWrapping="Wrap" AcceptsReturn="True"/>
-
-                    <Label Content="Datei"/>
-
-
-                    <Button Content="OK"/>
-                    <Button Content="Aendern"/>
-                </StackPanel>
-            </Grid>
-
-
+            </StackPanel>
         </StackPanel>
+
     </Grid>
 </Window>

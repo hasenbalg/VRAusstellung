@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<exhibition>
+  <title>Elefanten</title>
+  <iconpath>huhu</iconpath>
+  <piece>
+    <title>Genf</title>
+    <description>Ein Elefant ist grossarig</description>
+    <filepath></filepath>
+    <fileformat></fileformat>
+  </piece>
+  <piece>
+    <title>Luzern</title>
+    <description>Ein Elefant ist grossarig</description>
+    <filepath></filepath>
+    <fileformat></fileformat>
+  </piece>
+  <piece>
+    <title>Bregenz</title>
+    <description>Ein Elefant ist grossarig</description>
+    <filepath></filepath>
+    <fileformat></fileformat>
+  </piece>
+  <piece>
+    <title>Zurich</title>
+    <description>Ein Elefant ist grossarig</description>
+    <filepath></filepath>
+    <fileformat></fileformat>
+  </piece>
+</exhibition>
