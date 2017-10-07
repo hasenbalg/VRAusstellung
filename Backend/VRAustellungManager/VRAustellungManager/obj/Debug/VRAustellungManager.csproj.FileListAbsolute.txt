@@ -26,3 +26,5 @@ C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellung
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.g.resources
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.Properties.Resources.resources
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.csproj.GenerateResource.Cache
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\NReco.VideoConverter.dll
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\NReco.VideoConverter.xml

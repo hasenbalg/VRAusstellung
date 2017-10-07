@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
+using NReco.VideoConverter;
 
 namespace VRAustellungManager
 {
@@ -24,6 +25,8 @@ namespace VRAustellungManager
     {
         string dir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//VRAusstellungX";
         string xmlPath = "//Object.xml";
+        string videoThumbNailExtension = "_thumbnail.png";
+        FFMpegConverter ffMpeg = new FFMpegConverter();
         int gridHeight = 3, gridWidth = 3;
         List<List<Piece>> pieces;
 
@@ -171,8 +174,16 @@ namespace VRAustellungManager
                         b.UriSource = new Uri(@"pack://application:,,,/Resources/Audio.png"); //https://stackoverflow.com/q/12690774
                         break;
                     case ".mp4":
-                        b.UriSource = new Uri(@"pack://application:,,,/Resources/Video.png");
-                        break;
+                    //b.UriSource = new Uri(@"pack://application:,,,/Resources/Video.png");
+                    string thumbNailPath =
+                        thumbNailPath = System.IO.Path.GetTempPath() + System.IO.Path.GetFileNameWithoutExtension(filePath)
+                        + videoThumbNailExtension;
+                    if (!File.Exists(thumbNailPath))
+                    {
+                        ffMpeg.GetVideoThumbnail(filePath, thumbNailPath);
+                    }
+                        b.UriSource = new Uri(thumbNailPath);
+                    break;
                     case ".obj":
                         b.UriSource = new Uri(@"pack://application:,,,/Resources/3DModell.png");
                         break;
@@ -207,7 +218,16 @@ namespace VRAustellungManager
             {
                 if (newPiece.filePath != PieceFileUrlTextBlock.Text)
                 {
-                    File.Copy(PieceFileUrlTextBlock.Text, dir + "//" + System.IO.Path.GetFileName(PieceFileUrlTextBlock.Text), true);//https://stackoverflow.com/a/44610221
+                    string destinationPath = dir + "//" + System.IO.Path.GetFileName(PieceFileUrlTextBlock.Text);
+                    File.Copy(PieceFileUrlTextBlock.Text, destinationPath, true);//https://stackoverflow.com/a/44610221
+                    if (System.IO.Path.GetExtension(newPiece.filePath) == ".mp4")
+                    {
+                        string thumbnailPath =
+                             System.IO.Path.GetDirectoryName(destinationPath)+
+                            System.IO.Path.GetFileNameWithoutExtension(destinationPath) + videoThumbNailExtension;
+                        ffMpeg.GetVideoThumbnail(destinationPath, thumbnailPath);
+                    }
+                    
                 }
                 exeb.pieces = exeb.pieces.Where(x => x.id != Int32.Parse(IdTextBlock.Text)).ToList();
                 exeb.pieces.Add(newPiece);
