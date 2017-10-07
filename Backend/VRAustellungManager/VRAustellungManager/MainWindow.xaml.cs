@@ -17,6 +17,8 @@ using System.Xml.Serialization;
 using NReco.VideoConverter;
 using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf;
+using System.Windows.Threading;
+using System.Windows.Interop;
 
 namespace VRAustellungManager
 {
@@ -29,6 +31,7 @@ namespace VRAustellungManager
         string xmlPath = "//Object.xml";
         string videoThumbNailExtension = "_thumbnail.png";
         FFMpegConverter ffMpeg = new FFMpegConverter(); //https://www.nrecosite.com/video_converter_net.aspx
+        MediaPlayer mediaPlayer = new MediaPlayer();
         int gridHeight = 3, gridWidth = 3;
         List<List<Piece>> pieces;
 
@@ -92,7 +95,11 @@ namespace VRAustellungManager
 
         private void PieceChoose_ButtonClick(object sender, RoutedEventArgs e)
         {
-            var fileDialog = new System.Windows.Forms.OpenFileDialog() { Filter = "JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|MP4 Files (*.mp4)|*.mp4|MP3 Files (*.mp3)|*.mp3|WAV Files (*.wav)|*.wav|OBJ Files (*.obj)|*.obj" }; //https://stackoverflow.com/a/16862178
+            var fileDialog = new System.Windows.Forms.OpenFileDialog() {
+                Filter = "JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|MP4 Files (*.mp4)|*.mp4|MP3 Files (*.mp3)|*.mp3|WAV Files (*.wav)|*.wav|OBJ Files (*.obj)|*.obj",
+                Multiselect = false
+            }; //https://stackoverflow.com/a/16862178
+
             var result = fileDialog.ShowDialog();
             switch (result)
             {
@@ -185,7 +192,32 @@ namespace VRAustellungManager
             {
                 case ".mp3":
                 case ".wav":
-                    b.UriSource = new Uri(@"pack://application:,,,/Resources/Audio.png"); //https://stackoverflow.com/q/12690774
+                    mediaPlayer.Open(new Uri(filePath));
+                    DispatcherTimer timer = new DispatcherTimer();
+                    timer.Interval = TimeSpan.FromSeconds(1);
+                    timer.Tick += timer_Tick;
+                    timer.Start();
+
+                    //Artwork
+                    try
+                    {
+                        //https://stackoverflow.com/a/17905163
+                        // Load you image data in MemoryStream
+                        TagLib.File file = TagLib.File.Create(filePath);
+
+                        TagLib.IPicture pic = file.Tag.Pictures[0];
+                        MemoryStream ms = new MemoryStream(pic.Data.Data);
+                        ms.Seek(0, SeekOrigin.Begin);
+
+                        // ImageSource for System.Windows.Controls.Image
+                        b.StreamSource = ms;
+                    }
+                    catch (Exception)
+                    {
+
+                        b.UriSource = new Uri(@"pack://application:,,,/Resources/Audio.png"); //https://stackoverflow.com/q/12690774
+                    }
+
                     break;
                 case ".mp4":
                     //b.UriSource = new Uri(@"pack://application:,,,/Resources/Video.png");
@@ -349,5 +381,33 @@ namespace VRAustellungManager
             }
 
         }
+
+
+        //Audio
+        void timer_Tick(object sender, EventArgs e)
+        {
+            if (mediaPlayer.Source != null)
+                lblStatus.Content = String.Format("{0} / {1}", mediaPlayer.Position.ToString(@"mm\:ss"), mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss"));
+            else
+                lblStatus.Content = "No file selected...";
+        }
+
+        private void btnPlay_Click(object sender, RoutedEventArgs e)
+        {
+            mediaPlayer.Play();
+        }
+
+        private void btnPause_Click(object sender, RoutedEventArgs e)
+        {
+            mediaPlayer.Pause();
+        }
+
+        private void btnStop_Click(object sender, RoutedEventArgs e)
+        {
+            mediaPlayer.Stop();
+        }
+
+        //Helpers
+       
     }
 }

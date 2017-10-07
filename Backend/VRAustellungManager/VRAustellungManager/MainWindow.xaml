@@ -101,6 +101,17 @@
                                 <helix:DefaultLights/>
                             </helix:HelixViewport3D>
 
+                            <StackPanel >
+                                <!--http://www.wpf-tutorial.com/audio-video/playing-audio/-->
+                                <Label Name="lblStatus" Content="Audio pausiert..." HorizontalContentAlignment="Center" Margin="5" />
+                                <WrapPanel HorizontalAlignment="Center">
+                                    <Button Name="btnPlay" Click="btnPlay_Click">Play</Button>
+                                    <Button Name="btnPause"  Click="btnPause_Click">Pause</Button>
+                                    <Button Name="btnStop" Click="btnStop_Click">Stop</Button>
+                                </WrapPanel>
+                            </StackPanel>
+
+
                             <Button Content="Speichern" x:Name="PieceOKButton" Click="PieceOKButton_Click"/>
                             <Button Content="Loeschen" x:Name="PieceDeleteButton" Click="PieceDeleteButton_Click"/>
                             <Button Content="Abbrechen" x:Name="CancleButton" Click="CancleButton_Click"/>

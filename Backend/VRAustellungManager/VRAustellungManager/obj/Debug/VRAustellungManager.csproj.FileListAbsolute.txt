@@ -34,3 +34,6 @@ C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellung
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\HelixToolkit.xml
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\HelixToolkit.Wpf.pdb
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\HelixToolkit.Wpf.xml
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\policy.2.0.taglib-sharp.dll
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\taglib-sharp.dll
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\policy.2.0.taglib-sharp.config
