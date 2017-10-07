@@ -32,10 +32,9 @@ namespace VRAustellungManager
         string videoThumbNailExtension = "_thumbnail.png";
         FFMpegConverter ffMpeg = new FFMpegConverter(); //https://www.nrecosite.com/video_converter_net.aspx
         MediaPlayer mediaPlayer = new MediaPlayer();
-        int gridHeight = 3, gridWidth = 3;
         List<List<Piece>> pieces;
 
-        Exhibition exeb;
+        Exhibition exhib;
 
         public MainWindow()
         {
@@ -44,6 +43,7 @@ namespace VRAustellungManager
             ReadXMLFile();
             BuildGrid();
             ResetForm();
+            FillGeneralSettings();
         }
 
         private void ReadXMLFile()
@@ -53,28 +53,37 @@ namespace VRAustellungManager
             {
                 using (FileStream fileStream = new FileStream(xmlPath, FileMode.Open))
                 {
-                    exeb = (Exhibition)serializer.Deserialize(fileStream);
+                    exhib = (Exhibition)serializer.Deserialize(fileStream);
                 }
             }
             catch (Exception e)
             {
-                exeb = new Exhibition() { title = "Neue Ausstellung", iconpath = "kein Bild gesetzt", pieces = new List<Piece>() };
+                exhib = new Exhibition() { title = "Neue Ausstellung", iconpath = "kein Bild gesetzt", width= 3, height = 3, pieces = new List<Piece>() };
                 BuildGrid();
                 Flush();
             }
             finally
             {
-                FillForm();
+                FillGeneralSettings();
             }
 
         }
 
-        private void FillForm()
+        //Exhibition
+
+        private void FillGeneralSettings()
         {
-            ImageFilePath.Text = exeb.iconpath;
+            ExhibitionTitleTextBox.Text = exhib.title;
+            ExhibitionDescriptionTextBox.Text = exhib.description;
+            GridWidthTextBox.Text = exhib.width.ToString();
+            GridHeightTextBox.Text = exhib.height.ToString();
+            ExhibitionLogoPath.Text = exhib.iconpath;
+
+            ExhibitionLogo.Source = SetImageSource(exhib.iconpath);
+         
         }
 
-        private void ExebLogo_ButtonClick(object sender, RoutedEventArgs e)
+        private void ExhibitionChooseLogo_ButtonClick(object sender, RoutedEventArgs e)
         {
             var fileDialog = new System.Windows.Forms.OpenFileDialog() { Filter = "JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg" }; //https://stackoverflow.com/a/16862178
             var result = fileDialog.ShowDialog();
@@ -82,8 +91,8 @@ namespace VRAustellungManager
             {
                 case System.Windows.Forms.DialogResult.OK:
                     string filePath = fileDialog.FileName;
-                    ImageFilePath.Text = filePath;
-
+                    ExhibitionLogoPath.Text = filePath;
+                    ExhibitionLogo.Source = SetImageSource(filePath);
                     break;
                 case System.Windows.Forms.DialogResult.Cancel:
                 default:
@@ -91,6 +100,33 @@ namespace VRAustellungManager
                     //TxtFile.ToolTip = null;
                     break;
             }
+        }
+
+        private void ExhibitionitionSave_Button_Click(object sender, RoutedEventArgs e)
+        {
+            exhib.title = ExhibitionTitleTextBox.Text;
+            exhib.description = ExhibitionDescriptionTextBox.Text;
+            string destinationPath = dir + "//" + System.IO.Path.GetFileName(ExhibitionLogoPath.Text);
+            if (!File.Exists(destinationPath))
+            {
+                File.Copy(ExhibitionLogoPath.Text, destinationPath, true);
+            }
+            exhib.iconpath = destinationPath;
+            ChangeGridDimensions();
+            Flush();
+            InitializeComponent();
+            ReadXMLFile();
+            BuildGrid();
+            ResetForm();
+            FillGeneralSettings();
+        }
+
+        private void ExhibitionitionCancel_Button_Click(object sender, RoutedEventArgs e)
+        {
+            InitializeComponent();
+            ReadXMLFile();
+            BuildGrid();
+            ResetForm();
         }
 
         private void PieceChoose_ButtonClick(object sender, RoutedEventArgs e)
@@ -121,16 +157,16 @@ namespace VRAustellungManager
         {
             pieces = new List<List<Piece>>();
             int k = 0;
-            for (int i = 0; i < gridWidth; i++)
+            for (int i = 0; i < exhib.width; i++)
             {
                 pieces.Add(new List<Piece>());
 
-                for (int j = 0; j < gridHeight; j++)
+                for (int j = 0; j < exhib.height; j++)
                 {
-                    if (exeb.pieces.Count > k && !pieces[i].Contains(exeb.pieces[k]))
+                    if (exhib.pieces.Count > k && !pieces[i].Contains(exhib.pieces[k]))
                     {
-                        exeb.pieces[k].id = k;
-                        pieces[i].Add(exeb.pieces[k]);
+                        exhib.pieces[k].id = k;
+                        pieces[i].Add(exhib.pieces[k]);
                     }
                     else
                     {
@@ -146,17 +182,9 @@ namespace VRAustellungManager
 
         }
 
-        private void GridDimensionsChanged_Button_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                ChangeGridDimensions();
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show("Bitte geben Sie nur ganze Zahlen ein." + exc.Message);
-            }
-        }
+    
+
+        
 
         private void PieceButton_Click(object sender, RoutedEventArgs e)
         {
@@ -169,12 +197,21 @@ namespace VRAustellungManager
             switch (piece2Edit.fileformat)
             {
                 case ".obj":
-                    viewPort3d.Visibility = Visibility.Visible;
+                    Piece3D.Visibility = Visibility.Visible;
                     PiecePreviewImage.Visibility = Visibility.Collapsed;
+                    PieceAudio.Visibility = Visibility.Collapsed;
+                    break;
+
+                case ".wav":
+                case ".mp3":
+                    Piece3D.Visibility = Visibility.Collapsed;
+                    PiecePreviewImage.Visibility = Visibility.Visible;
+                    PieceAudio.Visibility = Visibility.Visible;
                     break;
                 default:
-                    viewPort3d.Visibility = Visibility.Collapsed;
+                    Piece3D.Visibility = Visibility.Collapsed;
                     PiecePreviewImage.Visibility = Visibility.Visible;
+                    PieceAudio.Visibility = Visibility.Collapsed;
                     break;
             }
            
@@ -204,7 +241,7 @@ namespace VRAustellungManager
                         //https://stackoverflow.com/a/17905163
                         // Load you image data in MemoryStream
                         TagLib.File file = TagLib.File.Create(filePath);
-
+                        //https://stackoverflow.com/a/24833972
                         TagLib.IPicture pic = file.Tag.Pictures[0];
                         MemoryStream ms = new MemoryStream(pic.Data.Data);
                         ms.Seek(0, SeekOrigin.Begin);
@@ -235,9 +272,9 @@ namespace VRAustellungManager
                     //https://www.codeproject.com/Tips/882885/Display-D-Model-using-Window-Presentation-Foundat
                     ModelVisual3D device3D = new ModelVisual3D();
                     device3D.Content = Display3d(filePath);
-                    viewPort3d.Children.Clear();
+                    Piece3D.Children.Clear();
                     // Add to view port
-                    viewPort3d.Children.Add(device3D);
+                    Piece3D.Children.Add(device3D);
 
                     break;
                 case ".png":
@@ -249,8 +286,19 @@ namespace VRAustellungManager
                     b.UriSource = new Uri(@"pack://application:,,,/Resources/Preview.png");
                     break;
             }
+            try
+            {
+                b.EndInit();
 
-            b.EndInit();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Vorschaubild konnte nicht geladen werden" + e.ToString());
+                b = new BitmapImage();
+                b.BeginInit();
+                b.UriSource = new Uri(@"pack://application:,,,/Resources/Preview.png");
+                b.EndInit();
+            }
 
             return b;
 
@@ -261,18 +309,12 @@ namespace VRAustellungManager
             Model3D device = null;
             try
             {
-                //Adding a gesture here
-                viewPort3d.RotateGesture = new MouseGesture(MouseAction.LeftClick);
-
-                //Import 3D model file
+                Piece3D.RotateGesture = new MouseGesture(MouseAction.LeftClick);
                 ModelImporter import = new ModelImporter();
-
-                //Load the 3D model file
                 device = import.Load(model);
             }
             catch (Exception e)
             {
-                // Handle exception in case can not file 3D model
                 MessageBox.Show("Exception Error : " + e.StackTrace);
             }
             return device;
@@ -304,8 +346,8 @@ namespace VRAustellungManager
                     }
 
                 }
-                exeb.pieces = exeb.pieces.Where(x => x.id != Int32.Parse(IdTextBlock.Text)).ToList();
-                exeb.pieces.Add(newPiece);
+                exhib.pieces = exhib.pieces.Where(x => x.id != Int32.Parse(IdTextBlock.Text)).ToList();
+                exhib.pieces.Add(newPiece);
 
                 Flush();
                 ResetForm();
@@ -322,8 +364,8 @@ namespace VRAustellungManager
 
         private void PieceDeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            Piece piece2Edit = exeb.pieces.Find(x => x.id == Int32.Parse(IdTextBlock.Text));
-            exeb.pieces.Remove(piece2Edit);
+            Piece piece2Edit = exhib.pieces.Find(x => x.id == Int32.Parse(IdTextBlock.Text));
+            exhib.pieces.Remove(piece2Edit);
             Flush();
             ResetForm();
             BuildGrid();
@@ -334,12 +376,12 @@ namespace VRAustellungManager
             int newWidth, newHeight;
             newWidth = Int32.Parse(GridWidthTextBox.Text);
             newHeight = Int32.Parse(GridHeightTextBox.Text);
-            if (newWidth < gridWidth || newHeight < gridHeight)
+            if (newWidth < exhib.width || newHeight < exhib.height)
             {
                 MessageBox.Show("Die aktuellen Dimensionen sind kleiner als die Austellung. Die aeusseren Objekte werden geloescht.");
             }
-            gridWidth = Int32.Parse(GridWidthTextBox.Text);
-            gridHeight = Int32.Parse(GridHeightTextBox.Text);
+            exhib.width = Int32.Parse(GridWidthTextBox.Text);
+            exhib.height = Int32.Parse(GridHeightTextBox.Text);
 
             GridWidthTextBox.Text = newWidth.ToString();
             GridHeightTextBox.Text = newHeight.ToString();
@@ -360,19 +402,23 @@ namespace VRAustellungManager
             NameTextBox.Text = string.Empty;
             DescriptionTextBox.Text = string.Empty;
             PieceFileUrlTextBlock.Text = string.Empty;
-            PiecePreviewImage.Source = null;
+            PiecePreviewImage.Source = SetImageSource(null);
+
+            Piece3D.Visibility = Visibility.Collapsed;
+            PiecePreviewImage.Visibility = Visibility.Visible;
+            PieceAudio.Visibility = Visibility.Collapsed;
 
         }
 
         private void Flush()
         {
-            exeb.pieces = exeb.pieces.OrderBy(x => x.id).ToList();
+            exhib.pieces = exhib.pieces.OrderBy(x => x.id).ToList();
             Directory.CreateDirectory(dir);//https://msdn.microsoft.com/en-us/library/54a0at6s.aspx
             try
             {
                 XmlSerializer writer = new XmlSerializer(typeof(Exhibition));
                 FileStream file = File.Create(xmlPath);
-                writer.Serialize(file, exeb);
+                writer.Serialize(file, exhib);
                 file.Close();
             }
             catch (IOException e)
@@ -387,9 +433,9 @@ namespace VRAustellungManager
         void timer_Tick(object sender, EventArgs e)
         {
             if (mediaPlayer.Source != null)
-                lblStatus.Content = String.Format("{0} / {1}", mediaPlayer.Position.ToString(@"mm\:ss"), mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss"));
+                AudioStatusLabel.Content = String.Format("{0} / {1}", mediaPlayer.Position.ToString(@"mm\:ss"), mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss"));
             else
-                lblStatus.Content = "No file selected...";
+                AudioStatusLabel.Content = "No file selected...";
         }
 
         private void btnPlay_Click(object sender, RoutedEventArgs e)

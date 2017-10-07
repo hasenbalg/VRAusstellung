@@ -12,10 +12,19 @@ namespace VRAustellungManager
     public class Exhibition
     {
         [XmlElement("titel")]
-        public string title;
+        public string title { get; set; }
+
+        [XmlElement("description")]
+        public string description { get; set; }
+
+        [XmlElement("width")]
+        public int width { get; set; }
+
+        [XmlElement("height")]
+        public int height { get; set; }
 
         [XmlElement("iconpath")]
-        public string iconpath;
+        public string iconpath { get; set; }
 
         [XmlElement("piece")]
         public List<Piece> pieces { get; set; }
