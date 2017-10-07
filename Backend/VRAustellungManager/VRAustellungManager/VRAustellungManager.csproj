@@ -101,6 +101,18 @@
   <ItemGroup>
     <Resource Include="Objects.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Preview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Video.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\3DModell.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Audio.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -22,7 +22,8 @@ namespace VRAustellungManager
     /// </summary>
     public partial class MainWindow : Window
     {
-        string xmlPath = @"D:\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\Objects.xml";
+        string dir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//VRAusstellungX";
+        string xmlPath = "//Object.xml";
         int gridHeight = 3, gridWidth = 3;
         List<List<Piece>> pieces;
 
@@ -30,6 +31,7 @@ namespace VRAustellungManager
 
         public MainWindow()
         {
+            xmlPath = dir + xmlPath;
             InitializeComponent();
             ReadXMLFile();
             BuildGrid();
@@ -48,13 +50,15 @@ namespace VRAustellungManager
             }
             catch (Exception e)
             {
-
-                throw;
+                exeb = new Exhibition() { title = "Neue Ausstellung", iconpath = "kein Bild gesetzt", pieces = new List<Piece>() };
+                BuildGrid();
+                Flush();
             }
-            finally {
+            finally
+            {
                 FillForm();
             }
-           
+
         }
 
         private void FillForm()
@@ -64,13 +68,33 @@ namespace VRAustellungManager
 
         private void ExebLogo_ButtonClick(object sender, RoutedEventArgs e)
         {
-            var fileDialog = new System.Windows.Forms.OpenFileDialog();
+            var fileDialog = new System.Windows.Forms.OpenFileDialog() { Filter = "JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg" }; //https://stackoverflow.com/a/16862178
             var result = fileDialog.ShowDialog();
             switch (result)
             {
                 case System.Windows.Forms.DialogResult.OK:
-                    var file = fileDialog.FileName;
-                    ImageFilePath.Text = file;
+                    string filePath = fileDialog.FileName;
+                    ImageFilePath.Text = filePath;
+
+                    break;
+                case System.Windows.Forms.DialogResult.Cancel:
+                default:
+                    //TxtFile.Text = null;
+                    //TxtFile.ToolTip = null;
+                    break;
+            }
+        }
+
+        private void PieceChoose_ButtonClick(object sender, RoutedEventArgs e)
+        {
+            var fileDialog = new System.Windows.Forms.OpenFileDialog() { Filter = "JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|MP4 Files (*.mp4)|*.mp4|*.gif|MP3 Files (*.mp3)|*.mp3|*.gif|WAV Files (*.wav)|*.wav" }; //https://stackoverflow.com/a/16862178
+            var result = fileDialog.ShowDialog();
+            switch (result)
+            {
+                case System.Windows.Forms.DialogResult.OK:
+                    string filePath = fileDialog.FileName;
+                    PieceFileUrlTextBlock.Text = filePath;
+                    PiecePreviewImage.Source = SetImageSource(filePath);
                     break;
                 case System.Windows.Forms.DialogResult.Cancel:
                 default:
@@ -81,7 +105,8 @@ namespace VRAustellungManager
         }
 
 
-        private void BuildGrid() {
+        private void BuildGrid()
+        {
             pieces = new List<List<Piece>>();
             int k = 0;
             for (int i = 0; i < gridWidth; i++)
@@ -95,8 +120,9 @@ namespace VRAustellungManager
                         exeb.pieces[k].id = k;
                         pieces[i].Add(exeb.pieces[k]);
                     }
-                    else {
-                        pieces[i].Add(new Piece() {id = k, title = "", description = "", fileformat = "", filePath = "" });
+                    else
+                    {
+                        pieces[i].Add(new Piece() { id = k, title = "leer", description = "", fileformat = "", filePath = "" });
                     }
                     k++;
                 }
@@ -105,7 +131,7 @@ namespace VRAustellungManager
             PiecesGrid.ItemsSource = pieces;
 
             this.SizeToContent = SizeToContent.WidthAndHeight;
-           
+
         }
 
         private void GridDimensionsChanged_Button_Click(object sender, RoutedEventArgs e)
@@ -123,38 +149,93 @@ namespace VRAustellungManager
         private void PieceButton_Click(object sender, RoutedEventArgs e)
         {
             Piece piece2Edit = (Piece)(sender as Button).DataContext;
+            IdTextBlock.Text = piece2Edit.id.ToString();
             NameTextBox.Text = piece2Edit.title;
             DescriptionTextBox.Text = piece2Edit.description;
             PieceFileUrlTextBlock.Text = piece2Edit.filePath;
-            NewPieceOKButton.Visibility = Visibility.Hidden;
-            EditPieceOKButton.Visibility = Visibility.Visible;
-            CancleButton.Visibility = Visibility.Visible;
+            PiecePreviewImage.Source = SetImageSource(piece2Edit.filePath);
+            EditPanel.IsEnabled = true;
         }
 
-        private void NewPieceOKButton_Click(object sender, RoutedEventArgs e)
+        private ImageSource SetImageSource(string filePath)
         {
-            exeb.pieces.Add(new Piece {
-                id = exeb.pieces.OrderBy(x => x.id).Last().id + 1,
-                title = NameTextBox.Text,
-                description = DescriptionTextBox.Text,
-                filePath = PieceFileUrlTextBlock.Text
-            });
+                //https://www.dotnetperls.com/image-wpf
+                BitmapImage b = new BitmapImage();
+                b.BeginInit();
+
+                string extension = System.IO.Path.GetExtension(filePath);
+                switch (extension)
+                {
+                    case ".mp3":
+                    case ".wav":
+                        b.UriSource = new Uri(@"pack://application:,,,/Resources/Audio.png"); //https://stackoverflow.com/q/12690774
+                        break;
+                    case ".mp4":
+                        b.UriSource = new Uri(@"pack://application:,,,/Resources/Video.png");
+                        break;
+                    case ".obj":
+                        b.UriSource = new Uri(@"pack://application:,,,/Resources/3DModell.png");
+                        break;
+                    case ".png":
+                    case ".jpg":
+                    case ".jpeg":
+                        b.UriSource = new Uri(filePath);
+                        break;
+                    default:
+                        b.UriSource = new Uri(@"pack://application:,,,/Resources/Preview.png");
+                        break;
+                }
+
+                b.EndInit();
+            
+                return b;
+            
         }
 
-        private void EditPieceOKButton_Click(object sender, RoutedEventArgs e)
+        private void PieceOKButton_Click(object sender, RoutedEventArgs e)
         {
-            Piece piece2Edit = exeb.pieces.Find(x => x.id == Int32.Parse(IdTextBlock.Text));
-            exeb.pieces.Add(new Piece
+            Piece newPiece = new Piece
             {
                 id = Int32.Parse(IdTextBlock.Text),
                 title = NameTextBox.Text,
                 description = DescriptionTextBox.Text,
-                filePath = PieceFileUrlTextBlock.Text
-            });
-            CancleButton.Visibility = Visibility.Visible;
+                filePath = dir + "//" + System.IO.Path.GetFileName(PieceFileUrlTextBlock.Text),
+                fileformat = System.IO.Path.GetExtension(PieceFileUrlTextBlock.Text) //fuehr vllt zu problemen
+            };
+
+            try
+            {
+                if (newPiece.filePath != PieceFileUrlTextBlock.Text)
+                {
+                    File.Copy(PieceFileUrlTextBlock.Text, dir + "//" + System.IO.Path.GetFileName(PieceFileUrlTextBlock.Text), true);//https://stackoverflow.com/a/44610221
+                }
+                exeb.pieces = exeb.pieces.Where(x => x.id != Int32.Parse(IdTextBlock.Text)).ToList();
+                exeb.pieces.Add(newPiece);
+
+                Flush();
+                ResetForm();
+                BuildGrid();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
+
+
         }
 
-        private void ChangeGridDimensions() {
+        private void PieceDeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            Piece piece2Edit = exeb.pieces.Find(x => x.id == Int32.Parse(IdTextBlock.Text));
+            exeb.pieces.Remove(piece2Edit);
+            Flush();
+            ResetForm();
+            BuildGrid();
+        }
+
+        private void ChangeGridDimensions()
+        {
             int newWidth, newHeight;
             newWidth = Int32.Parse(GridWidthTextBox.Text);
             newHeight = Int32.Parse(GridHeightTextBox.Text);
@@ -170,19 +251,40 @@ namespace VRAustellungManager
             BuildGrid();
         }
 
-        private void CancleButton_Click(object sender, RoutedEventArgs e) {
+        private void CancleButton_Click(object sender, RoutedEventArgs e)
+        {
             ResetForm();
         }
 
-        private void ResetForm() {
-            NewPieceOKButton.Visibility = Visibility.Visible;
-            EditPieceOKButton.Visibility = Visibility.Hidden;
-            CancleButton.Visibility = Visibility.Hidden;
+        private void ResetForm()
+        {
+            EditPanel.IsEnabled = false;
+
 
             IdTextBlock.Text = string.Empty;
             NameTextBox.Text = string.Empty;
             DescriptionTextBox.Text = string.Empty;
             PieceFileUrlTextBlock.Text = string.Empty;
+            PiecePreviewImage.Source = null;
+
+        }
+
+        private void Flush()
+        {
+            exeb.pieces = exeb.pieces.OrderBy(x => x.id).ToList();
+            Directory.CreateDirectory(dir);//https://msdn.microsoft.com/en-us/library/54a0at6s.aspx
+            try
+            {
+                XmlSerializer writer = new XmlSerializer(typeof(Exhibition));
+                FileStream file = File.Create(xmlPath);
+                writer.Serialize(file, exeb);
+                file.Close();
+            }
+            catch (IOException e)
+            {
+                MessageBox.Show(xmlPath + "ist nicht schreibbar, die Festplatte ist voll, der Dateiname zu lang oder ???\n" + e.Message);
+            }
+
         }
     }
 }

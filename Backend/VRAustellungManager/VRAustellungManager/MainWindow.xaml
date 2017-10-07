@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VRAustellungManager"
         mc:Ignorable="d"
-        Title="VR Ausstellung Manager" Height="350" Width="525">
+        Title="VR Ausstellung Manager" Height="950" Width="525">
     <Window.Resources>
         <DataTemplate x:Key="DataTemplate_Level2">
             <Button Content="{Binding title}" Height="40" Width="50" Margin="4,4,4,4" Click="PieceButton_Click"/>
@@ -46,7 +46,14 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Image x:Name="Logo" MaxWidth="100" MaxHeight="100" Grid.Column="0"/>
+                    <Image />
+
+                    <Image x:Name="Logo" MaxWidth="100" MaxHeight="100" Grid.Column="0">
+                        <!--https://stackoverflow.com/q/25714085-->
+                        <Image.Source>
+                            <BitmapImage UriSource="Resources/Preview.png" />
+                        </Image.Source>
+                    </Image>
                     <StackPanel Grid.Column="1">
                 <Label Content="Logo der Ausstellung"/>
                         <TextBlock x:Name="ImageFilePath" Text="C://irgendwas"/>
@@ -65,22 +72,33 @@
                     </Grid>
 
 
-                    <StackPanel Grid.Column="1">
-                        <TextBlock x:Name="IdTextBlock" Visibility="Collapsed"/>
-                        <Label Content="Name"/>
-                        <TextBox x:Name="NameTextBox"/>
+               
 
-                        <Label Content="Beschreibung"/>
-                        <TextBox x:Name="DescriptionTextBox" TextWrapping="Wrap" AcceptsReturn="True"/>
+                    <Border Grid.Column="1" Background="Aquamarine" BorderBrush="Gainsboro" BorderThickness="1" Margin="5" Padding="5" x:Name="EditPanel">
+                        <StackPanel >
+                            
+                            <TextBox x:Name="IdTextBlock" Visibility="Visible"/>
+                            <Label Content="Name"/>
+                            <TextBox x:Name="NameTextBox"/>
 
-                        <Label Content="Datei"/>
-                        <TextBlock x:Name="PieceFileUrlTextBlock"/>
-                        <Button Content="Ausstellungsstueck auswaehlen" x:Name="ExebPiece_Button" Click="ExebLogo_ButtonClick"/>
+                            <Label Content="Beschreibung"/>
+                            <TextBox x:Name="DescriptionTextBox" TextWrapping="Wrap" AcceptsReturn="True"/>
 
-                        <Button Content="OK" Visibility="Hidden" x:Name="NewPieceOKButton" Click="NewPieceOKButton_Click"/>
-                        <Button Content="Aendern" x:Name="EditPieceOKButton" Click="EditPieceOKButton_Click"/>
-                        <Button Content="Abbrechen" x:Name="CancleButton" Click="CancleButton_Click"/>
-                    </StackPanel>
+                            <Label Content="Datei"/>
+                            <Button Content="Ausstellungsstueck auswaehlen" x:Name="PieceChoose_Button" Click="PieceChoose_ButtonClick"/>
+                            <TextBlock x:Name="PieceFileUrlTextBlock"/>
+
+                            <Image x:Name="PiecePreviewImage" MaxWidth="100" MaxHeight="100">
+                                <Image.Source>
+                                    <BitmapImage UriSource="Resources/Preview.png" />
+                                </Image.Source>
+                            </Image>
+
+                            <Button Content="Speichern" x:Name="PieceOKButton" Click="PieceOKButton_Click"/>
+                            <Button Content="Loeschen" x:Name="PieceDeleteButton" Click="PieceDeleteButton_Click"/>
+                            <Button Content="Abbrechen" x:Name="CancleButton" Click="CancleButton_Click"/>
+                        </StackPanel>
+                    </Border>
                 </Grid>
 
 

@@ -12,3 +12,17 @@ D:\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAus
 D:\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.csproj.GenerateResource.Cache
 D:\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.exe
 D:\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.pdb
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\VRAustellungManager.exe.config
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.exe
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.pdb
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\VRAustellungManager.exe
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\VRAustellungManager.pdb
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.csprojResolveAssemblyReference.cache
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\MainWindow.g.cs
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\App.g.cs
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager_MarkupCompile.cache
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager_MarkupCompile.lref
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\MainWindow.baml
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.g.resources
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.Properties.Resources.resources
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.csproj.GenerateResource.Cache
