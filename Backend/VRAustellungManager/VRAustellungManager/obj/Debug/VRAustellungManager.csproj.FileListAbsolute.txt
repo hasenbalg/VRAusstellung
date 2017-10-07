@@ -28,3 +28,9 @@ C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellung
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.csproj.GenerateResource.Cache
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\NReco.VideoConverter.dll
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\NReco.VideoConverter.xml
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\HelixToolkit.dll
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\HelixToolkit.Wpf.dll
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\HelixToolkit.pdb
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\HelixToolkit.xml
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\HelixToolkit.Wpf.pdb
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\HelixToolkit.Wpf.xml

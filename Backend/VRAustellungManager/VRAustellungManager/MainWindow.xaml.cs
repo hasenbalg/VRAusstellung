@@ -15,6 +15,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
 using NReco.VideoConverter;
+using System.Windows.Media.Media3D;
+using HelixToolkit.Wpf;
 
 namespace VRAustellungManager
 {
@@ -90,7 +92,7 @@ namespace VRAustellungManager
 
         private void PieceChoose_ButtonClick(object sender, RoutedEventArgs e)
         {
-            var fileDialog = new System.Windows.Forms.OpenFileDialog() { Filter = "JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|MP4 Files (*.mp4)|*.mp4|*.gif|MP3 Files (*.mp3)|*.mp3|*.gif|WAV Files (*.wav)|*.wav" }; //https://stackoverflow.com/a/16862178
+            var fileDialog = new System.Windows.Forms.OpenFileDialog() { Filter = "JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|MP4 Files (*.mp4)|*.mp4|MP3 Files (*.mp3)|*.mp3|WAV Files (*.wav)|*.wav|OBJ Files (*.obj)|*.obj" }; //https://stackoverflow.com/a/16862178
             var result = fileDialog.ShowDialog();
             switch (result)
             {
@@ -157,23 +159,35 @@ namespace VRAustellungManager
             DescriptionTextBox.Text = piece2Edit.description;
             PieceFileUrlTextBlock.Text = piece2Edit.filePath;
             PiecePreviewImage.Source = SetImageSource(piece2Edit.filePath);
+            switch (piece2Edit.fileformat)
+            {
+                case ".obj":
+                    viewPort3d.Visibility = Visibility.Visible;
+                    PiecePreviewImage.Visibility = Visibility.Collapsed;
+                    break;
+                default:
+                    viewPort3d.Visibility = Visibility.Collapsed;
+                    PiecePreviewImage.Visibility = Visibility.Visible;
+                    break;
+            }
+           
             EditPanel.IsEnabled = true;
         }
 
         private ImageSource SetImageSource(string filePath)
         {
-                //https://www.dotnetperls.com/image-wpf
-                BitmapImage b = new BitmapImage();
-                b.BeginInit();
+            //https://www.dotnetperls.com/image-wpf
+            BitmapImage b = new BitmapImage();
+            b.BeginInit();
 
-                string extension = System.IO.Path.GetExtension(filePath);
-                switch (extension)
-                {
-                    case ".mp3":
-                    case ".wav":
-                        b.UriSource = new Uri(@"pack://application:,,,/Resources/Audio.png"); //https://stackoverflow.com/q/12690774
-                        break;
-                    case ".mp4":
+            string extension = System.IO.Path.GetExtension(filePath);
+            switch (extension)
+            {
+                case ".mp3":
+                case ".wav":
+                    b.UriSource = new Uri(@"pack://application:,,,/Resources/Audio.png"); //https://stackoverflow.com/q/12690774
+                    break;
+                case ".mp4":
                     //b.UriSource = new Uri(@"pack://application:,,,/Resources/Video.png");
                     string thumbNailPath =
                         thumbNailPath = System.IO.Path.GetTempPath() + System.IO.Path.GetFileNameWithoutExtension(filePath)
@@ -182,25 +196,54 @@ namespace VRAustellungManager
                     {
                         ffMpeg.GetVideoThumbnail(filePath, thumbNailPath);
                     }
-                        b.UriSource = new Uri(thumbNailPath);
+                    b.UriSource = new Uri(thumbNailPath);
                     break;
-                    case ".obj":
-                        b.UriSource = new Uri(@"pack://application:,,,/Resources/3DModell.png");
-                        break;
-                    case ".png":
-                    case ".jpg":
-                    case ".jpeg":
-                        b.UriSource = new Uri(filePath);
-                        break;
-                    default:
-                        b.UriSource = new Uri(@"pack://application:,,,/Resources/Preview.png");
-                        break;
-                }
+                case ".obj":
+                    b.UriSource = new Uri(@"pack://application:,,,/Resources/3DModell.png");
+                    //https://www.codeproject.com/Tips/882885/Display-D-Model-using-Window-Presentation-Foundat
+                    ModelVisual3D device3D = new ModelVisual3D();
+                    device3D.Content = Display3d(filePath);
+                    viewPort3d.Children.Clear();
+                    // Add to view port
+                    viewPort3d.Children.Add(device3D);
 
-                b.EndInit();
-            
-                return b;
-            
+                    break;
+                case ".png":
+                case ".jpg":
+                case ".jpeg":
+                    b.UriSource = new Uri(filePath);
+                    break;
+                default:
+                    b.UriSource = new Uri(@"pack://application:,,,/Resources/Preview.png");
+                    break;
+            }
+
+            b.EndInit();
+
+            return b;
+
+        }
+
+        private Model3D Display3d(string model)
+        {
+            Model3D device = null;
+            try
+            {
+                //Adding a gesture here
+                viewPort3d.RotateGesture = new MouseGesture(MouseAction.LeftClick);
+
+                //Import 3D model file
+                ModelImporter import = new ModelImporter();
+
+                //Load the 3D model file
+                device = import.Load(model);
+            }
+            catch (Exception e)
+            {
+                // Handle exception in case can not file 3D model
+                MessageBox.Show("Exception Error : " + e.StackTrace);
+            }
+            return device;
         }
 
         private void PieceOKButton_Click(object sender, RoutedEventArgs e)
@@ -223,11 +266,11 @@ namespace VRAustellungManager
                     if (System.IO.Path.GetExtension(newPiece.filePath) == ".mp4")
                     {
                         string thumbnailPath =
-                             System.IO.Path.GetDirectoryName(destinationPath)+
+                             System.IO.Path.GetDirectoryName(destinationPath) +
                             System.IO.Path.GetFileNameWithoutExtension(destinationPath) + videoThumbNailExtension;
                         ffMpeg.GetVideoThumbnail(destinationPath, thumbnailPath);
                     }
-                    
+
                 }
                 exeb.pieces = exeb.pieces.Where(x => x.id != Int32.Parse(IdTextBlock.Text)).ToList();
                 exeb.pieces.Add(newPiece);
