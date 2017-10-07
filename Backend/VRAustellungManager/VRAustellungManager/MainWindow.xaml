@@ -75,6 +75,7 @@
                
 
                     <Border Grid.Column="1" Background="Aquamarine" BorderBrush="Gainsboro" BorderThickness="1" Margin="5" Padding="5" x:Name="EditPanel">
+                        <!--http://www.wpf-tutorial.com/misc-controls/the-border-control/-->
                         <StackPanel >
                             
                             <TextBox x:Name="IdTextBlock" Visibility="Visible"/>

@@ -26,7 +26,7 @@ namespace VRAustellungManager
         string dir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//VRAusstellungX";
         string xmlPath = "//Object.xml";
         string videoThumbNailExtension = "_thumbnail.png";
-        FFMpegConverter ffMpeg = new FFMpegConverter();
+        FFMpegConverter ffMpeg = new FFMpegConverter(); //https://www.nrecosite.com/video_converter_net.aspx
         int gridHeight = 3, gridWidth = 3;
         List<List<Piece>> pieces;
 
