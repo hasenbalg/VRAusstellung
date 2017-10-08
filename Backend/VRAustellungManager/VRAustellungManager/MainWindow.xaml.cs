@@ -355,25 +355,21 @@ namespace VRAustellungManager
                         ffMpeg.GetVideoThumbnail(destinationPath, thumbnailPath);
                     }
 
-                }
-                try
-                {
-                    exhib.pieces[newPiece.id] = newPiece;
-                }
-                catch (Exception)
-                {
 
-                    exhib.pieces.Add(newPiece);
                 }
-                
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Kein Ausstellungsstueck gespeicher?\n\n" + ex.ToString());
+            }finally {
+                exhib.pieces = exhib.pieces.Where(x => x.id != Int32.Parse(IdTextBlock.Text)).ToList();
+                exhib.pieces.Add(newPiece);
+
 
                 Flush();
                 ResetForm();
                 BuildGrid();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
             }
 
 
