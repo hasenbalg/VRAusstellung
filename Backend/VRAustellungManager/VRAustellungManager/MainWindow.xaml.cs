@@ -13,6 +13,7 @@ using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf;
 using System.Windows.Threading;
 using LibVRAusstellung;
+using System.Text.RegularExpressions;
 
 namespace VRAustellungManager
 {
@@ -359,17 +360,18 @@ namespace VRAustellungManager
                             System.IO.Path.GetFileNameWithoutExtension(newPiece.filePath) + videoThumbNailExtension;
                         ffMpeg.GetVideoThumbnail(path, thumbnailPath);
 
-                        //convert video 2 ogg
-                        var output = new MemoryStream();
-                      
-                        ffMpeg.ConvertMedia(path, output, Format.ogg);
-                        output.Seek(0, SeekOrigin.Begin);
-                        newPiece.filePath = dir + "//" + System.IO.Path.GetFileNameWithoutExtension(path) + ".ogg";
-                        using (FileStream file = new FileStream(newPiece.filePath, FileMode.Create, FileAccess.Write))
-                        {
-                            output.WriteTo(file);
-                        }
-                        newPiece.fileformat = System.IO.Path.GetExtension(newPiece.filePath);
+                        ////convert video 2 ogg
+                        //var output = new MemoryStream();
+
+                        //ffMpeg.ConvertMedia(path, output, Format.ogg);
+                        //output.Seek(0, SeekOrigin.Begin);
+                        //newPiece.filePath = dir + "//" + System.IO.Path.GetFileNameWithoutExtension(path) + ".ogg";
+                        //using (FileStream file = new FileStream(newPiece.filePath, FileMode.Create, FileAccess.Write))
+                        //{
+                        //    output.WriteTo(file);
+                        //}
+                        //newPiece.fileformat = System.IO.Path.GetExtension(newPiece.filePath);
+                        File.Copy(path, newPiece.filePath, true);
 
                     }
                     else {
