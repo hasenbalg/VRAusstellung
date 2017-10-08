@@ -84,14 +84,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Exhibition.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Piece.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -133,6 +131,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Audio.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LibVRAusstellung\LibVRAusstellung.csproj">
+      <Project>{e69bf860-b0c4-442d-981f-903d5278e4c2}</Project>
+      <Name>LibVRAusstellung</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

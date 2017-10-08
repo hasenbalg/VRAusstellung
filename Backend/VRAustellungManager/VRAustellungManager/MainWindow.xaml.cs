@@ -2,23 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Xml.Serialization;
 using NReco.VideoConverter;
 using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf;
 using System.Windows.Threading;
-using System.Windows.Interop;
+using LibVRAusstellung;
 
 namespace VRAustellungManager
 {
@@ -40,34 +34,13 @@ namespace VRAustellungManager
         {
             xmlPath = dir + xmlPath;
             InitializeComponent();
-            ReadXMLFile();
+            exhib = Exhibition.ReadXMLFile();
             BuildGrid();
             ResetForm();
             FillGeneralSettings();
         }
 
-        private void ReadXMLFile()
-        {
-            XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(Exhibition));
-            try
-            {
-                using (FileStream fileStream = new FileStream(xmlPath, FileMode.Open))
-                {
-                    exhib = (Exhibition)serializer.Deserialize(fileStream);
-                }
-            }
-            catch (Exception e)
-            {
-                exhib = new Exhibition() { title = "Neue Ausstellung", iconpath = "kein Bild gesetzt", width= 3, height = 3, pieces = new List<Piece>() };
-                BuildGrid();
-                Flush();
-            }
-            finally
-            {
-                FillGeneralSettings();
-            }
-
-        }
+       
 
         //Exhibition
 
@@ -115,7 +88,7 @@ namespace VRAustellungManager
             ChangeGridDimensions();
             Flush();
             InitializeComponent();
-            ReadXMLFile();
+            exhib = Exhibition.ReadXMLFile();
             BuildGrid();
             ResetForm();
             FillGeneralSettings();
@@ -124,7 +97,7 @@ namespace VRAustellungManager
         private void ExhibitionitionCancel_Button_Click(object sender, RoutedEventArgs e)
         {
             InitializeComponent();
-            ReadXMLFile();
+            exhib = Exhibition.ReadXMLFile();
             BuildGrid();
             ResetForm();
         }
@@ -448,7 +421,6 @@ namespace VRAustellungManager
 
         private void Flush()
         {
-           
             exhib.pieces = exhib.pieces.OrderBy(x => x.id).ToList();
            
             Directory.CreateDirectory(dir);//https://msdn.microsoft.com/en-us/library/54a0at6s.aspx
@@ -461,7 +433,7 @@ namespace VRAustellungManager
             }
             catch (IOException e)
             {
-                MessageBox.Show(xmlPath + "ist nicht schreibbar, die Festplatte ist voll, der Dateiname zu lang oder ???\n" + e.Message);
+                MessageBox.Show(xmlPath + "ist nicht schreibbar, die Festplatte ist voll, der Dateiname zu lang oder ???\n\n" + e.Message);
             }
 
         }
@@ -490,11 +462,6 @@ namespace VRAustellungManager
         {
             mediaPlayer.Stop();
         }
-
-
-
-       
-
     }
     
 }
