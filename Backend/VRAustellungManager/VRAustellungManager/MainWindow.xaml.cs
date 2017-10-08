@@ -105,7 +105,7 @@ namespace VRAustellungManager
         private void PieceChoose_ButtonClick(object sender, RoutedEventArgs e)
         {
             var fileDialog = new System.Windows.Forms.OpenFileDialog() {
-                Filter = "JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png|JPEG Files (*.jpeg)|*.jpeg|MP4 Files (*.mp4)|*.mp4|MP3 Files (*.mp3)|*.mp3|WAV Files (*.wav)|*.wav|OBJ Files (*.obj)|*.obj",
+                Filter = "JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png|JPEG Files (*.jpeg)|*.jpeg|MP4 Files (*.mp4)|*.mp4|MP3 Files (*.mp3)|*.mp3|WAV Files (*.wav)|*.wav|OBJ Files (*.obj)|*.obj|OGG Files (*.ogg)|*.ogg|OGV Files (*.ogv)|*.ogv",
                 Multiselect = false
             }; //https://stackoverflow.com/a/16862178
 
@@ -157,6 +157,9 @@ namespace VRAustellungManager
 
         //Drag'Drop
         bool m_inMouseMove;
+
+        public bool InvokeRequired { get; private set; }
+
         private void PreviewMouseMove(object sender, MouseEventArgs e)
         {
             //https://stackoverflow.com/a/15780620
@@ -267,6 +270,8 @@ namespace VRAustellungManager
 
                     break;
                 case ".mp4":
+                case ".ogg":
+                case ".ogv":
                     //b.UriSource = new Uri(@"pack://application:,,,/Resources/Video.png");
                     string thumbNailPath =
                         thumbNailPath = System.IO.Path.GetTempPath() + System.IO.Path.GetFileNameWithoutExtension(filePath)
@@ -332,29 +337,45 @@ namespace VRAustellungManager
 
         private void PieceOKButton_Click(object sender, RoutedEventArgs e)
         {
+            string path = PieceFileUrlTextBlock.Text;
             Piece newPiece = new Piece
             {
                 id = Int32.Parse(IdTextBlock.Text),
                 title = NameTextBox.Text,
                 description = DescriptionTextBox.Text,
-                filePath = dir + "//" + System.IO.Path.GetFileName(PieceFileUrlTextBlock.Text),
-                fileformat = System.IO.Path.GetExtension(PieceFileUrlTextBlock.Text.ToLower()) //fuehr vllt zu problemen
+                filePath = dir + "//" + System.IO.Path.GetFileName(path),
+                fileformat = System.IO.Path.GetExtension(path.ToLower()) //fuehr vllt zu problemen
             };
 
             try
             {
-                if (newPiece.filePath != PieceFileUrlTextBlock.Text)
+                if (newPiece.filePath != path)
                 {
-                    string destinationPath = dir + "//" + System.IO.Path.GetFileName(PieceFileUrlTextBlock.Text);
-                    File.Copy(PieceFileUrlTextBlock.Text, destinationPath, true);//https://stackoverflow.com/a/44610221
+                    newPiece.filePath = dir + "//" + System.IO.Path.GetFileName(path);
                     if (System.IO.Path.GetExtension(newPiece.filePath) == ".mp4")
                     {
                         string thumbnailPath =
-                             System.IO.Path.GetDirectoryName(destinationPath) +
-                            System.IO.Path.GetFileNameWithoutExtension(destinationPath) + videoThumbNailExtension;
-                        ffMpeg.GetVideoThumbnail(destinationPath, thumbnailPath);
-                    }
+                             System.IO.Path.GetDirectoryName(newPiece.filePath) +
+                            System.IO.Path.GetFileNameWithoutExtension(newPiece.filePath) + videoThumbNailExtension;
+                        ffMpeg.GetVideoThumbnail(path, thumbnailPath);
 
+                        //convert video 2 ogg
+                        var output = new MemoryStream();
+                      
+                        ffMpeg.ConvertMedia(path, output, Format.ogg);
+                        output.Seek(0, SeekOrigin.Begin);
+                        newPiece.filePath = dir + "//" + System.IO.Path.GetFileNameWithoutExtension(path) + ".ogg";
+                        using (FileStream file = new FileStream(newPiece.filePath, FileMode.Create, FileAccess.Write))
+                        {
+                            output.WriteTo(file);
+                        }
+                        newPiece.fileformat = System.IO.Path.GetExtension(newPiece.filePath);
+
+                    }
+                    else {
+                        File.Copy(path, newPiece.filePath, true);//https://stackoverflow.com/a/44610221
+                    }
+                    
 
                 }
 
@@ -376,6 +397,7 @@ namespace VRAustellungManager
 
         }
 
+      
         private void PieceDeleteButton_Click(object sender, RoutedEventArgs e)
         {
             Piece piece2Edit = exhib.pieces.Find(x => x.id == Int32.Parse(IdTextBlock.Text));
