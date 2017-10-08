@@ -85,7 +85,7 @@ namespace VRAustellungManager
 
         private void ExhibitionChooseLogo_ButtonClick(object sender, RoutedEventArgs e)
         {
-            var fileDialog = new System.Windows.Forms.OpenFileDialog() { Filter = "JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg" }; //https://stackoverflow.com/a/16862178
+            var fileDialog = new System.Windows.Forms.OpenFileDialog() { Filter = "JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png|JPEG Files (*.jpeg)|*.jpeg" }; //https://stackoverflow.com/a/16862178
             var result = fileDialog.ShowDialog();
             switch (result)
             {
@@ -132,7 +132,7 @@ namespace VRAustellungManager
         private void PieceChoose_ButtonClick(object sender, RoutedEventArgs e)
         {
             var fileDialog = new System.Windows.Forms.OpenFileDialog() {
-                Filter = "JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|MP4 Files (*.mp4)|*.mp4|MP3 Files (*.mp3)|*.mp3|WAV Files (*.wav)|*.wav|OBJ Files (*.obj)|*.obj",
+                Filter = "JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png|JPEG Files (*.jpeg)|*.jpeg|MP4 Files (*.mp4)|*.mp4|MP3 Files (*.mp3)|*.mp3|WAV Files (*.wav)|*.wav|OBJ Files (*.obj)|*.obj",
                 Multiselect = false
             }; //https://stackoverflow.com/a/16862178
 
@@ -182,9 +182,42 @@ namespace VRAustellungManager
 
         }
 
-    
+        //Drag'Drop
+        bool m_inMouseMove;
+        private void PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            //https://stackoverflow.com/a/15780620
+            if (!m_inMouseMove)
+            {
+                m_inMouseMove = true;
+                if (e.LeftButton == MouseButtonState.Pressed)
+                {
+                    var btn = sender as TextBlock;
+                    System.Console.WriteLine("Dragged: " + (string)(btn.DataContext as Piece).title);
+                    DragDrop.DoDragDrop(btn, (Piece)btn.DataContext, DragDropEffects.All);
+                    e.Handled = true;
+                }
+                m_inMouseMove = false;
+            }
+        }
 
-        
+        private void Drop(object sender, DragEventArgs e)
+        {
+            //https://stackoverflow.com/a/15780620
+            System.Console.WriteLine("Dropped: " + (string)(e.Data.GetData(typeof(Piece)) as Piece).title);
+            System.Console.WriteLine("on: " + (string)(((TextBlock)sender).DataContext as Piece).title);
+            Piece dropped = e.Data.GetData(typeof(Piece)) as Piece;
+            Piece sndr = ((TextBlock)sender).DataContext as Piece;
+            int tmpId = dropped.id;
+            dropped.id = sndr.id;
+            sndr.id = tmpId;
+
+            Flush();
+            ResetForm();
+            BuildGrid();
+        }
+
+
 
         private void PieceButton_Click(object sender, RoutedEventArgs e)
         {
@@ -194,7 +227,7 @@ namespace VRAustellungManager
             DescriptionTextBox.Text = piece2Edit.description;
             PieceFileUrlTextBlock.Text = piece2Edit.filePath;
             PiecePreviewImage.Source = SetImageSource(piece2Edit.filePath);
-            switch (piece2Edit.fileformat)
+            switch (piece2Edit.fileformat.ToLower())
             {
                 case ".obj":
                     Piece3D.Visibility = Visibility.Visible;
@@ -225,6 +258,10 @@ namespace VRAustellungManager
             b.BeginInit();
 
             string extension = System.IO.Path.GetExtension(filePath);
+            if (extension != null)
+            {
+                extension = extension.ToLower();
+            }
             switch (extension)
             {
                 case ".mp3":
@@ -328,7 +365,7 @@ namespace VRAustellungManager
                 title = NameTextBox.Text,
                 description = DescriptionTextBox.Text,
                 filePath = dir + "//" + System.IO.Path.GetFileName(PieceFileUrlTextBlock.Text),
-                fileformat = System.IO.Path.GetExtension(PieceFileUrlTextBlock.Text) //fuehr vllt zu problemen
+                fileformat = System.IO.Path.GetExtension(PieceFileUrlTextBlock.Text.ToLower()) //fuehr vllt zu problemen
             };
 
             try
@@ -346,8 +383,7 @@ namespace VRAustellungManager
                     }
 
                 }
-                exhib.pieces = exhib.pieces.Where(x => x.id != Int32.Parse(IdTextBlock.Text)).ToList();
-                exhib.pieces.Add(newPiece);
+                exhib.pieces[newPiece.id] = newPiece;
 
                 Flush();
                 ResetForm();
@@ -412,7 +448,9 @@ namespace VRAustellungManager
 
         private void Flush()
         {
+           
             exhib.pieces = exhib.pieces.OrderBy(x => x.id).ToList();
+           
             Directory.CreateDirectory(dir);//https://msdn.microsoft.com/en-us/library/54a0at6s.aspx
             try
             {
@@ -453,7 +491,10 @@ namespace VRAustellungManager
             mediaPlayer.Stop();
         }
 
-        //Helpers
+
+
        
+
     }
+    
 }

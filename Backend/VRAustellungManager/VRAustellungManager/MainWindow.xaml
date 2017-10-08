@@ -9,7 +9,18 @@
         Title="VR Ausstellung Manager" Height="950" Width="525">
     <Window.Resources>
         <DataTemplate x:Key="DataTemplate_Level2">
-            <Button Content="{Binding title}" Height="40" Width="50" Margin="4,4,4,4" Click="PieceButton_Click"/>
+            <StackPanel Width="90" Height="90" Margin="5" Background="#FF939393" >
+                <Grid>
+                    <!--https://stackoverflow.com/a/29698994-->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="40" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{Binding  title}" Margin="2.5"  Grid.Row="0" HorizontalAlignment="Center" TextWrapping="Wrap" PreviewMouseDown = "PreviewMouseMove" Drop = "Drop" AllowDrop="True" Cursor="SizeAll"/>
+                    <Button Grid.Row="1" Content="&#128394;" Click="PieceButton_Click"
+                        MinWidth="45"  VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+                </Grid>
+            </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="DataTemplate_Level1">
@@ -50,7 +61,12 @@
             <Setter Property="Height" Value="100" />
             <Setter Property="TextWrapping" Value="Wrap" />
             <Setter Property="AcceptsReturn" Value="True" />
+            <Setter Property="MaxWidth" Value="300" />
+            <Setter Property="SpellCheck.IsEnabled" Value="True" />
         </Style>
+
+        
+       
 
     </Window.Resources>
     <Grid>
@@ -137,8 +153,8 @@
 
                     <Grid Margin="5">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1.5*" />
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="700" />
+                            <ColumnDefinition Width="500" />
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Grid.Column="0">
@@ -155,49 +171,95 @@
                         <Border Grid.Column="1" BorderBrush="Gainsboro" BorderThickness="1" Margin="5" Padding="5" x:Name="EditPanel">
                             <!--http://www.wpf-tutorial.com/misc-controls/the-border-control/-->
                             <StackPanel >
+                                <TextBlock TextWrapping="Wrap" MaxWidth="150">
+                                    Die <Bold>Anordnung</Bold> der Ausstellungsstuecke kann per <Bold>Drag'n'Drop</Bold> geaendert werden.
+                                </TextBlock>
                                 <Label Content="Eigenschaften" Style="{StaticResource subHeading}"/>
-                                <TextBox x:Name="IdTextBlock" Visibility="Visible"/>
-                                <Label Content="Name"/>
-                                <TextBox x:Name="NameTextBox"/>
+                                <TextBlock Text="" TextWrapping="Wrap" MaxWidth="150">
+                                Es koennen Bild, Video, Audio und 3D-Dateien in den <Bold>Formaten</Bold> JPEG, PNG, MP4, WAV, MP3 und OBJ geladen werden.
+                                </TextBlock>
+                                <TextBox x:Name="IdTextBlock" Visibility="Hidden"/>
 
-                                <Label Content="Beschreibung"/>
-                                <TextBox x:Name="DescriptionTextBox"  Style="{StaticResource continuousText}" />
+                                <Grid Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label Content="Name" Grid.Column="0"/>
+                                    <TextBox x:Name="NameTextBox" Grid.Column="1"/>
+                                </Grid>
+                                <Grid  Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label Content="Beschreibung" Grid.Column="0"/>
+                                    <TextBox x:Name="DescriptionTextBox"  Style="{StaticResource continuousText}" Grid.Column="1" />
+                                </Grid>
 
-                                <Label Content="Datei"/>
-                                <Button Content="Ausstellungsstueck auswaehlen" x:Name="PieceChoose_Button" Click="PieceChoose_ButtonClick"/>
-                                <TextBlock x:Name="PieceFileUrlTextBlock"/>
+                                <Grid  Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <Label Content="Ausstellungsstueck"/>
+                                        <Image x:Name="PiecePreviewImage" MaxWidth="100" MaxHeight="100">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="Resources/Preview.png" />
+                                            </Image.Source>
+                                        </Image>
 
-                                <Image x:Name="PiecePreviewImage" MaxWidth="100" MaxHeight="100">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="Resources/Preview.png" />
-                                    </Image.Source>
-                                </Image>
+                                        <helix:HelixViewport3D x:Name="Piece3D" ZoomExtentsWhenLoaded="true" Width="100" Height="100" >
+                                            <!-- Remember to add light to the scene -->
+                                            <helix:DefaultLights/>
+                                        </helix:HelixViewport3D>
 
-                                <helix:HelixViewport3D x:Name="Piece3D" ZoomExtentsWhenLoaded="true" Width="100" Height="100" >
-                                    <!-- Remember to add light to the scene -->
-                                    <helix:DefaultLights/>
-                                </helix:HelixViewport3D>
+                                        <StackPanel x:Name="PieceAudio">
+                                            <!--http://www.wpf-tutorial.com/audio-video/playing-audio/-->
+                                            <Label Name="AudioStatusLabel" Content="Audio pausiert..." HorizontalContentAlignment="Center" Margin="5" />
+                                            <WrapPanel HorizontalAlignment="Center">
+                                                <Button Name="btnPlay" Click="btnPlay_Click">Play</Button>
+                                                <Button Name="btnPause"  Click="btnPause_Click">Pause</Button>
+                                                <Button Name="btnStop" Click="btnStop_Click">Stop</Button>
+                                            </WrapPanel>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Grid.Column="1">
+                                        <Button Content="Datei auswaehlen" x:Name="PieceChoose_Button" Click="PieceChoose_ButtonClick"/>
+                                        <TextBlock x:Name="PieceFileUrlTextBlock" TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                    
+                                </Grid>
 
-                                <StackPanel x:Name="PieceAudio">
-                                    <!--http://www.wpf-tutorial.com/audio-video/playing-audio/-->
-                                    <Label Name="AudioStatusLabel" Content="Audio pausiert..." HorizontalContentAlignment="Center" Margin="5" />
-                                    <WrapPanel HorizontalAlignment="Center">
-                                        <Button Name="btnPlay" Click="btnPlay_Click">Play</Button>
-                                        <Button Name="btnPause"  Click="btnPause_Click">Pause</Button>
-                                        <Button Name="btnStop" Click="btnStop_Click">Stop</Button>
-                                    </WrapPanel>
-                                </StackPanel>
+                                <Grid  Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Button Content="Speichern" x:Name="PieceOKButton" Click="PieceOKButton_Click" Grid.Column="0"/>
+                                    <Button Content="Loeschen" x:Name="PieceDeleteButton" Click="PieceDeleteButton_Click" Grid.Column="1"/>
+                                    <Button Content="Abbrechen" x:Name="CancleButton" Click="CancleButton_Click" Grid.Column="2"/>
+                                </Grid>
 
 
-                                <Button Content="Speichern" x:Name="PieceOKButton" Click="PieceOKButton_Click"/>
-                                <Button Content="Loeschen" x:Name="PieceDeleteButton" Click="PieceDeleteButton_Click"/>
-                                <Button Content="Abbrechen" x:Name="CancleButton" Click="CancleButton_Click"/>
+
+
+
+
+                               
                             </StackPanel>
                         </Border>
                     </Grid>
 
 
                 </TabItem>
+
+            <!--TEST-->
+
+             
             </TabControl>
         </Grid>
 

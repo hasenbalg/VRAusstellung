@@ -9,6 +9,7 @@ namespace VRAustellungManager
 {
     public class Piece
     {
+        [XmlElement("id")]
         public int id { get; set; }
         [XmlElement("title")]
         public string title { get; set; }
