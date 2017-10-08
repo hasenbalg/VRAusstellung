@@ -105,7 +105,7 @@ namespace VRAustellungManager
         private void PieceChoose_ButtonClick(object sender, RoutedEventArgs e)
         {
             var fileDialog = new System.Windows.Forms.OpenFileDialog() {
-                Filter = "JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png|JPEG Files (*.jpeg)|*.jpeg|MP4 Files (*.mp4)|*.mp4|MP3 Files (*.mp3)|*.mp3|WAV Files (*.wav)|*.wav|OBJ Files (*.obj)|*.obj|OGG Files (*.ogg)|*.ogg|OGV Files (*.ogv)|*.ogv",
+                Filter = "JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png|JPEG Files (*.jpeg)|*.jpeg|MP4 Files (*.mp4)|*.mp4|MP3 Files (*.mp3)|*.mp3|WAV Files (*.wav)|*.wav|OBJ Files (*.obj)|*.obj|OGG Files (*.ogg)|*.ogg|OVG Files (*.ovg )|*.ovg ",
                 Multiselect = false
             }; //https://stackoverflow.com/a/16862178
 
