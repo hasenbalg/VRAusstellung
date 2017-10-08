@@ -50,7 +50,7 @@ namespace LibVRAusstellung
                     return (Exhibition)serializer.Deserialize(fileStream);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return new Exhibition() { title = "Neue Ausstellung", iconpath = "kein Bild gesetzt", width = 3, height = 3, pieces = new List<Piece>() };
             }
