@@ -356,7 +356,16 @@ namespace VRAustellungManager
                     }
 
                 }
-                exhib.pieces[newPiece.id] = newPiece;
+                try
+                {
+                    exhib.pieces[newPiece.id] = newPiece;
+                }
+                catch (Exception)
+                {
+
+                    exhib.pieces.Add(newPiece);
+                }
+                
 
                 Flush();
                 ResetForm();
