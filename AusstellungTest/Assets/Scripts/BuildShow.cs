@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using System;
 
 public class BuildShow : MonoBehaviour {
     Exhibition exhibition;
@@ -11,7 +12,8 @@ public class BuildShow : MonoBehaviour {
     public Material matShowRoom;
    
 
-    public GameObject prefabImageCanvas, prefabVideoCanvas;
+    public GameObject prefabImageCanvas, prefabVideoCanvas, prefabAudioCanvas;
+    public Texture2D audioFallbackTexture;
     public float groundOffset;
 
     [HideInInspector]
@@ -54,6 +56,10 @@ public class BuildShow : MonoBehaviour {
                         case ".mp4":
                             InstantiateVideoCanvas(pos, exhibition.pieces[k].filePath);
                             break;
+                        case ".mp3":
+                        case ".wav":
+                            InstantiateAudioCanvas(pos, exhibition.pieces[k].filePath);
+                            break;
                         default:
                             break;
                     }
@@ -62,9 +68,11 @@ public class BuildShow : MonoBehaviour {
             }
         }
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    
+
+    // Update is called once per frame
+    void Update () {
 		
 	}
 
@@ -76,28 +84,70 @@ public class BuildShow : MonoBehaviour {
         //mat.SetColor("_EmissionColor", new Color(.10f, .10f, .10f));
 
         GameObject stand = Instantiate(prefabImageCanvas, pos, Quaternion.identity);
-        GameObject canvas = stand.transform.Find("Canvas").gameObject;
-        canvas.transform.localScale = new Vector3(tex.width, 1, tex.height).normalized;
-        Vector3 liftUp = canvas.transform.position;
-        liftUp.y = canvas.transform.localScale.z * .5f + groundOffset;
-        canvas.transform.position = liftUp;
+        Transform canvas = stand.transform.Find("Canvas");
+        canvas.localScale = new Vector3(tex.width, 1, tex.height).normalized;
+        Vector3 liftUp = canvas.position;
+        liftUp.y = canvas.localScale.z * .5f + groundOffset;
+        canvas.position = liftUp;
         canvas.GetComponent<Renderer>().material = mat;
     }
 
     public void InstantiateVideoCanvas(Vector3 pos, string filePath)
     {
- 
-       
         GameObject stand = Instantiate(prefabVideoCanvas, pos, Quaternion.identity);
-        GameObject canvas = stand.transform.Find("Canvas").gameObject;
-        //canvas.transform.localScale = new Vector3(tex.width, 1, tex.height).normalized;
-        Vector3 liftUp = canvas.transform.position;
-        liftUp.y = canvas.transform.localScale.z * .5f + groundOffset;
-        canvas.transform.position = liftUp;
+        Transform canvas = stand.transform.Find("Canvas");
+        Transform timeLine = stand.transform.Find("TimeLine");
+        Vector3 liftUp = canvas.position;
+        liftUp.y = canvas.localScale.z * .5f + groundOffset;
+        canvas.position = liftUp;
+
+        timeLine.position = liftUp + canvas.forward * 1f;
+
         var videoPlayer = canvas.GetComponent<UnityEngine.Video.VideoPlayer>();
         videoPlayer.url = (new WWW(filePath).url);
         videoPlayer.isLooping = true;
+       // canvas.localScale = new Vector3(videoPlayer.clip.width, 1, videoPlayer.clip.height).normalized;
         videoPlayer.Play();
+    }
+
+    private void InstantiateAudioCanvas(Vector3 pos, string filePath)
+    {
+        Material mat = new Material(Shader.Find("Standard"));
+        Texture2D tex = LoadAudioArtWork(filePath);
+        mat.mainTexture = tex;
+        //mat.EnableKeyword("_EMISSION");
+        //mat.SetColor("_EmissionColor", new Color(.10f, .10f, .10f));
+
+        GameObject stand = Instantiate(prefabAudioCanvas, pos, Quaternion.identity);
+        Transform canvas = stand.transform.Find("Canvas");
+        canvas.localScale = new Vector3(tex.width, 1, tex.height).normalized;
+        Vector3 liftUp = canvas.position;
+        liftUp.y = canvas.localScale.z * .5f + groundOffset;
+        canvas.position = liftUp;
+        canvas.GetComponent<Renderer>().material = mat;
+    }
+
+    private Texture2D LoadAudioArtWork(string filePath)
+    {
+        Texture2D tex = null;
+        byte[] fileData;
+
+        if (File.Exists(filePath))
+        {
+            try
+            {
+                fileData = TagLib.File.Create(filePath).Tag.Pictures[0].Data.Data;
+                tex = new Texture2D(2, 2);
+                tex.LoadImage(fileData);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("No Artwork found on track " + filePath + " .");
+                tex = audioFallbackTexture;
+            }
+             return tex;
+        }
+        return tex;
     }
 
     public static Texture2D LoadPNG(string filePath)

@@ -234,6 +234,10 @@ MonoBehaviour:
     type: 2}
   prefabVideoCanvas: {fileID: 1535939517848272, guid: 3735b855e0646e142ab8d5b164fe56af,
     type: 2}
+  prefabAudioCanvas: {fileID: 1297948614756086, guid: 59a8a6a4840b6eb42886bae7fc18d30f,
+    type: 2}
+  audioFallbackTexture: {fileID: 2800000, guid: 115a31fa10d9f2245b07b8b97abcac05,
+    type: 3}
   groundOffset: 5
   showRoomDiff: {fileID: 0}
 --- !u!1 &1660278322

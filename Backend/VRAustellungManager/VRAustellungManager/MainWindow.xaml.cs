@@ -106,7 +106,7 @@ namespace VRAustellungManager
         private void PieceChoose_ButtonClick(object sender, RoutedEventArgs e)
         {
             var fileDialog = new System.Windows.Forms.OpenFileDialog() {
-                Filter = "JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png|JPEG Files (*.jpeg)|*.jpeg|MP4 Files (*.mp4)|*.mp4|MP3 Files (*.mp3)|*.mp3|WAV Files (*.wav)|*.wav|OBJ Files (*.obj)|*.obj|OGG Files (*.ogg)|*.ogg|OVG Files (*.ovg )|*.ovg ",
+                Filter = "JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png|JPEG Files (*.jpeg)|*.jpeg|MP4 Files (*.mp4)|*.mp4|MP3 Files (*.mp3)|*.mp3|WAV Files (*.wav)|*.wav|OBJ Files (*.obj)|*.obj",
                 Multiselect = false
             }; //https://stackoverflow.com/a/16862178
 
@@ -271,8 +271,7 @@ namespace VRAustellungManager
 
                     break;
                 case ".mp4":
-                case ".ogg":
-                case ".ogv":
+               
                     //b.UriSource = new Uri(@"pack://application:,,,/Resources/Video.png");
                     string thumbNailPath =
                         thumbNailPath = System.IO.Path.GetTempPath() + System.IO.Path.GetFileNameWithoutExtension(filePath)
@@ -471,10 +470,23 @@ namespace VRAustellungManager
         //Audio
         void timer_Tick(object sender, EventArgs e)
         {
-            if (mediaPlayer.Source != null)
-                AudioStatusLabel.Content = String.Format("{0} / {1}", mediaPlayer.Position.ToString(@"mm\:ss"), mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss"));
-            else
+            if (mediaPlayer.Source != null) {
+                try
+                {
+                    AudioStatusLabel.Content = String.Format("{0} / {1}", mediaPlayer.Position.ToString(@"mm\:ss"), mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss"));
+                }
+                catch (Exception)
+                {
+
+                    AudioStatusLabel.Content = "Datei kopiert wahrscheinlich noch.\n\n";
+                }
+
+            }
+            else {
+
                 AudioStatusLabel.Content = "No file selected...";
+            }
+            
         }
 
         private void btnPlay_Click(object sender, RoutedEventArgs e)

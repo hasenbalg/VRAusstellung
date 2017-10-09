@@ -1,45 +1,53 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
 [RequireComponent(typeof(AudioSource))]
 public class ControlVideo : MonoBehaviour {
-    // Use this for initialization
-    public MovieTexture mt;
-     bool isPlaying = false;
+
+    VideoPlayer vp;
+    bool isPlaying = false;
     public bool switchOn = false;
+
+    GameObject timeLine, timeMarker;
+
     void Start () {
-        mt = (MovieTexture)GetComponent<Renderer>().material.mainTexture;
-	}
+        vp = (VideoPlayer)GetComponent<VideoPlayer>();
+        timeLine = transform.parent.Find("TimeLine").gameObject;
+        timeMarker = timeLine.transform.Find("TimeMarker").gameObject;
+    }
 	
-	// Update is called once per frame
 	void Update () {
-        if (mt != null)
+        if (vp != null)
         {
-            if (switchOn && !mt.isPlaying)
+            if (switchOn && !vp.isPlaying)
             {
                 PlayVideo();
             }
-            if (!switchOn && mt.isPlaying)
+            if (!switchOn && vp.isPlaying)
             {
                 PlayVideo();
             }
         }
-      
-	}
+        SetMarkerPos();
+        
+    }
 
     public void PlayVideo() {
-        var aud = GetComponent<AudioSource> ();
-        aud.clip = mt.audioClip;
         if (isPlaying)
         {
-            mt.Play();
-            aud.Play();
+            vp.Play();
         }
         else {
-            mt.Pause();
-            aud.Pause();
+            vp.Pause();
         }
         isPlaying = !isPlaying;
         
+    }
+
+    public void SetMarkerPos(){
+        float playProgress = (float)vp.frame / vp.frameCount;
+        Vector3 markerPos = timeLine.transform.TransformPoint(Vector3.up * (playProgress * 2 - 1));//https://docs.unity3d.com/ScriptReference/Transform.TransformPoint.html
+        timeMarker.transform.position = markerPos;
     }
 }
