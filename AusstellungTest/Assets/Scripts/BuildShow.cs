@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using System;
+using System.Runtime.Serialization.Formatters.Binary;
+using NReco.VideoConverter;
 
 public class BuildShow : MonoBehaviour {
     Exhibition exhibition;
@@ -125,6 +127,9 @@ public class BuildShow : MonoBehaviour {
         liftUp.y = canvas.localScale.z * .5f + groundOffset;
         canvas.position = liftUp;
         canvas.GetComponent<Renderer>().material = mat;
+
+        AudioSource audioSource = canvas.GetComponent<AudioSource>();
+        StartCoroutine(LoadAudio(audioSource, filePath));
     }
 
     private Texture2D LoadAudioArtWork(string filePath)
@@ -140,7 +145,7 @@ public class BuildShow : MonoBehaviour {
                 tex = new Texture2D(2, 2);
                 tex.LoadImage(fileData);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Debug.LogWarning("No Artwork found on track " + filePath + " .");
                 tex = audioFallbackTexture;
@@ -165,6 +170,50 @@ public class BuildShow : MonoBehaviour {
         return tex;
     }
 
-   
-    
+    IEnumerator LoadAudio(AudioSource audioSource, string filePath)
+    {
+        //filePath = "https://upload.wikimedia.org/wikipedia/en/5/58/Barbie_girl_aqua.ogg";
+
+        string targetFormat = string.Empty;
+        if (Path.GetExtension(filePath) == ".mp3")
+        {
+            targetFormat = (string)Format.aiff;
+            Debug.LogWarning("converting audio file 2 " + targetFormat);
+            string oggFilePath = Application.temporaryCachePath
+                + Path.GetFileNameWithoutExtension(filePath) + "." + targetFormat;
+
+            FFMpegConverter ffMpeg = new FFMpegConverter();
+            ffMpeg.ConvertProgress += FfMpeg_ConvertProgress;
+            ffMpeg.ConvertMedia(filePath, oggFilePath, targetFormat);
+            filePath = oggFilePath;
+        }
+
+        
+        WWW www = new WWW(filePath);
+        yield return www;
+        if (!string.IsNullOrEmpty(www.error))
+        {
+            Debug.Log("WWW Error: " + www.error);
+        }
+        else
+        {
+            Debug.Log("WWW Ok!: " + www.text);
+            if (targetFormat == Format.aiff)
+            {
+                audioSource.clip = www.GetAudioClip(true, true, AudioType.AIFF);
+            }
+            else {
+                audioSource.clip = www.GetAudioClip(true, true, AudioType.UNKNOWN);
+            }
+        }
+
+
+
+
+    }
+
+    private void FfMpeg_ConvertProgress(object sender, ConvertProgressEventArgs e)
+    {
+        Console.WriteLine(String.Format("Progress: {0} / {1}\r\n", e.Processed, e.TotalDuration));
+    }
 }

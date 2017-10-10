@@ -85,9 +85,14 @@
     <Reference Include="taglib-sharp">
       <HintPath>Assets\Plugins\taglib-sharp.dll</HintPath>
     </Reference>
+    <Reference Include="NReco.VideoConverter">
+      <HintPath>Assets\Plugins\NReco.VideoConverter.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\BuildShow.cs" />
+    <Compile Include="Assets\Scripts\Control.cs" />
+    <Compile Include="Assets\Scripts\ControlAudio.cs" />
     <Compile Include="Assets\Scripts\ControlVideo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -3,37 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 [RequireComponent(typeof(AudioSource))]
-public class ControlVideo : MonoBehaviour {
+public class ControlVideo : Control {
 
     VideoPlayer vp;
-    bool isPlaying = false;
-    public bool switchOn = false;
-
-    GameObject timeLine, timeMarker;
-
+ 
     void Start () {
+        InitMarkers();
         vp = (VideoPlayer)GetComponent<VideoPlayer>();
-        timeLine = transform.parent.Find("TimeLine").gameObject;
-        timeMarker = timeLine.transform.Find("TimeMarker").gameObject;
     }
-	
-	void Update () {
+
+    void Update () {
         if (vp != null)
         {
             if (switchOn && !vp.isPlaying)
             {
-                PlayVideo();
+                Play();
             }
             if (!switchOn && vp.isPlaying)
             {
-                PlayVideo();
+                Play();
             }
+        SetMarkerPos((float)vp.frame / vp.frameCount);
         }
-        SetMarkerPos();
         
     }
 
-    public void PlayVideo() {
+    public void Play() {
         if (isPlaying)
         {
             vp.Play();
@@ -42,12 +37,5 @@ public class ControlVideo : MonoBehaviour {
             vp.Pause();
         }
         isPlaying = !isPlaying;
-        
-    }
-
-    public void SetMarkerPos(){
-        float playProgress = (float)vp.frame / vp.frameCount;
-        Vector3 markerPos = timeLine.transform.TransformPoint(Vector3.up * (playProgress * 2 - 1));//https://docs.unity3d.com/ScriptReference/Transform.TransformPoint.html
-        timeMarker.transform.position = markerPos;
     }
 }
