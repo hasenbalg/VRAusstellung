@@ -352,31 +352,60 @@ namespace VRAustellungManager
                 if (newPiece.filePath != path)
                 {
                     newPiece.filePath = dir + "//" + System.IO.Path.GetFileName(path);
-                    if (System.IO.Path.GetExtension(newPiece.filePath) == ".mp4")
+                   
+                    switch (System.IO.Path.GetExtension(newPiece.filePath))
                     {
-                        string thumbnailPath =
+                        case ".mp4":
+                            string thumbnailPath =
                              System.IO.Path.GetDirectoryName(newPiece.filePath) +
                             System.IO.Path.GetFileNameWithoutExtension(newPiece.filePath) + videoThumbNailExtension;
-                        ffMpeg.GetVideoThumbnail(path, thumbnailPath);
+                            ffMpeg.GetVideoThumbnail(path, thumbnailPath);
+                            File.Copy(path, newPiece.filePath, true);
+                            break;
+                        case ".obj":
+                            //try to find material
+                            string materialPath = GetPathWithoutExtension(path) + ".mtl";
+                            Console.WriteLine("materialPath: " + materialPath);
 
-                        ////convert video 2 ogg
-                        //var output = new MemoryStream();
+                            string materialDestination = GetPathWithoutExtension(newPiece.filePath) + ".mtl";
+                            Console.WriteLine("materialDestination: " + materialDestination);
 
-                        //ffMpeg.ConvertMedia(path, output, Format.ogg);
-                        //output.Seek(0, SeekOrigin.Begin);
-                        //newPiece.filePath = dir + "//" + System.IO.Path.GetFileNameWithoutExtension(path) + ".ogg";
-                        //using (FileStream file = new FileStream(newPiece.filePath, FileMode.Create, FileAccess.Write))
-                        //{
-                        //    output.WriteTo(file);
-                        //}
-                        //newPiece.fileformat = System.IO.Path.GetExtension(newPiece.filePath);
-                        File.Copy(path, newPiece.filePath, true);
+                            if (File.Exists(materialPath))
+                            {
+                                Console.WriteLine("material file found");
 
+                                CopyMaterialFileAndFindTextures(materialPath, materialDestination);
+                                Console.WriteLine("material file copied");
+                            }
+                            else
+                            {
+                                MessageBox.Show("Die Matereialdatei " + Path.GetFileName(materialPath) + " konnte nicht gefunden werden.\n Falls Sie wissen, wo sie ist, koennen Sie sie im naechsten Fenster auswaehlen. Falls nicht, klicke Sie auf \"Abbrechen\".");
+                                var fileDialog = new System.Windows.Forms.OpenFileDialog()
+                                {
+                                    Filter = "MTL Files (*.mtl)|*.mtl",
+                                    Multiselect = false
+                                };
+
+                                var result = fileDialog.ShowDialog();
+                                switch (result)
+                                {
+                                    case System.Windows.Forms.DialogResult.OK:
+                                        materialPath = fileDialog.FileName;
+                                        CopyMaterialFileAndFindTextures(materialPath, materialDestination);
+                                        break;
+                                    case System.Windows.Forms.DialogResult.Cancel:
+                                    default:
+
+                                        break;
+                                }
+                            }
+                            File.Copy(path, newPiece.filePath, true);
+                            break;
+                        default:
+                            File.Copy(path, newPiece.filePath, true);//https://stackoverflow.com/a/44610221
+                            break;
                     }
-                    else {
-                        File.Copy(path, newPiece.filePath, true);//https://stackoverflow.com/a/44610221
-                    }
-                    
+
 
                 }
 
@@ -398,7 +427,82 @@ namespace VRAustellungManager
 
         }
 
-      
+        private string GetPathWithoutExtension(string path)
+        {
+            //http://www.java2s.com/Code/CSharp/File-Stream/GetFullPathWithoutExtension.htm
+            return Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path));
+        }
+
+        public void CopyMaterialFileAndFindTextures(string materialPath, string materialDestination) {
+            try
+            {
+                //https://stackoverflow.com/questions/8037070/whats-the-fastest-way-to-read-a-text-file-line-by-line
+                var filestream = new System.IO.FileStream(materialPath,
+                          System.IO.FileMode.Open,
+                          System.IO.FileAccess.Read,
+                          System.IO.FileShare.ReadWrite);
+                var file = new System.IO.StreamReader(filestream, System.Text.Encoding.UTF8, true, 128);
+
+                string newMaterialFileText = string.Empty;
+                string lineOfFile;
+                string marker = "map_Kd";
+                while ((lineOfFile = file.ReadLine()) != null)
+                {
+                    Console.WriteLine(lineOfFile);
+                    if (lineOfFile.Contains(marker)) //line with texture path
+                    {
+                        lineOfFile = lineOfFile.Trim();
+                        string texName = lineOfFile.Substring(marker.Length, lineOfFile.Length - marker.Length).Trim(); // get rid of "mak_Kd "
+                        Console.WriteLine("texName: " + texName);
+                        Console.WriteLine("Texture should be here:" + Path.Combine(Path.GetDirectoryName(materialPath), texName));
+                        if (File.Exists(Path.Combine(Path.GetDirectoryName(materialPath),  texName)))
+                        {
+                            File.Copy(
+                                Path.Combine(Path.GetDirectoryName(materialPath), texName),
+                                Path.Combine(Path.GetDirectoryName(materialDestination), texName), true);
+
+                        }
+                        else
+                        { // tex couldnt be found
+                            MessageBox.Show("Die Textur '" + texName + "' konnte nicht gefunden werden.\n Falls Sie wissen," + 
+                                "wo sie ist, koennen Sie sie im naechsten Fenster auswaehlen. Falls nicht, klicke Sie auf \"Abbrechen\".");
+                            var fileDialog = new System.Windows.Forms.OpenFileDialog()
+                            {
+                                Filter = "JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png|JPEG Files (*.jpeg)|*.jpeg",
+                                Multiselect = false
+                            };
+
+                            var result = fileDialog.ShowDialog();
+                            switch (result)
+                            {
+                                case System.Windows.Forms.DialogResult.OK:
+                                    lineOfFile = marker + " " + Path.Combine(Path.GetDirectoryName(materialDestination),
+                                        Path.GetFileName(fileDialog.FileName));
+                                    File.Copy(fileDialog.FileName,
+                                        Path.Combine(Path.GetDirectoryName(materialDestination),
+                                        Path.GetFileName(fileDialog.FileName)), true);
+                                    break;
+                                case System.Windows.Forms.DialogResult.Cancel:
+                                default:
+
+                                    break;
+                            }
+                        }
+                    }
+                    //rewrite each line to a new .mtl-file
+                    newMaterialFileText += lineOfFile + Environment.NewLine;
+                }
+                //file is ready
+                File.WriteAllText(materialDestination, newMaterialFileText);
+            }
+            catch (Exception jj)
+            {
+                MessageBox.Show(jj.ToString());
+                throw;
+            }
+           
+        }
+
         private void PieceDeleteButton_Click(object sender, RoutedEventArgs e)
         {
             Piece piece2Edit = exhib.pieces.Find(x => x.id == Int32.Parse(IdTextBlock.Text));

@@ -14,7 +14,7 @@ public class BuildShow : MonoBehaviour {
     public Material matShowRoom;
    
 
-    public GameObject prefabImageCanvas, prefabVideoCanvas, prefabAudioCanvas;
+    public GameObject prefabImageCanvas, prefabVideoCanvas, prefabAudioCanvas, prefab3DCanvas;
     public Texture2D audioFallbackTexture;
     public float groundOffset;
 
@@ -61,6 +61,9 @@ public class BuildShow : MonoBehaviour {
                         case ".mp3":
                         case ".wav":
                             InstantiateAudioCanvas(pos, exhibition.pieces[k].filePath);
+                            break;
+                        case ".obj":
+                            Instantiate3DCanvas(pos, exhibition.pieces[k].filePath);
                             break;
                         default:
                             break;
@@ -132,6 +135,35 @@ public class BuildShow : MonoBehaviour {
         StartCoroutine(LoadAudio(audioSource, filePath));
     }
 
+    private void Instantiate3DCanvas(Vector3 pos, string filePath)
+    {
+        Material mat = new Material(Shader.Find("Standard"));
+        Texture2D tex = new Texture2D(2,2);
+        mat.mainTexture = tex;
+        //mat.EnableKeyword("_EMISSION");
+        //mat.SetColor("_EmissionColor", new Color(.10f, .10f, .10f));
+
+        GameObject newPiece = Instantiate(prefab3DCanvas, pos, Quaternion.identity);
+
+        Mesh holderMesh = new Mesh();
+        ObjImporter newMesh = new ObjImporter();
+        holderMesh = newMesh.ImportFile(filePath);
+
+        MeshFilter filter = newPiece.GetComponent<MeshFilter>();
+        filter.mesh = holderMesh;
+
+
+        //GameObject stand = Instantiate(prefabAudioCanvas, pos, Quaternion.identity);
+        //Transform canvas = stand.transform.Find("Canvas");
+        //canvas.localScale = new Vector3(tex.width, 1, tex.height).normalized;
+        //Vector3 liftUp = canvas.position;
+        //liftUp.y = canvas.localScale.z * .5f + groundOffset;
+        //canvas.position = liftUp;
+        //newPiece.GetComponent<Renderer>().material = mat;
+
+
+    }
+
     private Texture2D LoadAudioArtWork(string filePath)
     {
         Texture2D tex = null;
@@ -173,37 +205,39 @@ public class BuildShow : MonoBehaviour {
     IEnumerator LoadAudio(AudioSource audioSource, string filePath)
     {
         //filePath = "https://upload.wikimedia.org/wikipedia/en/5/58/Barbie_girl_aqua.ogg";
-
-        string targetFormat = string.Empty;
-        if (Path.GetExtension(filePath) == ".mp3")
+        if (File.Exists(filePath))
         {
-            targetFormat = (string)Format.aiff;
-            Debug.LogWarning("converting audio file 2 " + targetFormat);
-            string oggFilePath = Application.temporaryCachePath
-                + Path.GetFileNameWithoutExtension(filePath) + "." + targetFormat;
+            string targetFormat = string.Empty;
+            if (Path.GetExtension(filePath) == ".mp3")
+            {
+                targetFormat = (string)Format.aiff;
+                Debug.LogWarning("converting audio file 2 " + targetFormat);
+                string oggFilePath = Application.temporaryCachePath
+                    + Path.GetFileNameWithoutExtension(filePath) + "." + targetFormat;
 
-            FFMpegConverter ffMpeg = new FFMpegConverter();
-            ffMpeg.ConvertProgress += FfMpeg_ConvertProgress;
-            ffMpeg.ConvertMedia(filePath, oggFilePath, targetFormat);
-            filePath = oggFilePath;
-        }
+                FFMpegConverter ffMpeg = new FFMpegConverter();
+                ffMpeg.ConvertProgress += FfMpeg_ConvertProgress;
+                ffMpeg.ConvertMedia(filePath, oggFilePath, targetFormat);
+                filePath = oggFilePath;
+            }
 
         
-        WWW www = new WWW(filePath);
-        yield return www;
-        if (!string.IsNullOrEmpty(www.error))
-        {
-            Debug.Log("WWW Error: " + www.error);
-        }
-        else
-        {
-            Debug.Log("WWW Ok!: " + www.text);
-            if (targetFormat == Format.aiff)
+            WWW www = new WWW(filePath);
+            yield return www;
+            if (!string.IsNullOrEmpty(www.error))
             {
-                audioSource.clip = www.GetAudioClip(true, true, AudioType.AIFF);
+                Debug.Log("WWW Error: " + www.error);
             }
-            else {
-                audioSource.clip = www.GetAudioClip(true, true, AudioType.UNKNOWN);
+            else
+            {
+                Debug.Log("WWW Ok!: " + www.text);
+                if (targetFormat == Format.aiff)
+                {
+                    audioSource.clip = www.GetAudioClip(true, true, AudioType.AIFF);
+                }
+                else {
+                    audioSource.clip = www.GetAudioClip(true, true, AudioType.UNKNOWN);
+                }
             }
         }
 

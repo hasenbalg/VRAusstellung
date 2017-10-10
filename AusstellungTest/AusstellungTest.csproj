@@ -82,11 +82,11 @@
     <Reference Include="LibVRAusstellung">
       <HintPath>Assets\Plugins\LibVRAusstellung.dll</HintPath>
     </Reference>
-    <Reference Include="taglib-sharp">
-      <HintPath>Assets\Plugins\taglib-sharp.dll</HintPath>
-    </Reference>
     <Reference Include="NReco.VideoConverter">
       <HintPath>Assets\Plugins\NReco.VideoConverter.dll</HintPath>
+    </Reference>
+    <Reference Include="taglib-sharp">
+      <HintPath>Assets\Plugins\taglib-sharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +94,7 @@
     <Compile Include="Assets\Scripts\Control.cs" />
     <Compile Include="Assets\Scripts\ControlAudio.cs" />
     <Compile Include="Assets\Scripts\ControlVideo.cs" />
+    <Compile Include="Assets\Scripts\ObjImporter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
