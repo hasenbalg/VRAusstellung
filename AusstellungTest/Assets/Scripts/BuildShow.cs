@@ -137,9 +137,8 @@ public class BuildShow : MonoBehaviour {
 
     private void Instantiate3DCanvas(Vector3 pos, string filePath)
     {
-        Material mat = new Material(Shader.Find("Standard"));
-        Texture2D tex = new Texture2D(2,2);
-        mat.mainTexture = tex;
+        Material mat = new Material(Shader.Find("Diffuse"));
+
         //mat.EnableKeyword("_EMISSION");
         //mat.SetColor("_EmissionColor", new Color(.10f, .10f, .10f));
 
@@ -152,6 +151,8 @@ public class BuildShow : MonoBehaviour {
         MeshFilter filter = newPiece.GetComponent<MeshFilter>();
         filter.mesh = holderMesh;
 
+        newPiece.GetComponent<Renderer>().materials = LoadMaterials(filePath); 
+
 
         //GameObject stand = Instantiate(prefabAudioCanvas, pos, Quaternion.identity);
         //Transform canvas = stand.transform.Find("Canvas");
@@ -162,6 +163,32 @@ public class BuildShow : MonoBehaviour {
         //newPiece.GetComponent<Renderer>().material = mat;
 
 
+    }
+
+    private Material[] LoadMaterials( string filePath)
+    {
+       string materialPath = Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath)) + ".mtl";
+        Debug.Log(materialPath);
+        string texPathMarker = "map_Kd";
+
+        List<Material> materials = new List<Material>();
+        if (File.Exists(materialPath)) {
+            foreach (string line in File.ReadAllLines(materialPath))
+            {
+                string[] tokens = line.Split(' ');
+
+                if (tokens[0] == texPathMarker)
+                {
+                    string texFileName = tokens[1];
+                    Debug.Log("tex found: " + texFileName);
+                    Material newMat = new Material(Shader.Find("Standard"));
+                    newMat.name = texFileName;
+                    newMat.mainTexture = LoadPNG(Path.Combine(Path.GetDirectoryName(materialPath), texFileName));
+                    materials.Add(newMat);
+                }
+            }
+        }
+        return materials.ToArray();
     }
 
     private Texture2D LoadAudioArtWork(string filePath)
