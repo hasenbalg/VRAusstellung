@@ -19,6 +19,7 @@ public class ObjImporter
         public Vector2[] uv;
         public Vector2[] uv1;
         public Vector2[] uv2;
+        public List<List<int>> submeshes;
         public int[] triangles;
         public int[] faceVerts;
         public int[] faceUVs;
@@ -56,7 +57,12 @@ public class ObjImporter
         mesh.vertices = newVerts;
         mesh.uv = newUVs;
         mesh.normals = newNormals;
-        mesh.triangles = newMesh.triangles;
+        mesh.subMeshCount = newMesh.submeshes.Count;
+        //mesh.triangles = newMesh.triangles;
+        for (int s = 0; s < newMesh.submeshes.Count; s++)
+        {
+            mesh.SetTriangles(newMesh.submeshes[s].ToArray(), s);
+        }
 
         mesh.RecalculateBounds();
         ;
@@ -67,6 +73,7 @@ public class ObjImporter
     private static meshStruct createMeshStruct(string filename)
     {
         int triangles = 0;
+        List<int> trianglesList = new List<int>();
         int vertices = 0;
         int vt = 0;
         int vn = 0;
@@ -76,6 +83,9 @@ public class ObjImporter
         StreamReader stream = File.OpenText(filename);
         string entireText = stream.ReadToEnd();
         stream.Close();
+
+        mesh.submeshes = new List<List<int>>();
+
         using (StringReader reader = new StringReader(entireText))
         {
             string currentText = reader.ReadLine();
@@ -84,7 +94,7 @@ public class ObjImporter
             while (currentText != null)
             {
                 if (!currentText.StartsWith("f ") && !currentText.StartsWith("v ") && !currentText.StartsWith("vt ")
-                    && !currentText.StartsWith("vn "))
+                    && !currentText.StartsWith("vn ") && !currentText.StartsWith("usemtl "))
                 {
                     currentText = reader.ReadLine();
                     if (currentText != null)
@@ -106,6 +116,9 @@ public class ObjImporter
                             break;
                         case "vn":
                             vn++;
+                            break;
+                        case "usemtl":
+                            
                             break;
                         case "f":
                             face = face + brokenString.Length - 1;
@@ -147,9 +160,11 @@ public class ObjImporter
             int f2 = 0;
             int v = 0;
             int vn = 0;
+            
             int vt = 0;
             int vt1 = 0;
             int vt2 = 0;
+        
             while (currentText != null)
             {
                 if (!currentText.StartsWith("f ") && !currentText.StartsWith("v ") && !currentText.StartsWith("vt ") &&
@@ -172,6 +187,7 @@ public class ObjImporter
                         case "g":
                             break;
                         case "usemtl":
+                            mesh.submeshes.Add(new List<int>());
                             break;
                         case "usemap":
                             break;
@@ -222,16 +238,20 @@ public class ObjImporter
 
                                 mesh.faceData[f2] = temp;
                                 intArray.Add(f2);
+                                
                                 f2++;
                             }
                             j = 1;
                             while (j + 2 < brokenString.Length)     //Create triangles out of the face data.  There will generally be more than 1 triangle per face.
                             {
                                 mesh.triangles[f] = intArray[0];
+                                mesh.submeshes[mesh.submeshes.Count-1].Add(intArray[0]);
                                 f++;
                                 mesh.triangles[f] = intArray[j];
+                                mesh.submeshes[mesh.submeshes.Count - 1].Add(intArray[j]);
                                 f++;
                                 mesh.triangles[f] = intArray[j + 1];
+                                mesh.submeshes[mesh.submeshes.Count - 1].Add(intArray[j + 1]);
                                 f++;
 
                                 j++;
