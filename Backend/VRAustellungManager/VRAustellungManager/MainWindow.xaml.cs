@@ -22,7 +22,8 @@ namespace VRAustellungManager
     /// </summary>
     public partial class MainWindow : Window
     {
-        string dir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//VRAusstellungX";
+        string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) , "VRAusstellungX");
+        //string dir = Path.Combine(Path.GetPathRoot(Environment.SystemDirectory) , "VRAusstellungX");
         string xmlPath = "//Object.xml";
         string videoThumbNailExtension = "_thumbnail.png";
         FFMpegConverter ffMpeg = new FFMpegConverter(); //https://www.nrecosite.com/video_converter_net.aspx
@@ -78,13 +79,14 @@ namespace VRAustellungManager
 
         private void ExhibitionitionSave_Button_Click(object sender, RoutedEventArgs e)
         {
+            Directory.CreateDirectory(dir);
             exhib.title = ExhibitionTitleTextBox.Text;
             exhib.description = ExhibitionDescriptionTextBox.Text;
-            string destinationPath = dir + "//" + System.IO.Path.GetFileName(ExhibitionLogoPath.Text);
-            if (!File.Exists(destinationPath))
-            {
+            string destinationPath = Path.Combine(dir , Path.GetFileName(ExhibitionLogoPath.Text));
+            //if (!File.Exists(destinationPath))
+            //{
                 File.Copy(ExhibitionLogoPath.Text, destinationPath, true);
-            }
+            //}
             exhib.iconpath = destinationPath;
             ChangeGridDimensions();
             Flush();
