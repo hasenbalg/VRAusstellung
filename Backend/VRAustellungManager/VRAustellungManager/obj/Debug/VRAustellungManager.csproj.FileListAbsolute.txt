@@ -66,3 +66,10 @@ C:\Users\fr\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungMana
 C:\Users\fr\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.g.resources
 C:\Users\fr\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.Properties.Resources.resources
 C:\Users\fr\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\VRAustellungManager.csproj.GenerateResource.Cache
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\ExhibitionProperties.g.cs
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\ExhibitionProperties.baml
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PieceProperties.g.cs
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PiecesGrid.g.cs
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PieceProperties.baml
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PiecesGrid.baml

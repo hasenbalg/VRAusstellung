@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\App.xaml
-11151548125
+41449663415
 
-9308445964
-20311568958
-MainWindow.xaml;
+12488973295
+21-1428841203
+ExhibitionProperties.xaml;MainWindow.xaml;PieceProperties.xaml;PiecesGrid.xaml;
 
-False
+True
 

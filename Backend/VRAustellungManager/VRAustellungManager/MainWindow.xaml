@@ -7,263 +7,73 @@
         xmlns:helix="http://helix-toolkit.org/wpf"
         mc:Ignorable="d"
         Title="VR Ausstellung Manager" Height="950" Width="525">
-    <Window.Resources>
-        <DataTemplate x:Key="DataTemplate_Level2">
-            <StackPanel Width="90" Height="90" Margin="5" Background="#FF939393" >
-                <Grid>
-                    <!--https://stackoverflow.com/a/29698994-->
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50" />
-                        <RowDefinition Height="40" />
-                    </Grid.RowDefinitions>
-                    <TextBlock Text="{Binding  title}" Margin="2.5"  Grid.Row="0" HorizontalAlignment="Center" TextWrapping="Wrap" PreviewMouseDown = "PreviewMouseMove" Drop = "Drop" AllowDrop="True" Cursor="SizeAll"/>
-                    <Button Grid.Row="1" Content="&#128394;" Click="PieceButton_Click"
-                        MinWidth="45"  VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
-                </Grid>
-            </StackPanel>
-        </DataTemplate>
 
-        <DataTemplate x:Key="DataTemplate_Level1">
-            <ItemsControl ItemsSource="{Binding}" ItemTemplate="{DynamicResource DataTemplate_Level2}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-        </DataTemplate>
+    <Window.CommandBindings>
+        <CommandBinding Command="New" Executed="NewCommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="Open" Executed="OpenCommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="SaveAs" Executed="SaveAsCommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="Save" Executed="SaveCommandBinding_Executed"></CommandBinding>
+        <!--<CommandBinding Command="Export" Executed="ExportCommandBinding_Executed"></CommandBinding>-->
+        <CommandBinding Command="Close" Executed="CloseCommandBinding_Executed"></CommandBinding>
+    </Window.CommandBindings>
 
-        <Style TargetType="{x:Type Button}">
-            <Setter Property="MinWidth" Value="90" />
-            <Setter Property="HorizontalAlignment" Value="Left" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Margin" Value="5" />
-            <Setter Property="Padding" Value="5" />
-        </Style>
+    <Window.InputBindings>
+        <KeyBinding Key="N" Modifiers="Control" Command="New"></KeyBinding>
+        <KeyBinding Key="O" Modifiers="Control" Command="Open"></KeyBinding>
+        <KeyBinding Key="S" Modifiers="Control" Command="Save"></KeyBinding>
+        <KeyBinding Key="S" Modifiers="Ctrl+Shift" Command="SaveAs"></KeyBinding>
+        <!--<KeyBinding Key="E" Modifiers="Ctrl" Command="Export"></KeyBinding>-->
+    </Window.InputBindings>
 
-        <Style x:Key="heading" TargetType="Label">
-            <Setter Property="FontSize" Value="24" />
-        </Style>
+    <StackPanel>
 
-        <Style x:Key="subHeading" TargetType="Label">
-            <Setter Property="FontSize" Value="16" />
-        </Style>
 
-        <Style x:Key="generalSettings" TargetType="Grid">
-            <Setter Property="Margin" Value="5" />
-        </Style>
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_Datei">
+                    <MenuItem Header="_Neu" Command="New" InputGestureText="Ctrl+N"/>
+                    <MenuItem Header="_Oeffnen" Command="Open" InputGestureText="Ctrl+O"/>
+                    <MenuItem Header="_Speichern" Command="Save" InputGestureText="Ctrl+S"/>
+                    <MenuItem Header="_Speichern unter" Command="Save" InputGestureText="Ctrl+Shift+S"/>
+                    <MenuItem Header="_Exportieren"  InputGestureText="Ctrl+E"/>
+                    <MenuItem Header="_Beenden" Command="Close" InputGestureText="Alt+F4"/>
+                </MenuItem>
+            </Menu>
+            <StackPanel></StackPanel>
+        </DockPanel>
+        
 
-        <Style x:Key="menuPoints" TargetType="Label">
-            <Setter Property="HorizontalAlignment" Value="Left" />
-        </Style>
-
-        <Style x:Key="continuousText" TargetType="TextBox">
-            <Setter Property="Height" Value="100" />
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="AcceptsReturn" Value="True" />
-            <Setter Property="MaxWidth" Value="300" />
-            <Setter Property="SpellCheck.IsEnabled" Value="True" />
-        </Style>
 
         
-       
 
-    </Window.Resources>
-    <Grid>
-
-        <Grid>
-            <TabControl TabStripPlacement ="Top">
-                <TabItem>
-                    <TabItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Allgemeine Einstellungen" />
-                        </StackPanel>
-                    </TabItem.Header>
-
-                    <StackPanel>
-                    <!--<Label Style="{StaticResource heading}" Content="Allegemeine Einstellungen"/>-->
-                        
-                   
-                    <Grid Style="{StaticResource generalSettings}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="3*" />
-                        </Grid.ColumnDefinitions>
-                        <Label Content="Titel der Ausstellung" Style="{StaticResource menuPoints}" Grid.Column="0" ToolTip="Wie soll die Ausstellung heissen?"/>
-                        <TextBox x:Name="ExhibitionTitleTextBox" Grid.Column="1"/>
-                    </Grid>
-
-                    <Grid Style="{StaticResource generalSettings}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="3*" />
-                        </Grid.ColumnDefinitions>
-                        <Label Content="Beschreibung" Style="{StaticResource menuPoints}" Grid.Column="0" ToolTip="Wie soll die Ausstellung heissen?"/>
-                        <TextBox x:Name="ExhibitionDescriptionTextBox" Grid.Column="1" Style="{StaticResource continuousText}"/>
-                    </Grid>
-
-
-                    <Grid Style="{StaticResource generalSettings}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="3*" />
-                        </Grid.ColumnDefinitions>
-                        <Label Content="Ausstellungsgroesse" Style="{StaticResource menuPoints}" Grid.Column="0" ToolTip="Ein Raster n x m"/>
-                        <TextBlock Grid.Column="1">
-                    <TextBox x:Name="GridWidthTextBox" Text="3"/> × <TextBox Text="3" x:Name="GridHeightTextBox" />
-                        </TextBlock>
-                    </Grid>
-
-                    <Grid Style="{StaticResource generalSettings}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="2*" />
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0">
-                            <Label Content="Logo der Ausstellung" Style="{StaticResource menuPoints}" ToolTip="Waehlen Sie ein Bild aus!" />
-                            <Image x:Name="ExhibitionLogo" MaxWidth="100" MaxHeight="100">
-                                <!--https://stackoverflow.com/q/25714085-->
-                                <Image.Source>
-                                    <BitmapImage UriSource="Resources/Preview.png" />
-                                </Image.Source>
-                            </Image>
-                        </StackPanel>
-                        <StackPanel Grid.Column="1">
-                            <Button Content="Bilddatei auswaehlen" x:Name="ExhibitionChooseLogo_Button" Click="ExhibitionChooseLogo_ButtonClick"/>
-                            <TextBlock x:Name="ExhibitionLogoPath" />
-                        </StackPanel>
-                    </Grid>
-                        <Grid >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Button Content="Speichern" x:Name="ExhibitionitionSave_Button" Click="ExhibitionitionSave_Button_Click" Grid.Column="1"/>
-                            <Button Content="Abbrechen" x:Name="ExhibitionitionCancel_Button" Click="ExhibitionitionCancel_Button_Click" Grid.Column="2"/>
-                        </Grid>
+        <TabControl TabStripPlacement ="Top">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Allgemeine Einstellungen" />
                     </StackPanel>
-                </TabItem>
-                <TabItem>
-                    <TabItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Ausstellungsstuecke"/>
-                        </StackPanel>
-                    </TabItem.Header>
+                </TabItem.Header>
+                <local:ExhibitionProperties x:Name="exhibitionPropertiesControl"/>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Ausstellungsstuecke"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <local:PiecesGrid x:Name="piecesGridControl" Grid.Column="0"/>
+                    <local:PieceProperties x:Name="piecesPropertiesControl" Grid.Column="1"/>
+                </Grid>
+                
+                
+            </TabItem>
+        </TabControl>
+        
 
-                    <Grid Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="700" />
-                            <ColumnDefinition Width="500" />
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel Grid.Column="0">
-
-                            <!--<Label Content="Ausstellungsstuecke" Style="{StaticResource heading}"/>-->
-                            <Grid>
-                                <ItemsControl x:Name="PiecesGrid" ItemTemplate="{DynamicResource DataTemplate_Level1}"/>
-                            </Grid>
-                        </StackPanel>
-
-
-
-
-                        <Border Grid.Column="1" BorderBrush="Gainsboro" BorderThickness="1" Margin="5" Padding="5" x:Name="EditPanel">
-                            <!--http://www.wpf-tutorial.com/misc-controls/the-border-control/-->
-                            <StackPanel >
-                                <TextBlock TextWrapping="Wrap" MaxWidth="150">
-                                    Die <Bold>Anordnung</Bold> der Ausstellungsstuecke kann per <Bold>Drag'n'Drop</Bold> geaendert werden.
-                                </TextBlock>
-                                <Label Content="Eigenschaften" Style="{StaticResource subHeading}"/>
-                                <TextBlock Text="" TextWrapping="Wrap" MaxWidth="150">
-                                Es koennen Bild, Video, Audio und 3D-Dateien in den <Bold>Formaten</Bold> JPEG, PNG, MP4, WAV, MP3 und OBJ geladen werden.
-                                </TextBlock>
-                                <TextBox x:Name="IdTextBlock" Visibility="Hidden"/>
-
-                                <Grid Margin="5">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Label Content="Name" Grid.Column="0"/>
-                                    <TextBox x:Name="NameTextBox" Grid.Column="1"/>
-                                </Grid>
-                                <Grid  Margin="5">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Label Content="Beschreibung" Grid.Column="0"/>
-                                    <TextBox x:Name="DescriptionTextBox"  Style="{StaticResource continuousText}" Grid.Column="1" />
-                                </Grid>
-
-                                <Grid  Margin="5">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Grid.Column="0">
-                                        <Label Content="Ausstellungsstueck"/>
-                                        <Image x:Name="PiecePreviewImage" MaxWidth="100" MaxHeight="100">
-                                            <Image.Source>
-                                                <BitmapImage UriSource="Resources/Preview.png" />
-                                            </Image.Source>
-                                        </Image>
-
-                                        <helix:HelixViewport3D x:Name="Piece3D" ZoomExtentsWhenLoaded="true" Width="100" Height="100" >
-                                            <!-- Remember to add light to the scene -->
-                                            <helix:DefaultLights/>
-                                        </helix:HelixViewport3D>
-
-                                        <StackPanel x:Name="PieceAudio">
-                                            <!--http://www.wpf-tutorial.com/audio-video/playing-audio/-->
-                                            <Label Name="AudioStatusLabel" Content="Audio pausiert..." HorizontalContentAlignment="Center" Margin="5" />
-                                            <WrapPanel HorizontalAlignment="Center">
-                                                <Button Name="btnPlay" Click="btnPlay_Click">Play</Button>
-                                                <Button Name="btnPause"  Click="btnPause_Click">Pause</Button>
-                                                <Button Name="btnStop" Click="btnStop_Click">Stop</Button>
-                                            </WrapPanel>
-                                        </StackPanel>
-                                    </StackPanel>
-                                    
-                                    <StackPanel Grid.Column="1">
-                                        <Button Content="Datei auswaehlen" x:Name="PieceChoose_Button" Click="PieceChoose_ButtonClick"/>
-                                        <TextBlock x:Name="PieceFileUrlTextBlock" TextWrapping="Wrap"/>
-                                    </StackPanel>
-                                    
-                                </Grid>
-
-                                <Grid  Margin="5">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Button Content="Speichern" x:Name="PieceOKButton" Click="PieceOKButton_Click" Grid.Column="0"/>
-                                    <Button Content="Loeschen" x:Name="PieceDeleteButton" Click="PieceDeleteButton_Click" Grid.Column="1"/>
-                                    <Button Content="Abbrechen" x:Name="CancleButton" Click="CancleButton_Click" Grid.Column="2"/>
-                                </Grid>
-
-
-
-
-
-
-
-                            </StackPanel>
-                        </Border>
-                    </Grid>
-
-
-                </TabItem>
-
-            <!--TEST-->
-
-             
-            </TabControl>
-        </Grid>
-
-       
-
-    </Grid>
+    </StackPanel>
 </Window>

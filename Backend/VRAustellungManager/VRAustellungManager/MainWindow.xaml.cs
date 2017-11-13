@@ -1,614 +1,140 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Xml.Serialization;
-using NReco.VideoConverter;
-using System.Windows.Media.Media3D;
-using HelixToolkit.Wpf;
-using System.Windows.Threading;
 using LibVRAusstellung;
-using System.Text.RegularExpressions;
+using System.Linq;
+using System.Reflection;
+using System.ComponentModel;
+using System.Windows.Input;
+using Microsoft.Win32;
 
 namespace VRAustellungManager
 {
-    /// <summary>
-    /// Interaktionslogik für MainWindow.xaml
-    /// </summary>
+
     public partial class MainWindow : Window
     {
-        string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) , "VRAusstellungX");
-        //string dir = Path.Combine(Path.GetPathRoot(Environment.SystemDirectory) , "VRAusstellungX");
-        string xmlPath = "//Object.xml";
-        string videoThumbNailExtension = "_thumbnail.png";
-        FFMpegConverter ffMpeg = new FFMpegConverter(); //https://www.nrecosite.com/video_converter_net.aspx
-        MediaPlayer mediaPlayer = new MediaPlayer();
-        List<List<Piece>> pieces;
 
-        Exhibition exhib;
+       public List<List<Piece>> pieces;
+        public Exhibition exhib;
 
         public MainWindow()
         {
-            xmlPath = dir + xmlPath;
+
             InitializeComponent();
-            exhib = Exhibition.ReadXMLFile();
-            BuildGrid();
-            ResetForm();
-            FillGeneralSettings();
-        }
-
-       
-
-        //Exhibition
-
-        private void FillGeneralSettings()
-        {
-            ExhibitionTitleTextBox.Text = exhib.title;
-            ExhibitionDescriptionTextBox.Text = exhib.description;
-            GridWidthTextBox.Text = exhib.width.ToString();
-            GridHeightTextBox.Text = exhib.height.ToString();
-            ExhibitionLogoPath.Text = exhib.iconpath;
-
-            ExhibitionLogo.Source = SetImageSource(exhib.iconpath);
-         
-        }
-
-        private void ExhibitionChooseLogo_ButtonClick(object sender, RoutedEventArgs e)
-        {
-            var fileDialog = new System.Windows.Forms.OpenFileDialog() { Filter = "JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png|JPEG Files (*.jpeg)|*.jpeg" }; //https://stackoverflow.com/a/16862178
-            var result = fileDialog.ShowDialog();
-            switch (result)
-            {
-                case System.Windows.Forms.DialogResult.OK:
-                    string filePath = fileDialog.FileName;
-                    ExhibitionLogoPath.Text = filePath;
-                    ExhibitionLogo.Source = SetImageSource(filePath);
-                    break;
-                case System.Windows.Forms.DialogResult.Cancel:
-                default:
-                    //TxtFile.Text = null;
-                    //TxtFile.ToolTip = null;
-                    break;
-            }
-        }
-
-        private void ExhibitionitionSave_Button_Click(object sender, RoutedEventArgs e)
-        {
-            Directory.CreateDirectory(dir);
-            exhib.title = ExhibitionTitleTextBox.Text;
-            exhib.description = ExhibitionDescriptionTextBox.Text;
-            string destinationPath = Path.Combine(dir , Path.GetFileName(ExhibitionLogoPath.Text));
-            //if (!File.Exists(destinationPath))
-            //{
-                File.Copy(ExhibitionLogoPath.Text, destinationPath, true);
-            //}
-            exhib.iconpath = destinationPath;
-            ChangeGridDimensions();
-            Flush();
-            InitializeComponent();
-            exhib = Exhibition.ReadXMLFile();
-            BuildGrid();
-            ResetForm();
-            FillGeneralSettings();
-        }
-
-        private void ExhibitionitionCancel_Button_Click(object sender, RoutedEventArgs e)
-        {
-            InitializeComponent();
-            exhib = Exhibition.ReadXMLFile();
-            BuildGrid();
-            ResetForm();
-        }
-
-        private void PieceChoose_ButtonClick(object sender, RoutedEventArgs e)
-        {
-            var fileDialog = new System.Windows.Forms.OpenFileDialog() {
-                Filter = "JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png|JPEG Files (*.jpeg)|*.jpeg|MP4 Files (*.mp4)|*.mp4|MP3 Files (*.mp3)|*.mp3|WAV Files (*.wav)|*.wav|OBJ Files (*.obj)|*.obj",
-                Multiselect = false
-            }; //https://stackoverflow.com/a/16862178
-
-            var result = fileDialog.ShowDialog();
-            switch (result)
-            {
-                case System.Windows.Forms.DialogResult.OK:
-                    string filePath = fileDialog.FileName;
-                    PieceFileUrlTextBlock.Text = filePath;
-                    PiecePreviewImage.Source = SetImageSource(filePath);
-                    break;
-                case System.Windows.Forms.DialogResult.Cancel:
-                default:
-                    //TxtFile.Text = null;
-                    //TxtFile.ToolTip = null;
-                    break;
-            }
-        }
-
-
-        private void BuildGrid()
-        {
-            pieces = new List<List<Piece>>();
-            int k = 0;
-            for (int i = 0; i < exhib.width; i++)
-            {
-                pieces.Add(new List<Piece>());
-
-                for (int j = 0; j < exhib.height; j++)
-                {
-                    if (exhib.pieces.Count > k && !pieces[i].Contains(exhib.pieces[k]))
-                    {
-                        exhib.pieces[k].id = k;
-                        pieces[i].Add(exhib.pieces[k]);
-                    }
-                    else
-                    {
-                        pieces[i].Add(new Piece() { id = k, title = "leer", description = "", fileformat = "", filePath = "" });
-                    }
-                    k++;
-                }
-            }
-            InitializeComponent();
-            PiecesGrid.ItemsSource = pieces;
-
-            this.SizeToContent = SizeToContent.WidthAndHeight;
-
-        }
-
-        //Drag'Drop
-        bool m_inMouseMove;
-
-        public bool InvokeRequired { get; private set; }
-
-        private void PreviewMouseMove(object sender, MouseEventArgs e)
-        {
-            //https://stackoverflow.com/a/15780620
-            if (!m_inMouseMove)
-            {
-                m_inMouseMove = true;
-                if (e.LeftButton == MouseButtonState.Pressed)
-                {
-                    var btn = sender as TextBlock;
-                    System.Console.WriteLine("Dragged: " + (string)(btn.DataContext as Piece).title);
-                    DragDrop.DoDragDrop(btn, (Piece)btn.DataContext, DragDropEffects.All);
-                    e.Handled = true;
-                }
-                m_inMouseMove = false;
-            }
-        }
-
-        private void Drop(object sender, DragEventArgs e)
-        {
-            //https://stackoverflow.com/a/15780620
-            System.Console.WriteLine("Dropped: " + (string)(e.Data.GetData(typeof(Piece)) as Piece).title);
-            System.Console.WriteLine("on: " + (string)(((TextBlock)sender).DataContext as Piece).title);
-            Piece dropped = e.Data.GetData(typeof(Piece)) as Piece;
-            Piece sndr = ((TextBlock)sender).DataContext as Piece;
-            int tmpId = dropped.id;
-            dropped.id = sndr.id;
-            sndr.id = tmpId;
-
-            Flush();
-            ResetForm();
-            BuildGrid();
-        }
-
-
-
-        private void PieceButton_Click(object sender, RoutedEventArgs e)
-        {
-            Piece piece2Edit = (Piece)(sender as Button).DataContext;
-            IdTextBlock.Text = piece2Edit.id.ToString();
-            NameTextBox.Text = piece2Edit.title;
-            DescriptionTextBox.Text = piece2Edit.description;
-            PieceFileUrlTextBlock.Text = piece2Edit.filePath;
-            PiecePreviewImage.Source = SetImageSource(piece2Edit.filePath);
-            switch (piece2Edit.fileformat.ToLower())
-            {
-                case ".obj":
-                    Piece3D.Visibility = Visibility.Visible;
-                    PiecePreviewImage.Visibility = Visibility.Collapsed;
-                    PieceAudio.Visibility = Visibility.Collapsed;
-                    break;
-
-                case ".wav":
-                case ".mp3":
-                    Piece3D.Visibility = Visibility.Collapsed;
-                    PiecePreviewImage.Visibility = Visibility.Visible;
-                    PieceAudio.Visibility = Visibility.Visible;
-                    break;
-                default:
-                    Piece3D.Visibility = Visibility.Collapsed;
-                    PiecePreviewImage.Visibility = Visibility.Visible;
-                    PieceAudio.Visibility = Visibility.Collapsed;
-                    break;
-            }
-           
-            EditPanel.IsEnabled = true;
-        }
-
-        private ImageSource SetImageSource(string filePath)
-        {
-            //https://www.dotnetperls.com/image-wpf
-            BitmapImage b = new BitmapImage();
-            b.BeginInit();
-
-            string extension = System.IO.Path.GetExtension(filePath);
-            if (extension != null)
-            {
-                extension = extension.ToLower();
-            }
-            switch (extension)
-            {
-                case ".mp3":
-                case ".wav":
-                    mediaPlayer.Open(new Uri(filePath));
-                    DispatcherTimer timer = new DispatcherTimer();
-                    timer.Interval = TimeSpan.FromSeconds(1);
-                    timer.Tick += timer_Tick;
-                    timer.Start();
-
-                    //Artwork
-                    try
-                    {
-                        //https://stackoverflow.com/a/17905163
-                        // Load you image data in MemoryStream
-                        TagLib.File file = TagLib.File.Create(filePath);
-                        //https://stackoverflow.com/a/24833972
-                        TagLib.IPicture pic = file.Tag.Pictures[0];
-                        MemoryStream ms = new MemoryStream(pic.Data.Data);
-                        ms.Seek(0, SeekOrigin.Begin);
-
-                        // ImageSource for System.Windows.Controls.Image
-                        b.StreamSource = ms;
-                    }
-                    catch (Exception)
-                    {
-
-                        b.UriSource = new Uri(@"pack://application:,,,/Resources/Audio.png"); //https://stackoverflow.com/q/12690774
-                    }
-
-                    break;
-                case ".mp4":
-               
-                    //b.UriSource = new Uri(@"pack://application:,,,/Resources/Video.png");
-                    string thumbNailPath =
-                        thumbNailPath = System.IO.Path.GetTempPath() + System.IO.Path.GetFileNameWithoutExtension(filePath)
-                        + videoThumbNailExtension;
-                    if (!File.Exists(thumbNailPath))
-                    {
-                        ffMpeg.GetVideoThumbnail(filePath, thumbNailPath);
-                    }
-                    b.UriSource = new Uri(thumbNailPath);
-                    break;
-                case ".obj":
-                    b.UriSource = new Uri(@"pack://application:,,,/Resources/3DModell.png");
-                    //https://www.codeproject.com/Tips/882885/Display-D-Model-using-Window-Presentation-Foundat
-                    ModelVisual3D device3D = new ModelVisual3D();
-                    device3D.Content = Display3d(filePath);
-                    Piece3D.Children.Clear();
-                    // Add to view port
-                    Piece3D.Children.Add(device3D);
-
-                    break;
-                case ".png":
-                case ".jpg":
-                case ".jpeg":
-                    b.UriSource = new Uri(filePath);
-                    break;
-                default:
-                    b.UriSource = new Uri(@"pack://application:,,,/Resources/Preview.png");
-                    break;
-            }
-            try
-            {
-                b.EndInit();
-
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Vorschaubild konnte nicht geladen werden" + e.ToString());
-                b = new BitmapImage();
-                b.BeginInit();
-                b.UriSource = new Uri(@"pack://application:,,,/Resources/Preview.png");
-                b.EndInit();
-            }
-
-            return b;
-
-        }
-
-        private Model3D Display3d(string model)
-        {
-            Model3D device = null;
-            try
-            {
-                Piece3D.RotateGesture = new MouseGesture(MouseAction.LeftClick);
-                ModelImporter import = new ModelImporter();
-                device = import.Load(model);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Exception Error : " + e.StackTrace);
-            }
-            return device;
-        }
-
-        private void PieceOKButton_Click(object sender, RoutedEventArgs e)
-        {
-            string path = PieceFileUrlTextBlock.Text;
-            Piece newPiece = new Piece
-            {
-                id = Int32.Parse(IdTextBlock.Text),
-                title = NameTextBox.Text,
-                description = DescriptionTextBox.Text,
-                filePath = dir + "//" + System.IO.Path.GetFileName(path),
-                fileformat = System.IO.Path.GetExtension(path.ToLower()) //fuehr vllt zu problemen
-            };
-
-            try
-            {
-                if (newPiece.filePath != path)
-                {
-                    newPiece.filePath = dir + "//" + System.IO.Path.GetFileName(path);
-                   
-                    switch (System.IO.Path.GetExtension(newPiece.filePath))
-                    {
-                        case ".mp4":
-                            string thumbnailPath =
-                             System.IO.Path.GetDirectoryName(newPiece.filePath) +
-                            System.IO.Path.GetFileNameWithoutExtension(newPiece.filePath) + videoThumbNailExtension;
-                            ffMpeg.GetVideoThumbnail(path, thumbnailPath);
-                            File.Copy(path, newPiece.filePath, true);
-                            break;
-                        case ".obj":
-                            //try to find material
-                            string materialPath = GetPathWithoutExtension(path) + ".mtl";
-                            Console.WriteLine("materialPath: " + materialPath);
-
-                            string materialDestination = GetPathWithoutExtension(newPiece.filePath) + ".mtl";
-                            Console.WriteLine("materialDestination: " + materialDestination);
-
-                            if (File.Exists(materialPath))
-                            {
-                                Console.WriteLine("material file found");
-
-                                CopyMaterialFileAndFindTextures(materialPath, materialDestination);
-                                Console.WriteLine("material file copied");
-                            }
-                            else
-                            {
-                                MessageBox.Show("Die Matereialdatei " + Path.GetFileName(materialPath) + " konnte nicht gefunden werden.\n Falls Sie wissen, wo sie ist, koennen Sie sie im naechsten Fenster auswaehlen. Falls nicht, klicke Sie auf \"Abbrechen\".");
-                                var fileDialog = new System.Windows.Forms.OpenFileDialog()
-                                {
-                                    Filter = "MTL Files (*.mtl)|*.mtl",
-                                    Multiselect = false
-                                };
-
-                                var result = fileDialog.ShowDialog();
-                                switch (result)
-                                {
-                                    case System.Windows.Forms.DialogResult.OK:
-                                        materialPath = fileDialog.FileName;
-                                        CopyMaterialFileAndFindTextures(materialPath, materialDestination);
-                                        break;
-                                    case System.Windows.Forms.DialogResult.Cancel:
-                                    default:
-
-                                        break;
-                                }
-                            }
-                            File.Copy(path, newPiece.filePath, true);
-                            break;
-                        default:
-                            File.Copy(path, newPiece.filePath, true);//https://stackoverflow.com/a/44610221
-                            break;
-                    }
-
-
-                }
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Kein Ausstellungsstueck gespeicher?\n\n" + ex.ToString());
-            }finally {
-                exhib.pieces = exhib.pieces.Where(x => x.id != Int32.Parse(IdTextBlock.Text)).ToList();
-                exhib.pieces.Add(newPiece);
-
-
-                Flush();
-                ResetForm();
-                BuildGrid();
-            }
-
-
-
-        }
-
-        private string GetPathWithoutExtension(string path)
-        {
-            //http://www.java2s.com/Code/CSharp/File-Stream/GetFullPathWithoutExtension.htm
-            return Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path));
-        }
-
-        public void CopyMaterialFileAndFindTextures(string materialPath, string materialDestination) {
-            try
-            {
-                //https://stackoverflow.com/questions/8037070/whats-the-fastest-way-to-read-a-text-file-line-by-line
-                var filestream = new System.IO.FileStream(materialPath,
-                          System.IO.FileMode.Open,
-                          System.IO.FileAccess.Read,
-                          System.IO.FileShare.ReadWrite);
-                var file = new System.IO.StreamReader(filestream, System.Text.Encoding.UTF8, true, 128);
-
-                string newMaterialFileText = string.Empty;
-                string lineOfFile;
-                string marker = "map_Kd";
-                while ((lineOfFile = file.ReadLine()) != null)
-                {
-                    Console.WriteLine(lineOfFile);
-                    if (lineOfFile.Contains(marker)) //line with texture path
-                    {
-                        lineOfFile = lineOfFile.Trim();
-                        string texName = lineOfFile.Substring(marker.Length, lineOfFile.Length - marker.Length).Trim(); // get rid of "mak_Kd "
-                        Console.WriteLine("texName: " + texName);
-                        Console.WriteLine("Texture should be here:" + Path.Combine(Path.GetDirectoryName(materialPath), texName));
-                        if (File.Exists(Path.Combine(Path.GetDirectoryName(materialPath),  texName)))
-                        {
-                            File.Copy(
-                                Path.Combine(Path.GetDirectoryName(materialPath), texName),
-                                Path.Combine(Path.GetDirectoryName(materialDestination), texName), true);
-
-                        }
-                        else
-                        { // tex couldnt be found
-                            MessageBox.Show("Die Textur '" + texName + "' konnte nicht gefunden werden.\n Falls Sie wissen," + 
-                                "wo sie ist, koennen Sie sie im naechsten Fenster auswaehlen. Falls nicht, klicke Sie auf \"Abbrechen\".");
-                            var fileDialog = new System.Windows.Forms.OpenFileDialog()
-                            {
-                                Filter = "JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png|JPEG Files (*.jpeg)|*.jpeg",
-                                Multiselect = false
-                            };
-
-                            var result = fileDialog.ShowDialog();
-                            switch (result)
-                            {
-                                case System.Windows.Forms.DialogResult.OK:
-                                    lineOfFile = marker + " " + Path.Combine(Path.GetDirectoryName(materialDestination),
-                                        Path.GetFileName(fileDialog.FileName));
-                                    File.Copy(fileDialog.FileName,
-                                        Path.Combine(Path.GetDirectoryName(materialDestination),
-                                        Path.GetFileName(fileDialog.FileName)), true);
-                                    break;
-                                case System.Windows.Forms.DialogResult.Cancel:
-                                default:
-
-                                    break;
-                            }
-                        }
-                    }
-                    //rewrite each line to a new .mtl-file
-                    newMaterialFileText += lineOfFile + Environment.NewLine;
-                }
-                //file is ready
-                File.WriteAllText(materialDestination, newMaterialFileText);
-            }
-            catch (Exception jj)
-            {
-                MessageBox.Show(jj.ToString());
-                throw;
-            }
-           
-        }
-
-        private void PieceDeleteButton_Click(object sender, RoutedEventArgs e)
-        {
-            Piece piece2Edit = exhib.pieces.Find(x => x.id == Int32.Parse(IdTextBlock.Text));
-            exhib.pieces.Remove(piece2Edit);
-            Flush();
-            ResetForm();
-            BuildGrid();
-        }
-
-        private void ChangeGridDimensions()
-        {
-            int newWidth, newHeight;
-            newWidth = Int32.Parse(GridWidthTextBox.Text);
-            newHeight = Int32.Parse(GridHeightTextBox.Text);
-            if (newWidth < exhib.width || newHeight < exhib.height)
-            {
-                MessageBox.Show("Die aktuellen Dimensionen sind kleiner als die Austellung. Die aeusseren Objekte werden geloescht.");
-            }
-            exhib.width = Int32.Parse(GridWidthTextBox.Text);
-            exhib.height = Int32.Parse(GridHeightTextBox.Text);
-
-            GridWidthTextBox.Text = newWidth.ToString();
-            GridHeightTextBox.Text = newHeight.ToString();
-            BuildGrid();
-        }
-
-        private void CancleButton_Click(object sender, RoutedEventArgs e)
-        {
-            ResetForm();
-        }
-
-        private void ResetForm()
-        {
-            EditPanel.IsEnabled = false;
-
-
-            IdTextBlock.Text = string.Empty;
-            NameTextBox.Text = string.Empty;
-            DescriptionTextBox.Text = string.Empty;
-            PieceFileUrlTextBlock.Text = string.Empty;
-            PiecePreviewImage.Source = SetImageSource(null);
-
-            Piece3D.Visibility = Visibility.Collapsed;
-            PiecePreviewImage.Visibility = Visibility.Visible;
-            PieceAudio.Visibility = Visibility.Collapsed;
-
-        }
-
-        private void Flush()
-        {
-            exhib.pieces = exhib.pieces.OrderBy(x => x.id).ToList();
-           
-            Directory.CreateDirectory(dir);//https://msdn.microsoft.com/en-us/library/54a0at6s.aspx
-            try
-            {
-                XmlSerializer writer = new XmlSerializer(typeof(Exhibition));
-                FileStream file = File.Create(xmlPath);
-                writer.Serialize(file, exhib);
-                file.Close();
-            }
-            catch (IOException e)
-            {
-                MessageBox.Show(xmlPath + "ist nicht schreibbar, die Festplatte ist voll, der Dateiname zu lang oder ???\n\n" + e.Message);
-            }
-
-        }
-
-
-        //Audio
-        void timer_Tick(object sender, EventArgs e)
-        {
-            if (mediaPlayer.Source != null) {
-                try
-                {
-                    AudioStatusLabel.Content = String.Format("{0} / {1}", mediaPlayer.Position.ToString(@"mm\:ss"), mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss"));
-                }
-                catch (Exception)
-                {
-
-                    AudioStatusLabel.Content = "Datei kopiert wahrscheinlich noch.\n\n";
-                }
-
-            }
-            else {
-
-                AudioStatusLabel.Content = "No file selected...";
-            }
             
         }
 
-        private void btnPlay_Click(object sender, RoutedEventArgs e)
+        private void RefreshExhibProperies()
         {
-            mediaPlayer.Play();
+            (exhibitionPropertiesControl as ExhibitionProperties).SetExhibition(exhib);
         }
 
-        private void btnPause_Click(object sender, RoutedEventArgs e)
+        private void RefreshPiecesGrid()
         {
-            mediaPlayer.Pause();
+            (piecesGridControl as PiecesGrid).SetPieces(exhib.pieces);
         }
 
-        private void btnStop_Click(object sender, RoutedEventArgs e)
+
+        private void New()
         {
-            mediaPlayer.Stop();
+            exhib = Exhibition.newInstance();
+            RefreshExhibProperies();
+            RefreshPiecesGrid();
+
         }
+        private void Open()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "XML files (*.xml;*.XML)|*.xml;*.XML";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                exhib = Exhibition.Deserialize(openFileDialog.FileName);
+                RefreshExhibProperies();
+            }
+        }
+
+
+        private void Save()
+        {
+            if (exhib != null)
+            {
+                if (exhib.GetFilePath() != null)
+                {
+                    exhib.Serialize();
+                }
+                else
+                {
+                    SaveAs();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Nix da zum speichern.");
+            }
+        }
+
+        private void SaveAs()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "XML files (*.xml)|*.xml;";
+            if (saveFileDialog.ShowDialog() == true) {
+                if (exhib != null)
+                {
+                    exhib.setFilePath(saveFileDialog.FileName);
+                }
+                Save();
+            }
+        }
+
+        private void Export()
+        {
+
+        }
+
+        private void CloseAll()
+        {
+            if (exhib != null)
+            {
+                MessageBox.Show("Wollen Sie alle Aenderungen verwerfen?");
+            }
+            this.Close();
+        }
+
+
+
+        private void NewCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            New();
+        }
+
+        private void SaveCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Save();
+        }
+
+        private void OpenCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Open();
+        }
+
+        private void SaveAsCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SaveAs();
+        }
+
+        private void ExportCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Export();
+        }
+
+        private void CloseCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            CloseAll();
+        }
+        
     }
-    
+
+
+
+
 }

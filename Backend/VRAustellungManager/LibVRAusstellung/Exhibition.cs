@@ -1,61 +1,86 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Xml.Serialization;
+
 
 namespace LibVRAusstellung
 {
 
-    [XmlRoot("exhibition")]
     public class Exhibition
     {
-        [XmlElement("titel")]
         public string title { get; set; }
 
-        [XmlElement("description")]
         public string description { get; set; }
 
-        [XmlElement("width")]
         public int width { get; set; }
 
-        [XmlElement("height")]
         public int height { get; set; }
 
-        [XmlElement("iconpath")]
-        public string iconpath { get; set; }
+        public List<List<Piece>> pieces { get; set; }
 
-        [XmlElement("piece")]
-        public List<Piece> pieces { get; set; }
+        private string dir;
+        private string xmlFileName;
 
-
-
-
-
-
-
-
-
-
-        static string dir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//VRAusstellungX";
-        static string xmlPath = "//Object.xml";
-
-        public static Exhibition ReadXMLFile()
+        public static Exhibition newInstance()
         {
-            XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(Exhibition));
-            try
+            Exhibition exhib = new Exhibition();
+            exhib.title = "Neue Ausstellung";
+            exhib.description = "Beschreibung der neuen Ausstellung";
+
+            exhib.width = exhib.height = 3;
+
+            exhib.pieces = new List<List<Piece>>();
+            int k = 0;
+            for (int i = 0; i < exhib.height; i++)
             {
-                using (FileStream fileStream = new FileStream(dir + xmlPath, FileMode.Open))
+                List<Piece> newRow = new List<Piece>();
+                for (int j = 0; j < exhib.width; j++)
                 {
-                    return (Exhibition)serializer.Deserialize(fileStream);
+                    newRow.Add(new Text() {
+                        id = k++,
+                        title = "Neues Ausstellungsstueck",
+                        description = "Beschreibung des neuen Ausstellungsssteucks"
+                    });
                 }
+                exhib.pieces.Add(newRow);
             }
-            catch (Exception)
-            {
-                return new Exhibition() { title = "Neue Ausstellung", iconpath = "kein Bild gesetzt", width = 3, height = 3, pieces = new List<Piece>() };
-            }
+
+            return exhib;
         }
 
-        
+        public string GetFilePath()
+        {
+            return Path.Combine(dir, xmlFileName);
+        }
+
+        public void setFilePath(string path)
+        {
+            this.dir = Path.GetDirectoryName(path);
+            this.xmlFileName = Path.GetFileName(path);
+        }
+
+        public void Serialize()
+        {
+            //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/serialization/how-to-read-object-data-from-an-xml-file
+            System.Xml.Serialization.XmlSerializer writer =
+            new System.Xml.Serialization.XmlSerializer(typeof(Exhibition));
+
+            FileStream file = File.Create(GetFilePath());
+
+            writer.Serialize(file, this);
+            file.Close();
+        }
+
+        public static Exhibition Deserialize(string fileName)
+        {
+            //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/serialization/how-to-read-object-data-from-an-xml-file
+            System.Xml.Serialization.XmlSerializer reader =
+        new System.Xml.Serialization.XmlSerializer(typeof(Exhibition));
+            StreamReader file = new StreamReader(
+               fileName);
+            Exhibition exhib = (Exhibition)reader.Deserialize(file);
+            file.Close();
+            return exhib;
+        }
     }
 }
