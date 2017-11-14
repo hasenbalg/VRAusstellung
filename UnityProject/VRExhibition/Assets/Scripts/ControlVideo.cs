@@ -5,7 +5,7 @@ using UnityEngine.Video;
 [RequireComponent(typeof(AudioSource))]
 public class ControlVideo : Control {
 
-    VideoPlayer vp;
+    public VideoPlayer vp; //Public for scrubbing through video file
  
     void Start () {
         InitMarkers();

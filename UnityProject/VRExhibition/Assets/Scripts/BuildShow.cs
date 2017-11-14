@@ -9,10 +9,12 @@ using NReco.VideoConverter;
 
 public class BuildShow : MonoBehaviour {
     Exhibition exhibition;
+    // FOR PRESENTATION
+    List<Piece> pieces;
+
     private float tileSize;
-    public GameObject prefabShowRoom;
+    public GameObject prefabShowRoom, prefabDoor;
     public Material matShowRoom;
-   
 
     public GameObject prefabImageCanvas, prefabVideoCanvas, prefabAudioCanvas, prefab3DCanvas;
     public Texture2D audioFallbackTexture;
@@ -21,20 +23,70 @@ public class BuildShow : MonoBehaviour {
     [HideInInspector]
     public Texture2D showRoomDiff;
 
+    private int listIndex, mIndex, nIndex; //m = width, n = height
 
     void Awake()
     {
         tileSize = prefabShowRoom.transform.localScale.x;
 
-        exhibition = Exhibition.ReadXMLFile();
+        Debug.Log(Directory.GetParent(Application.dataPath));
+
+        #region presentation_hardcoded
+        //PRESENTATION HARDCODED
+        this.pieces = new List<Piece>();
+
+        Piece piece1 = new Piece();
+        piece1.filePath = Directory.GetParent(Application.dataPath) + "/Testdata/Audio/Siegesgeheul.mp3";
+        piece1.fileformat = ".mp3";
+        piece1.id = 0;
+        piece1.title = "Siegesgeheul";
+        piece1.description = "Lulululu";
+        this.pieces.Add(piece1);
+
+        Piece piece2 = new Piece();
+        piece2.filePath = Directory.GetParent(Application.dataPath) + "/Testdata/Images/Ernie.jpg";
+        piece2.fileformat = ".jpg";
+        piece2.id = 1;
+        piece2.title = "Ernie X";
+        piece2.description = "Ernie gon' give it to ya!";
+        this.pieces.Add(piece2);
+
+        Piece piece3 = new Piece();
+        piece3.filePath = Directory.GetParent(Application.dataPath) + "/Testdata/Video/NochnStueck.mp4";
+        piece3.fileformat = ".mp4";
+        piece3.id = 2;
+        piece3.title = "Fahr Weiter";
+        piece3.description = "Nochn Stueck, nochn Stueck, nochn Stueck, nochn Stueck...";
+        this.pieces.Add(piece3);
+
+        /* Apparent issue with parsing .obj after building project.
+        Piece piece4 = new Piece();
+        piece4.filePath = Directory.GetParent(Application.dataPath) + "/Testdata/Models/mittelfinger.obj";
+        piece4.fileformat = ".obj";
+        piece4.id = 3;
+        piece4.title = "Mittelfinger";
+        piece4.description = "Ist der Mittelfinger oben...";
+        this.pieces.Add(piece4);
+        */
+
+        exhibition = new Exhibition();
+        exhibition.width = 2;
+        exhibition.height = 2;
+        exhibition.pieces = this.pieces;
+        exhibition.iconpath = Directory.GetParent(Application.dataPath) + "/Testdata/Images/gray.png";
+        #endregion presentation_hardcoded;
+
+        // COMMENTED FOR PRESENTATION exhibition = Exhibition.ReadXMLFile();
         showRoomDiff = LoadPNG(exhibition.iconpath);
         matShowRoom.mainTexture = showRoomDiff;
 
-        
+
     }
 
     // Use this for initialization
-    void Start () {
+    void Start() {
+
+        //Build whole Show
         int k = 0;
         for (int i = 0; i < exhibition.width; i++)
         {
@@ -72,14 +124,73 @@ public class BuildShow : MonoBehaviour {
                 k++;
             }
         }
-	}
-
-    
+        //Build only first Room
+        /*
+        this.listIndex = 0;
+        this.mIndex = 0;
+        this.nIndex = 0;
+        this.BuildExhibitionPiece();
+        */
+    }
 
     // Update is called once per frame
-    void Update () {
-		
-	}
+    void Update() {
+
+    }
+
+    public void SwitchRoom(int mIndex, int nIndex) {
+        this.mIndex = mIndex;
+        this.nIndex = nIndex;
+        this.listIndex = nIndex * this.exhibition.width + mIndex;
+    }
+
+    public void BuildExhibitionPiece() {
+        if (exhibition.pieces.Count > this.listIndex && exhibition.pieces[this.listIndex].filePath != null)
+        {
+            Vector3 pos = new Vector3(0f, 0f, 0f);
+            Instantiate(prefabShowRoom,
+           pos,
+           Quaternion.identity
+           );
+
+            //Place Doors
+            if (this.mIndex < this.exhibition.width-1) {
+                Instantiate(prefabDoor, new Vector3(pos.x + tileSize/2, pos.y, pos.z), Quaternion.Euler(0,0,0)).name = "mPositive";
+            }
+            if (this.mIndex > 0) {
+                Instantiate(prefabDoor, new Vector3(pos.x - tileSize/2, pos.y, pos.z), Quaternion.Euler(0, 180, 0)).name = "mNegative";
+            }
+            if(this.nIndex < this.exhibition.height-1)
+            {
+                Instantiate(prefabDoor, new Vector3(pos.x, pos.y, pos.z + tileSize/2), Quaternion.Euler(0, 270, 0)).name = "nPositive";
+            }
+            if(this.nIndex > 0)
+            {
+                Instantiate(prefabDoor, new Vector3(pos.x, pos.y, pos.z - tileSize/2), Quaternion.Euler(0, 90, 0)).name = "nNegative";
+            }
+
+            switch (exhibition.pieces[this.listIndex].fileformat)
+            {
+                case ".png":
+                case ".jpg":
+                case ".jpeg":
+                    InstantiateImageCanvas(pos, exhibition.pieces[this.listIndex].filePath);
+                    break;
+                case ".mp4":
+                    InstantiateVideoCanvas(pos, exhibition.pieces[this.listIndex].filePath);
+                    break;
+                case ".mp3":
+                case ".wav":
+                    InstantiateAudioCanvas(pos, exhibition.pieces[this.listIndex].filePath);
+                    break;
+                case ".obj":
+                    Instantiate3DCanvas(pos, exhibition.pieces[this.listIndex].filePath);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 
     public void InstantiateImageCanvas(Vector3 pos, string filePath) {
         Material mat = new Material(Shader.Find("Standard"));
@@ -111,6 +222,12 @@ public class BuildShow : MonoBehaviour {
         var videoPlayer = canvas.GetComponent<UnityEngine.Video.VideoPlayer>();
         videoPlayer.url = (new WWW(filePath).url);
         videoPlayer.isLooping = true;
+        // Thanks to Robert Taylor on https://stackoverflow.com/questions/45532234/unity-videoplayer-is-not-playing-audio
+        videoPlayer.controlledAudioTrackCount = 1;
+        videoPlayer.audioOutputMode = UnityEngine.Video.VideoAudioOutputMode.AudioSource;
+        videoPlayer.EnableAudioTrack(0, true);
+        videoPlayer.SetTargetAudioSource(0, canvas.GetComponent<AudioSource>());
+
        // canvas.localScale = new Vector3(videoPlayer.clip.width, 1, videoPlayer.clip.height).normalized;
         videoPlayer.Play();
     }
@@ -147,12 +264,11 @@ public class BuildShow : MonoBehaviour {
         Mesh holderMesh = new Mesh();
         ObjImporter newMesh = new ObjImporter();
         holderMesh = newMesh.ImportFile(filePath);
-
+        
         MeshFilter filter = newPiece.GetComponent<MeshFilter>();
         filter.mesh = holderMesh;
-
-        newPiece.GetComponent<Renderer>().materials = LoadMaterials(filePath); 
-
+        
+        newPiece.GetComponent<Renderer>().materials = LoadMaterials(filePath);
 
         //GameObject stand = Instantiate(prefabAudioCanvas, pos, Quaternion.identity);
         //Transform canvas = stand.transform.Find("Canvas");
@@ -184,6 +300,7 @@ public class BuildShow : MonoBehaviour {
                     Material newMat = new Material(Shader.Find("Standard"));
                     newMat.name = texFileName;
                     newMat.mainTexture = LoadPNG(Path.Combine(Path.GetDirectoryName(materialPath), texFileName));
+                    Debug.Log(Path.Combine(Path.GetDirectoryName(materialPath), texFileName));
                     materials.Add(newMat);
                 }
             }
@@ -248,8 +365,7 @@ public class BuildShow : MonoBehaviour {
                 filePath = oggFilePath;
             }
 
-        
-            WWW www = new WWW(filePath);
+            WWW www = new WWW("file:///"+filePath);
             yield return www;
             if (!string.IsNullOrEmpty(www.error))
             {
@@ -265,6 +381,7 @@ public class BuildShow : MonoBehaviour {
                 else {
                     audioSource.clip = www.GetAudioClip(true, true, AudioType.UNKNOWN);
                 }
+                audioSource.clip.name = "Audioclip";
             }
         }
 
