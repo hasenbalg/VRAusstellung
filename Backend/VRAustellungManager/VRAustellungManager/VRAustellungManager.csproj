@@ -96,7 +96,23 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PieceProperiesText.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PieceProperties.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PiecePropertiesAudio.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PiecePropertiesImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PiecePropertiesVideo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -104,13 +120,33 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="PieceProperties3D.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PieceProperiesText.xaml.cs">
+      <DependentUpon>PieceProperiesText.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PieceProperties.xaml.cs">
       <DependentUpon>PieceProperties.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PiecePropertiesAudio.xaml.cs">
+      <DependentUpon>PiecePropertiesAudio.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PiecePropertiesBase.cs" />
+    <Compile Include="PiecePropertiesImage.xaml.cs">
+      <DependentUpon>PiecePropertiesImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PiecePropertiesVideo.xaml.cs">
+      <DependentUpon>PiecePropertiesVideo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PiecesGrid.xaml.cs">
       <DependentUpon>PiecesGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PieceProperties3D.xaml.cs">
+      <DependentUpon>PieceProperties3D.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -138,9 +174,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Objects.xml" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Preview.png" />

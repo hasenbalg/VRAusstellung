@@ -1,10 +1,10 @@
-﻿<UserControl x:Class="VRAustellungManager.PieceProperties"
+﻿<we:PiecePropertiesBase x:Class="VRAustellungManager.PiecePropertiesAudio"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:VRAustellungManager"
-             xmlns:helix="http://helix-toolkit.org/wpf"
+             xmlns:we="clr-namespace:VRAustellungManager"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <StackPanel>
@@ -15,17 +15,17 @@
         <TextBox x:Name="pieceNameTextBox" TextChanged="PiecePropertyChanged"/>
         <Label Content="Beschreibung"/>
         <TextBox x:Name="pieceDescriptionTextBox" TextChanged="PiecePropertyChanged"/>
-        
-        <Button Content="Datei waehlen" x:Name="pieceFileSelectButton" Click="PieceFileSelectButton_Click" Visibility="Collapsed"/>
+
+        <Button Content="Datei waehlen" x:Name="pieceFileSelectButton" Click="PieceFileSelectButton_Click"/>
         <TextBlock x:Name="pieceFileSelectURLTextBlock" />
-        
+
         <StackPanel MaxWidth="300">
-            <Grid x:Name="pieceAVPreview" Visibility="Collapsed">
+            <Grid x:Name="pieceAVPreview">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <MediaElement Source="http://hubblesource.stsci.edu/sources/video/clips/details/images/hst_1.mpg" LoadedBehavior="Manual" Name="mePlayer" />
+                <MediaElement LoadedBehavior="Manual" Name="mePlayer" />
                 <StackPanel Grid.Row="1">
                     <Label Name="lblStatus" Content="Not playing..." HorizontalContentAlignment="Center" Margin="5" />
                     <WrapPanel HorizontalAlignment="Center">
@@ -35,10 +35,6 @@
                     </WrapPanel>
                 </StackPanel>
             </Grid>
-
-            <Image x:Name="pieceImagePreview" Visibility="Collapsed"/>
-            <helix:HelixViewport3D x:Name="piece3DPreview" Visibility="Collapsed"/>
         </StackPanel>
     </StackPanel>
-    
-</UserControl>
+</we:PiecePropertiesBase>

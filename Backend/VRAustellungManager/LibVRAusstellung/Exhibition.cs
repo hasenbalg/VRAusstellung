@@ -50,10 +50,16 @@ namespace LibVRAusstellung
 
         public string GetFilePath()
         {
-            return Path.Combine(dir, xmlFileName);
+            if (dir != null && xmlFileName != null)
+            {
+                return Path.Combine(dir, xmlFileName);
+            }
+            else {
+                return null;
+            }
         }
 
-        public void setFilePath(string path)
+        public void SetFilePath(string path)
         {
             this.dir = Path.GetDirectoryName(path);
             this.xmlFileName = Path.GetFileName(path);
@@ -61,6 +67,17 @@ namespace LibVRAusstellung
 
         public void Serialize()
         {
+
+            foreach (var items in pieces)
+            {
+                Console.WriteLine("-------------------");
+                foreach (var item in items)
+                {
+                    Console.WriteLine(item.GetType().ToString());
+                }
+            }
+
+
             //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/serialization/how-to-read-object-data-from-an-xml-file
             System.Xml.Serialization.XmlSerializer writer =
             new System.Xml.Serialization.XmlSerializer(typeof(Exhibition));
@@ -68,6 +85,7 @@ namespace LibVRAusstellung
             FileStream file = File.Create(GetFilePath());
 
             writer.Serialize(file, this);
+            Console.WriteLine("Saved current data to:" + GetFilePath());
             file.Close();
         }
 
@@ -79,6 +97,7 @@ namespace LibVRAusstellung
             StreamReader file = new StreamReader(
                fileName);
             Exhibition exhib = (Exhibition)reader.Deserialize(file);
+            exhib.SetFilePath(fileName);
             file.Close();
             return exhib;
         }

@@ -26,10 +26,14 @@ namespace VRAustellungManager
 
         }
 
+        protected List<Type> GetTypesOfPieces()
+        {
+            return typeof(Piece).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(Piece)) && !type.Equals(typeof(PieceWithFile))).ToList();
+        }
+
 
         //Drag'Drop
         bool m_inMouseMove;
-
         public bool InvokeRequired { get; private set; }
 
         private void PreviewMouseMove(object sender, MouseEventArgs e)
@@ -52,15 +56,40 @@ namespace VRAustellungManager
         private void Drop(object sender, DragEventArgs e)
         {
             //https://stackoverflow.com/a/15780620
-            Console.WriteLine("Dropped: " + (string)(e.Data.GetData(typeof(Piece)) as Piece).title);
-            Console.WriteLine("on: " + (string)(((TextBlock)sender).DataContext as Piece).title);
-            Piece dropped = e.Data.GetData(typeof(Piece)) as Piece;
+            //Console.WriteLine("Dropped: " + (string)(e.Data.GetData(typeof(Piece)) as Piece).title);
+            //Console.WriteLine("on: " + (string)(((TextBlock)sender).DataContext as Piece).title);
+            Piece dropped = null;
+            foreach (Type type in GetTypesOfPieces())
+            {
+                if (dropped == null)
+                {
+                    dropped = e.Data.GetData(type) as Piece;
+                }
+            }
             Piece sndr = ((TextBlock)sender).DataContext as Piece;
-            Piece tmp = dropped;
-            dropped = sndr;
-            sndr = tmp;
 
-            InitializeComponent();
+            Console.WriteLine("swapped " + sndr.title + " with" + dropped.title);
+
+            for (int i = 0; i < pieces.Count; i++)
+            {
+                for (int j = 0; j < pieces[i].Count; j++)
+                {
+                    if (pieces[i][j].id == dropped.id)
+                    {
+                        pieces[i][j] = sndr;
+                    }
+                    if (pieces[i][j].id == sndr.id)
+                    {
+                        pieces[i][j] = dropped;
+                    }
+                }
+            }
+            foreach (var item in pieces.SelectMany(i => i))
+            {
+                Console.WriteLine(item.id);
+            }
+
+            (Window.GetWindow(this) as MainWindow).SetPieces(pieces);
         }
 
 
@@ -68,8 +97,8 @@ namespace VRAustellungManager
         private void PieceButton_Click(object sender, RoutedEventArgs e)
         {
             Piece piece2Edit = (Piece)(sender as Button).DataContext;
-            ((Window.GetWindow(this) as MainWindow)
-                .piecesPropertiesControl as PieceProperties).SetCurrentPiece(piece2Edit);
+            Console.WriteLine(piece2Edit.GetType());
+            (Window.GetWindow(this) as MainWindow).SetPiecePropertiesPanel(piece2Edit);
         }
 
 

@@ -49,8 +49,11 @@ namespace VRAustellungManager
             if (openFileDialog.ShowDialog() == true)
             {
                 exhib = Exhibition.Deserialize(openFileDialog.FileName);
+
                 RefreshExhibProperies();
+                RefreshPiecesGrid();
             }
+            
         }
 
 
@@ -66,6 +69,7 @@ namespace VRAustellungManager
                 {
                     SaveAs();
                 }
+                RefreshPiecesGrid();
             }
             else
             {
@@ -80,15 +84,22 @@ namespace VRAustellungManager
             if (saveFileDialog.ShowDialog() == true) {
                 if (exhib != null)
                 {
-                    exhib.setFilePath(saveFileDialog.FileName);
+                    exhib.SetFilePath(saveFileDialog.FileName);
                 }
                 Save();
             }
         }
 
+        internal void SetPieces(List<List<Piece>> pieces)
+        {
+            exhib.pieces = pieces;
+            RefreshPiecesGrid();
+        }
+
         private void Export()
         {
-
+            RefreshExhibProperies();
+            RefreshPiecesGrid();
         }
 
         private void CloseAll()
@@ -131,7 +142,53 @@ namespace VRAustellungManager
         {
             CloseAll();
         }
-        
+
+        internal void SetPiecePropertiesPanel(Piece piece)
+        {
+            PiecePropertiesBase newPiecePropertiesPanel = null;
+            switch (piece.GetType().ToString()) {
+                case "LibVRAusstellung.Text":
+                    newPiecePropertiesPanel = new PieceProperiesText();
+                    (newPiecePropertiesPanel as PieceProperiesText).SetCurrentPiece(piece as Text);
+                    break;
+                case "LibVRAusstellung.Image":
+                    newPiecePropertiesPanel = new PiecePropertiesImage();
+                    (newPiecePropertiesPanel as PiecePropertiesImage).SetCurrentPiece(piece as Image);
+                    break;
+                case "LibVRAusstellung.Video":
+                    newPiecePropertiesPanel = new PiecePropertiesVideo();
+                    (newPiecePropertiesPanel as PiecePropertiesVideo).SetCurrentPiece(piece as Video);
+                    break;
+                case "LibVRAusstellung.Audio":
+                    newPiecePropertiesPanel = new PiecePropertiesAudio();
+                    (newPiecePropertiesPanel as PiecePropertiesAudio).SetCurrentPiece(piece as Audio);
+                    break;
+                case "LibVRAusstellung.ThreeDModel":
+                    newPiecePropertiesPanel = new PieceProperties3D();
+                    (newPiecePropertiesPanel as PieceProperties3D).SetCurrentPiece(piece as ThreeDModel);
+                    break;
+                default:
+                    return;
+            }
+            
+            piecePropertiesControlHolderPanel.Children.Clear();
+            piecePropertiesControlHolderPanel.Children.Add(newPiecePropertiesPanel);
+            
+        }
+
+        internal void SetPiece(Piece currentPiece)
+        {
+            for (int i = 0; i < exhib.pieces.Count; i++)
+            {
+                for (int j = 0; j < exhib.pieces[i].Count; j++)
+                {
+                    if (exhib.pieces[i][j].id == currentPiece.id)
+                    {
+                        exhib.pieces[i][j] = currentPiece;
+                    }
+                }
+            }
+        }
     }
 
 

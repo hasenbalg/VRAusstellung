@@ -73,3 +73,13 @@ C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellung
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PiecesGrid.g.cs
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PieceProperties.baml
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PiecesGrid.baml
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PieceProperiesText.g.cs
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PiecePropertiesAudio.g.cs
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PiecePropertiesImage.g.cs
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PiecePropertiesVideo.g.cs
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PieceProperties3D.g.cs
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PieceProperiesText.baml
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PiecePropertiesAudio.baml
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PiecePropertiesImage.baml
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PiecePropertiesVideo.baml
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PieceProperties3D.baml
