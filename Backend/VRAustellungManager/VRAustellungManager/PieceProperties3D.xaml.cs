@@ -72,6 +72,7 @@ namespace VRAustellungManager
             currentPiece.title = pieceNameTextBox.Text;
             currentPiece.description = pieceDescriptionTextBox.Text;
             currentPiece.filePath = pieceFileSelectURLTextBlock.Text;
+            SendBackToMainWindow(currentPiece);
         }
 
         protected void SetPreview(string fileName)

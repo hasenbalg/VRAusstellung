@@ -71,6 +71,7 @@ namespace VRAustellungManager
             currentPiece.title = pieceNameTextBox.Text;
             currentPiece.description = pieceDescriptionTextBox.Text;
             currentPiece.filePath = pieceFileSelectURLTextBlock.Text;
+            SendBackToMainWindow(currentPiece);
         }
 
         protected void PieceFileSelectButton_Click(object sender, RoutedEventArgs e)

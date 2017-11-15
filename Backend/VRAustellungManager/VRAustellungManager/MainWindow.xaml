@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:VRAustellungManager"
         xmlns:helix="http://helix-toolkit.org/wpf"
         mc:Ignorable="d"
-        Title="VR Ausstellung Manager" Height="950" Width="525">
+        Title="VR Ausstellung Manager" Height="Auto" Width="Auto">
 
     <Window.CommandBindings>
         <CommandBinding Command="New" Executed="NewCommandBinding_Executed"></CommandBinding>

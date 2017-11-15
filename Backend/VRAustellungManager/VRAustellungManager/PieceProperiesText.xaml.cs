@@ -70,6 +70,7 @@ namespace VRAustellungManager
         {
             currentPiece.title = pieceNameTextBox.Text;
             currentPiece.description = pieceDescriptionTextBox.Text;
+            SendBackToMainWindow(currentPiece);
         }
 
         protected void BlankForm()

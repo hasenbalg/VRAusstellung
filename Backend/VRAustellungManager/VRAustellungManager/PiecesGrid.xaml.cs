@@ -21,8 +21,9 @@ namespace VRAustellungManager
 
         public void SetPieces(List<List<Piece>> pieces) {
             this.pieces = pieces;
-            Grid.ItemsSource = this.pieces;
             InitializeComponent();
+            Grid.ItemsSource = this.pieces;
+            Grid.Items.Refresh();
 
         }
 
@@ -70,23 +71,19 @@ namespace VRAustellungManager
 
             Console.WriteLine("swapped " + sndr.title + " with" + dropped.title);
 
+            int tmpId = dropped.id;
+            dropped.id = sndr.id;
+            sndr.id = tmpId;
+
+            List<Piece> orderedPieces = pieces.SelectMany(i => i).OrderBy(i => i.id).ToList();
+            int k = 0;
             for (int i = 0; i < pieces.Count; i++)
             {
                 for (int j = 0; j < pieces[i].Count; j++)
                 {
-                    if (pieces[i][j].id == dropped.id)
-                    {
-                        pieces[i][j] = sndr;
-                    }
-                    if (pieces[i][j].id == sndr.id)
-                    {
-                        pieces[i][j] = dropped;
-                    }
+                    pieces[i][j] = orderedPieces.First(p => p.id == k) as Piece;
+                    k++;
                 }
-            }
-            foreach (var item in pieces.SelectMany(i => i))
-            {
-                Console.WriteLine(item.id);
             }
 
             (Window.GetWindow(this) as MainWindow).SetPieces(pieces);

@@ -64,9 +64,9 @@ namespace VRAustellungManager
             }
         }
 
-        protected void SendBackToMainWindow()
+        protected void SendBackToMainWindow(Piece p)
         {
-            (Window.GetWindow(this) as MainWindow).SetPiece(currentPiece);
+            (Window.GetWindow(this) as MainWindow).SetPiece(p);
         }
 
         protected void ChangeUserControl(Piece piece)

@@ -94,6 +94,8 @@ namespace VRAustellungManager
         {
             exhib.pieces = pieces;
             RefreshPiecesGrid();
+            piecePropertiesControlHolderPanel.Children.Clear();
+
         }
 
         private void Export()
@@ -188,6 +190,8 @@ namespace VRAustellungManager
                     }
                 }
             }
+
+            RefreshPiecesGrid();
         }
     }
 
