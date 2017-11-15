@@ -19,10 +19,13 @@ namespace VRAustellungManager
        public List<List<Piece>> pieces;
         public Exhibition exhib;
 
+        List<string> tmpFiles2Delete;
+
         public MainWindow()
         {
 
             InitializeComponent();
+            tmpFiles2Delete = new List<string>();
             
         }
 
@@ -136,9 +139,18 @@ namespace VRAustellungManager
 
             Save();
             ZipAllFiles();
+            TidyUpTmpFiles();
 
 
 
+        }
+
+        private void TidyUpTmpFiles()
+        {
+            foreach (string filePath in tmpFiles2Delete)
+            {
+                File.Delete(filePath);
+            }
         }
 
         private void ZipAllFiles()
@@ -153,13 +165,19 @@ namespace VRAustellungManager
                     if (p != null)
                     {
                         string newPath = Path.GetFileName(p.filePath);
-                        zip.AddFile(p.filePath, string.Empty);
-                        Console.WriteLine("Added " + p.filePath + " to Zip");
-                        p.filePath = newPath;
+                        if (p.filePath.ToLower().EndsWith(".obj"))
+                        {
+                            ZipObjMatTexFiles(zip, p);
+                        }
+                        else {
+                            zip.AddFile(p.filePath, string.Empty);
+                            Console.WriteLine("Added " + p.filePath + " to Zip");
+                            p.filePath = newPath;
+                        }
                     }
-
                 }
             }
+
             string oldXMLFilePath = exhib.GetFilePath();
             string tmpXMLFilePath = Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(oldXMLFilePath) +  ".xml");
             SaveAs(tmpXMLFilePath);
@@ -175,14 +193,99 @@ namespace VRAustellungManager
                     ".zip"
                     );
                 zip.Save(destPath);
-                File.Delete(tmpXMLFilePath);
+                tmpFiles2Delete.Add(tmpXMLFilePath);
                 Open(oldXMLFilePath);
             }
             else{
                 return;
             }
+        }
 
-            
+        private void ZipObjMatTexFiles(ZipFile zip, PieceWithFile p)
+        {
+            //OBJ FILE
+
+            string filePath = p.filePath;
+            string objFileText = string.Empty;
+            string mtlFileName = string.Empty;
+
+            using (StreamReader sr = File.OpenText(filePath))
+            {
+                string line = String.Empty;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    if (line.Trim().StartsWith("mtllib"))
+                    {
+                        foreach (string token in line.Split(' '))
+                        {
+                            if (token.Contains(".mtl"))
+                            {
+                                mtlFileName = Path.GetFileName(token);
+                            }
+                        }
+                        //substitute mtllib line
+                        objFileText += "mtllib " + mtlFileName + "\n";
+                    }
+                    else {
+                        objFileText += line + "\n";
+                    }
+                }
+            }
+            //write obj file
+            string tmpObjPath = Path.Combine(Path.GetTempPath(), Path.GetFileName(filePath));
+            File.WriteAllText(tmpObjPath, objFileText);
+            tmpFiles2Delete.Add(tmpObjPath);
+            zip.AddFile(tmpObjPath, string.Empty);
+            p.filePath = Path.GetFileName(filePath);
+
+            //MTL FILE
+            if (mtlFileName != string.Empty)
+            {
+                string mtlFileText = string.Empty;
+                List<string> texFileNames = new List<string>();
+                string currentTexFileName = string.Empty;
+                using (StreamReader sr = File.OpenText(Path.Combine(Path.GetDirectoryName(filePath),mtlFileName)))
+                {
+                    string line = String.Empty;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        if (line.Trim().StartsWith("map_Kd"))
+                        {
+                            foreach (string token in line.Split(' '))
+                            {
+                                if (token.ToLower().Contains(".png")
+                                    || token.ToLower().Contains(".jpg"))
+                                {
+                                    currentTexFileName = Path.GetFileName(token);
+                                    texFileNames.Add(currentTexFileName);
+
+                                }
+                            }
+                            //substitute mtllib line
+                            mtlFileText += "map_Kd " + currentTexFileName + "\n";
+                        }
+                        else
+                        {
+                            mtlFileText += line + "\n";
+                        }
+                    }
+                }
+
+                //write mtl file
+                string tmpMTLPath = Path.Combine(Path.GetTempPath(), Path.GetFileName(mtlFileName));
+                File.WriteAllText(tmpMTLPath, mtlFileText);
+                tmpFiles2Delete.Add(tmpMTLPath);
+                zip.AddFile(tmpMTLPath, string.Empty);
+                
+
+                // Add Textures to zip
+                foreach (string texPath in texFileNames)
+                {
+                    string dir = Path.GetDirectoryName(filePath);
+
+                    zip.AddFile(Path.Combine(dir, texPath), string.Empty);
+                }
+            }
         }
 
         private void CloseAll()
