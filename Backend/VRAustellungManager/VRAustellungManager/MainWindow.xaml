@@ -9,20 +9,20 @@
         Title="VR Ausstellung Manager" Height="Auto" Width="Auto">
 
     <Window.CommandBindings>
-        <CommandBinding Command="New" Executed="NewCommandBinding_Executed"></CommandBinding>
-        <CommandBinding Command="Open" Executed="OpenCommandBinding_Executed"></CommandBinding>
-        <CommandBinding Command="SaveAs" Executed="SaveAsCommandBinding_Executed"></CommandBinding>
-        <CommandBinding Command="Save" Executed="SaveCommandBinding_Executed"></CommandBinding>
-        <!--<CommandBinding Command="Export" Executed="ExportCommandBinding_Executed"></CommandBinding>-->
-        <CommandBinding Command="Close" Executed="CloseCommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.New" Executed="NewCommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.Open" Executed="OpenCommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.SaveAs" Executed="SaveAsCommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.Save" Executed="SaveCommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="local:CustomCommands.Import" Executed="ImportCommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="local:CustomCommands.Export" Executed="ExportCommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="local:CustomCommands.Exit" Executed="CloseCommandBinding_Executed"></CommandBinding>
     </Window.CommandBindings>
 
     <Window.InputBindings>
-        <KeyBinding Key="N" Modifiers="Control" Command="New"></KeyBinding>
-        <KeyBinding Key="O" Modifiers="Control" Command="Open"></KeyBinding>
-        <KeyBinding Key="S" Modifiers="Control" Command="Save"></KeyBinding>
-        <KeyBinding Key="S" Modifiers="Ctrl+Shift" Command="SaveAs"></KeyBinding>
-        <!--<KeyBinding Key="E" Modifiers="Ctrl" Command="Export"></KeyBinding>-->
+        <KeyBinding Key="N" Modifiers="Control" Command="ApplicationCommands.New"></KeyBinding>
+        <KeyBinding Key="O" Modifiers="Control" Command="ApplicationCommands.Open"></KeyBinding>
+        <KeyBinding Key="S" Modifiers="Control" Command="ApplicationCommands.Save"></KeyBinding>
+        <KeyBinding Key="S" Modifiers="Ctrl+Shift" Command="ApplicationCommands.SaveAs"></KeyBinding>
     </Window.InputBindings>
 
     
@@ -33,12 +33,13 @@
         <DockPanel>
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_Datei">
-                    <MenuItem Header="_Neu" Command="New" InputGestureText="Ctrl+N"/>
-                    <MenuItem Header="_Oeffnen" Command="Open" InputGestureText="Ctrl+O"/>
-                    <MenuItem Header="_Speichern" Command="Save" InputGestureText="Ctrl+S"/>
-                    <MenuItem Header="_Speichern unter" Command="Save" InputGestureText="Ctrl+Shift+S"/>
-                    <MenuItem Header="_Exportieren"  InputGestureText="Ctrl+E"/>
-                    <MenuItem Header="_Beenden" Command="Close" InputGestureText="Alt+F4"/>
+                    <MenuItem Header="_Neu" Command="ApplicationCommands.New" InputGestureText="Ctrl+N"/>
+                    <MenuItem Header="_Oeffnen" Command="ApplicationCommands.Open" InputGestureText="Ctrl+O"/>
+                    <MenuItem Header="_Speichern" Command="ApplicationCommands.Save" InputGestureText="Ctrl+S"/>
+                    <MenuItem Header="_Speichern unter" Command="ApplicationCommands.Save" InputGestureText="Ctrl+Shift+S"/>
+                    <MenuItem Header="_Importieren"  Command="local:CustomCommands.Import" InputGestureText="Ctrl+I"/>
+                    <MenuItem Header="_Exportieren"  Command="local:CustomCommands.Export" InputGestureText="Ctrl+E"/>
+                    <MenuItem Header="_Beenden" Command="local:CustomCommands.Exit" InputGestureText="Alt+F4"/>
                 </MenuItem>
             </Menu>
             <StackPanel></StackPanel>

@@ -7,6 +7,8 @@ using System.Reflection;
 using System.ComponentModel;
 using System.Windows.Input;
 using Microsoft.Win32;
+using System.IO;
+using Ionic.Zip;
 
 namespace VRAustellungManager
 {
@@ -40,8 +42,10 @@ namespace VRAustellungManager
             exhib = Exhibition.newInstance();
             RefreshExhibProperies();
             RefreshPiecesGrid();
+            NoPiecePropertiesPanel();
 
         }
+
         private void Open()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -53,7 +57,13 @@ namespace VRAustellungManager
                 RefreshExhibProperies();
                 RefreshPiecesGrid();
             }
-            
+        }
+
+        private void Open(string fileName)
+        {
+          exhib = Exhibition.Deserialize(fileName);
+          RefreshExhibProperies();
+          RefreshPiecesGrid();
         }
 
 
@@ -90,18 +100,89 @@ namespace VRAustellungManager
             }
         }
 
+        private void SaveAs(string fileName)
+        {
+
+                if (exhib != null)
+                {
+                    exhib.SetFilePath(fileName);
+                }
+                Save();
+
+        }
+
         internal void SetPieces(List<List<Piece>> pieces)
         {
             exhib.pieces = pieces;
             RefreshPiecesGrid();
-            piecePropertiesControlHolderPanel.Children.Clear();
-
+            NoPiecePropertiesPanel();
         }
+
+        private void Import()
+        {
+            throw new NotImplementedException();
+        }
+
 
         private void Export()
         {
-            RefreshExhibProperies();
+            if (exhib == null)
+            {
+                return;
+            }
+
             RefreshPiecesGrid();
+            NoPiecePropertiesPanel();
+
+            Save();
+            ZipAllFiles();
+
+
+
+        }
+
+        private void ZipAllFiles()
+        {
+
+            ZipFile zip = new ZipFile();
+            for (int i = 0; i < exhib.pieces.Count; i++)
+            {
+                for (int j = 0; j < exhib.pieces[i].Count; j++)
+                {
+                    var p = exhib.pieces[i][j] as PieceWithFile;
+                    if (p != null)
+                    {
+                        string newPath = Path.GetFileName(p.filePath);
+                        zip.AddFile(p.filePath, string.Empty);
+                        Console.WriteLine("Added " + p.filePath + " to Zip");
+                        p.filePath = newPath;
+                    }
+
+                }
+            }
+            string oldXMLFilePath = exhib.GetFilePath();
+            string tmpXMLFilePath = Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(oldXMLFilePath) +  ".xml");
+            SaveAs(tmpXMLFilePath);
+            zip.AddFile(exhib.GetFilePath(), string.Empty);
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Zip file (*.zip)|*.zip";
+            saveFileDialog.FileName = exhib.title.Replace(' ', '_') + ".zip";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string destPath = Path.Combine(
+                    Path.GetDirectoryName(saveFileDialog.FileName),
+                    Path.GetFileNameWithoutExtension(saveFileDialog.FileName) +
+                    ".zip"
+                    );
+                zip.Save(destPath);
+                File.Delete(tmpXMLFilePath);
+                Open(oldXMLFilePath);
+            }
+            else{
+                return;
+            }
+
+            
         }
 
         private void CloseAll()
@@ -140,6 +221,11 @@ namespace VRAustellungManager
             Export();
         }
 
+        private void ImportCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Import();
+        }
+
         private void CloseCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             CloseAll();
@@ -172,10 +258,14 @@ namespace VRAustellungManager
                 default:
                     return;
             }
-            
-            piecePropertiesControlHolderPanel.Children.Clear();
+
+            NoPiecePropertiesPanel();
             piecePropertiesControlHolderPanel.Children.Add(newPiecePropertiesPanel);
             
+        }
+
+        private void NoPiecePropertiesPanel() {
+            piecePropertiesControlHolderPanel.Children.Clear();
         }
 
         internal void SetPiece(Piece currentPiece)

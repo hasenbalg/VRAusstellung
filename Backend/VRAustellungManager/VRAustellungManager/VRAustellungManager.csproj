@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotNetZip, Version=1.10.1.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.10.1\lib\net20\DotNetZip.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="HelixToolkit, Version=2015.1.715.0, Culture=neutral, PublicKeyToken=52aa3500039caf0d, processorArchitecture=MSIL">
       <HintPath>..\packages\HelixToolkit.2015.1.715\lib\portable-net4+sl4+wp71+win8\HelixToolkit.dll</HintPath>
       <Private>True</Private>
@@ -89,6 +93,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CustomCommands.cs" />
     <Compile Include="ExhibitionProperties.xaml.cs">
       <DependentUpon>ExhibitionProperties.xaml</DependentUpon>
     </Compile>
@@ -97,10 +102,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="PieceProperiesText.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PieceProperties.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -128,9 +129,6 @@
   <ItemGroup>
     <Compile Include="PieceProperiesText.xaml.cs">
       <DependentUpon>PieceProperiesText.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PieceProperties.xaml.cs">
-      <DependentUpon>PieceProperties.xaml</DependentUpon>
     </Compile>
     <Compile Include="PiecePropertiesAudio.xaml.cs">
       <DependentUpon>PiecePropertiesAudio.xaml</DependentUpon>

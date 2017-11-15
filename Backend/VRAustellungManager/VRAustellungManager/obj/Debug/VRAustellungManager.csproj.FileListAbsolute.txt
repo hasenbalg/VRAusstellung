@@ -69,9 +69,7 @@ C:\Users\fr\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungMana
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\ExhibitionProperties.g.cs
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\ExhibitionProperties.baml
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\GeneratedInternalTypeHelper.g.cs
-C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PieceProperties.g.cs
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PiecesGrid.g.cs
-C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PieceProperties.baml
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PiecesGrid.baml
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PieceProperiesText.g.cs
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PiecePropertiesAudio.g.cs
@@ -83,3 +81,5 @@ C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellung
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PiecePropertiesImage.baml
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PiecePropertiesVideo.baml
 C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Debug\PieceProperties3D.baml
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\DotNetZip.dll
+C:\Users\freddi\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Debug\DotNetZip.xml
