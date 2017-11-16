@@ -124,8 +124,41 @@ namespace VRAustellungManager
 
         private void Import()
         {
-            throw new NotImplementedException();
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true) {
+                string zipToUnpack = openFileDialog.FileName;
+                string extractionDir = "tmp";
+               
+                string unpackDirectory = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), extractionDir);
+                using (ZipFile zip1 = ZipFile.Read(zipToUnpack))
+                {
+                    foreach (ZipEntry e in zip1)
+                    {
+                        e.Extract(unpackDirectory, ExtractExistingFileAction.OverwriteSilently);
+                    }
+                }
+
+                //get xml file
+                string xmlFile = Directory.GetFiles(unpackDirectory, "*.xml").First();
+                Open(xmlFile);
+                if (exhib != null)
+                {
+                    string newPath = Path.Combine(
+                            Path.GetDirectoryName(unpackDirectory),
+                            exhib.title.Replace(' ', '_')
+                        );
+                    Directory.Move(unpackDirectory, 
+                        newPath
+                     );
+                    exhib.SetFilePath(newPath);
+
+                }
+            }
+
+                
         }
+    
 
 
         private void Export()
@@ -141,9 +174,6 @@ namespace VRAustellungManager
             Save();
             ZipAllFiles();
             TidyUpTmpFiles();
-
-
-
         }
 
         private void TidyUpTmpFiles()
