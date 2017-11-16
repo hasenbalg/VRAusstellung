@@ -15,7 +15,7 @@ namespace VRAustellungManager
     public partial class PiecePropertiesAudio : PiecePropertiesBase
     {
         public Audio currentPiece { get; set; }
-        protected string FILEFORMATS = "Video files (*.mp3)|*.mp3";
+        protected string FILEFORMATS = "Audio files (*.mp3;*.wav)|*.mp3;*.wav";
         public PiecePropertiesAudio()
         {
             InitializeComponent();

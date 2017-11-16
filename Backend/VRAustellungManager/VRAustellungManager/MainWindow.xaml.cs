@@ -9,6 +9,7 @@ using System.Windows.Input;
 using Microsoft.Win32;
 using System.IO;
 using Ionic.Zip;
+using NReco.VideoConverter;
 
 namespace VRAustellungManager
 {
@@ -169,6 +170,10 @@ namespace VRAustellungManager
                         {
                             ZipObjMatTexFiles(zip, p);
                         }
+                        else if (p.filePath.ToLower().EndsWith(".mp3") || p.filePath.ToLower().EndsWith(".wav"))
+                        {
+                            ZipAudio(zip, p);
+                        }
                         else {
                             zip.AddFile(p.filePath, string.Empty);
                             Console.WriteLine("Added " + p.filePath + " to Zip");
@@ -199,6 +204,17 @@ namespace VRAustellungManager
             else{
                 return;
             }
+        }
+
+        private void ZipAudio(ZipFile zip, PieceWithFile p)
+        {
+            string filePath = p.filePath;
+            string tmpAiffPath = Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(filePath)+ ".aiff");
+            var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
+            ffMpeg.ConvertMedia(filePath, tmpAiffPath, Format.aiff);
+            zip.AddFile(tmpAiffPath, string.Empty);
+            tmpFiles2Delete.Add(tmpAiffPath);
+            p.filePath = Path.GetFileName(tmpAiffPath);
         }
 
         private void ZipObjMatTexFiles(ZipFile zip, PieceWithFile p)
