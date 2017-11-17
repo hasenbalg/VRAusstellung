@@ -148,10 +148,29 @@ namespace VRAustellungManager
                             Path.GetDirectoryName(unpackDirectory),
                             exhib.title.Replace(' ', '_')
                         );
+                    if (Directory.Exists(newPath))
+                    {
+                        Directory.Delete(newPath, true);
+                    }
                     Directory.Move(unpackDirectory, 
                         newPath
                      );
-                    exhib.SetFilePath(newPath);
+                    exhib.SetFilePath(Path.Combine(newPath, Path.GetFileName(xmlFile)));
+
+                    for (int i = 0; i < exhib.pieces.Count; i++)
+                    {
+                        for (int j = 0; j < exhib.pieces[i].Count; j++)
+                        {
+                            if (exhib.pieces[i][j] is PieceWithFile)
+                            {
+                                (exhib.pieces[i][j] as PieceWithFile).filePath = 
+                                    Path.Combine(newPath, (exhib.pieces[i][j] as PieceWithFile).filePath);
+                                Console.WriteLine((exhib.pieces[i][j] as PieceWithFile).filePath);
+                            }
+                        }
+                    }
+
+                    Save();
 
                 }
             }
