@@ -6,6 +6,11 @@ using UnityEngine;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using NReco.VideoConverter;
+using Valve.VR.InteractionSystem;
+
+// !!! NOTE !!!
+// Validation for mIndex and nIndex is missing so it's theoretically possible to move to non-existing rooms
+// but no doors to such should be able to spawn so no user interaction should allow this to happen! 
 
 public class BuildShow : MonoBehaviour {
     Exhibition exhibition;
@@ -13,8 +18,9 @@ public class BuildShow : MonoBehaviour {
     List<Piece> pieces;
 
     private float tileSize;
-    public GameObject prefabShowRoom, prefabDoor;
+    public GameObject prefabShowRoom, prefabDoor, dontDestroyOnRoomSwitch;
     public Material matShowRoom;
+    public Shader shaderDiffuse; //TEST : Need to attach needed shaders as assets since Shader.Find("XYZ") seems to not function after build
 
     public GameObject prefabImageCanvas, prefabVideoCanvas, prefabAudioCanvas, prefab3DCanvas;
     public Texture2D audioFallbackTexture;
@@ -24,9 +30,21 @@ public class BuildShow : MonoBehaviour {
     public Texture2D showRoomDiff;
 
     private int listIndex, mIndex, nIndex; //m = width, n = height
+    private GameObject currentPiece;
+
+    private GameObject sceneControl;
+    public Vector3 sceneScale;
+    public bool cancelSteamVRTeleportHint; //For cancelling the TeleportHint and Vibration, very annoying for developement.
+
+    public enum MoveDirection {MPOS, MNEG, NPOS, NNEG}
 
     void Awake()
     {
+        Application.targetFrameRate = 120; //Max. 120fps for temp reasons
+        this.sceneControl = new GameObject();
+        this.sceneControl.name = "SceneControl"; //Enable scaling down the entire room for whatever purpose
+        //this.sceneScale = new Vector3(0.3f, 0.3f, 0.3f); //Set Scale of scene
+
         tileSize = prefabShowRoom.transform.localScale.x;
 
         Debug.Log(Directory.GetParent(Application.dataPath));
@@ -58,8 +76,7 @@ public class BuildShow : MonoBehaviour {
         piece3.title = "Fahr Weiter";
         piece3.description = "Nochn Stueck, nochn Stueck, nochn Stueck, nochn Stueck...";
         this.pieces.Add(piece3);
-
-        /* Apparent issue with parsing .obj after building project.
+        
         Piece piece4 = new Piece();
         piece4.filePath = Directory.GetParent(Application.dataPath) + "/Testdata/Models/mittelfinger.obj";
         piece4.fileformat = ".obj";
@@ -67,7 +84,6 @@ public class BuildShow : MonoBehaviour {
         piece4.title = "Mittelfinger";
         piece4.description = "Ist der Mittelfinger oben...";
         this.pieces.Add(piece4);
-        */
 
         exhibition = new Exhibition();
         exhibition.width = 2;
@@ -87,6 +103,7 @@ public class BuildShow : MonoBehaviour {
     void Start() {
 
         //Build whole Show
+        /*
         int k = 0;
         for (int i = 0; i < exhibition.width; i++)
         {
@@ -124,49 +141,113 @@ public class BuildShow : MonoBehaviour {
                 k++;
             }
         }
+        */
         //Build only first Room
-        /*
         this.listIndex = 0;
         this.mIndex = 0;
         this.nIndex = 0;
         this.BuildExhibitionPiece();
-        */
     }
 
     // Update is called once per frame
     void Update() {
 
+        //Could well be inefficient, might reenable for release, annoying for developement though.
+        if (cancelSteamVRTeleportHint)
+        {
+            GameObject.Find("Teleporting").GetComponent<Teleport>().CancelTeleportHint(); //Cancel Teleport Hint (annoying while testing)
+        }
     }
 
-    public void SwitchRoom(int mIndex, int nIndex) {
+    //Switches to room with explicitly defined mIndex and nIndex
+    public void SwitchRoom(int mIndex, int nIndex)
+    {
         this.mIndex = mIndex;
         this.nIndex = nIndex;
         this.listIndex = nIndex * this.exhibition.width + mIndex;
+        Debug.Log(this.mIndex + " " + this.nIndex);
+        BuildExhibitionPiece();
     }
 
-    public void BuildExhibitionPiece() {
+    public int[] GetCurrentRoom()
+    {
+        return new int[] {this.mIndex, this.nIndex};
+    }
+
+    //Moves to an adjacent room without the need to know mIndex and nIndex
+    public void MoveRoom(BuildShow.MoveDirection md)
+    {
+        switch (md)
+        {
+            case MoveDirection.MPOS: this.mIndex++;
+                break;
+            case MoveDirection.MNEG: this.mIndex--;
+                break;
+            case MoveDirection.NPOS: this.nIndex++;
+                break;
+            case MoveDirection.NNEG: this.nIndex--;
+                break;
+            default:
+                break;
+        }
+        this.listIndex = nIndex * this.exhibition.width + mIndex;
+        Debug.Log(this.mIndex + " " + this.nIndex);
+        BuildExhibitionPiece();
+    }
+
+    public void BuildExhibitionPiece()
+    {
+        GameObject.Find("Player").transform.position = new Vector3(0, 0, 5);
+        GameObject.Find("Player").transform.rotation = Quaternion.Euler(0, 180, 0);
+
+        this.sceneControl.transform.localScale = Vector3.one; //Reset scale before adding any objects to sceneControl
+        //Destroy objects from previous room if there are any.
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("ShowObject"))
+        {
+            GameObject.Destroy(go);
+        }
+        //And destroy doors, also
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Door"))
+        {
+            GameObject.Destroy(go);
+        }
+        
         if (exhibition.pieces.Count > this.listIndex && exhibition.pieces[this.listIndex].filePath != null)
         {
             Vector3 pos = new Vector3(0f, 0f, 0f);
             Instantiate(prefabShowRoom,
            pos,
            Quaternion.identity
-           );
+           ).transform.SetParent(this.sceneControl.transform);
 
             //Place Doors
             if (this.mIndex < this.exhibition.width-1) {
-                Instantiate(prefabDoor, new Vector3(pos.x + tileSize/2, pos.y, pos.z), Quaternion.Euler(0,0,0)).name = "mPositive";
+                if ((this.nIndex * this.exhibition.width + this.mIndex + 1) < this.exhibition.pieces.Count) //Check if next place is not empty (lines can be incomplete in exhibition)
+                {
+                    GameObject doorMP = Instantiate(prefabDoor, new Vector3(pos.x - tileSize / 2, pos.y, pos.z), Quaternion.Euler(0, 0, 0));
+                    doorMP.name = "mPositive";
+                    doorMP.transform.SetParent(this.sceneControl.transform);
+                }
             }
             if (this.mIndex > 0) {
-                Instantiate(prefabDoor, new Vector3(pos.x - tileSize/2, pos.y, pos.z), Quaternion.Euler(0, 180, 0)).name = "mNegative";
+                GameObject doorMN = Instantiate(prefabDoor, new Vector3(pos.x + tileSize / 2, pos.y, pos.z), Quaternion.Euler(0, 180, 0));
+                doorMN.name = "mNegative";
+                doorMN.transform.SetParent(this.sceneControl.transform);
             }
             if(this.nIndex < this.exhibition.height-1)
             {
-                Instantiate(prefabDoor, new Vector3(pos.x, pos.y, pos.z + tileSize/2), Quaternion.Euler(0, 270, 0)).name = "nPositive";
+                if ((this.nIndex + 1 * this.exhibition.width + this.mIndex) < this.exhibition.pieces.Count) //Check if next place is not empty (lines can be incomplete in exhibition)
+                {
+                    GameObject doorNP = Instantiate(prefabDoor, new Vector3(pos.x, pos.y, pos.z + tileSize / 2), Quaternion.Euler(0, 270, 0));
+                    doorNP.name = "nPositive";
+                    doorNP.transform.SetParent(this.sceneControl.transform);
+                }
             }
             if(this.nIndex > 0)
             {
-                Instantiate(prefabDoor, new Vector3(pos.x, pos.y, pos.z - tileSize/2), Quaternion.Euler(0, 90, 0)).name = "nNegative";
+                GameObject doorNN = Instantiate(prefabDoor, new Vector3(pos.x, pos.y, pos.z - tileSize/2), Quaternion.Euler(0, 90, 0));
+                doorNN.name = "nNegative";
+                doorNN.transform.SetParent(this.sceneControl.transform);
             }
 
             switch (exhibition.pieces[this.listIndex].fileformat)
@@ -190,6 +271,9 @@ public class BuildShow : MonoBehaviour {
                     break;
             }
         }
+
+        this.sceneControl.transform.localScale = this.sceneScale;
+        this.dontDestroyOnRoomSwitch.transform.localScale = this.sceneScale;
     }
 
     public void InstantiateImageCanvas(Vector3 pos, string filePath) {
@@ -206,6 +290,8 @@ public class BuildShow : MonoBehaviour {
         liftUp.y = canvas.localScale.z * .5f + groundOffset;
         canvas.position = liftUp;
         canvas.GetComponent<Renderer>().material = mat;
+
+        stand.transform.SetParent(this.sceneControl.transform);
     }
 
     public void InstantiateVideoCanvas(Vector3 pos, string filePath)
@@ -230,6 +316,8 @@ public class BuildShow : MonoBehaviour {
 
        // canvas.localScale = new Vector3(videoPlayer.clip.width, 1, videoPlayer.clip.height).normalized;
         videoPlayer.Play();
+
+        stand.transform.SetParent(this.sceneControl.transform);
     }
 
     private void InstantiateAudioCanvas(Vector3 pos, string filePath)
@@ -250,11 +338,14 @@ public class BuildShow : MonoBehaviour {
 
         AudioSource audioSource = canvas.GetComponent<AudioSource>();
         StartCoroutine(LoadAudio(audioSource, filePath));
+
+        stand.transform.SetParent(this.sceneControl.transform);
     }
 
     private void Instantiate3DCanvas(Vector3 pos, string filePath)
     {
-        Material mat = new Material(Shader.Find("Diffuse"));
+        // Material mat = new Material(Shader.Find("Diffuse")); //After building, Shader.Find("XYZ") appears to cause problems.
+        Material mat = new Material(this.shaderDiffuse); //Using shader from assets instead
 
         //mat.EnableKeyword("_EMISSION");
         //mat.SetColor("_EmissionColor", new Color(.10f, .10f, .10f));
@@ -278,7 +369,7 @@ public class BuildShow : MonoBehaviour {
         //canvas.position = liftUp;
         //newPiece.GetComponent<Renderer>().material = mat;
 
-
+        newPiece.transform.SetParent(this.sceneControl.transform);
     }
 
     private Material[] LoadMaterials( string filePath)

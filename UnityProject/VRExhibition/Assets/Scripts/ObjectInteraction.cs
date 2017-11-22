@@ -13,15 +13,20 @@ public class ObjectInteraction : MonoBehaviour
     //bool mediaSwitchedOnBeforeTrackpad = false;
     ControlAudio ctrlAudio = null;
     ControlVideo ctrlVideo = null;
+    GameObject door = null;
+    BuildShow bs;
 
     // Use this for initialization
     void Start()
     {
+        this.bs = GameObject.Find("GameManager").GetComponent<BuildShow>();
     }
 
     // Update is called once per frame
+
     void Update()
     {
+        #region raycast
         Ray raycast = new Ray(transform.position, transform.forward);
         RaycastHit hit;
         bool raycastHit = Physics.Raycast(raycast, out hit, 100f);
@@ -33,19 +38,33 @@ public class ObjectInteraction : MonoBehaviour
             {
                 this.ctrlAudio = hitGameObject.GetComponent<ControlAudio>();
                 this.ctrlVideo = null;
+                this.door = null;
             } else if (this.CheckMediaVideo(hitGameObject))
             {
                 this.ctrlVideo = hitGameObject.GetComponent<ControlVideo>();
                 this.ctrlAudio = null;
+                this.door = null;
+            } else if (hitGameObject.CompareTag("Door"))
+            {
+                this.door = hitGameObject;
+                this.ctrlAudio = null;
+                this.ctrlVideo = null;
+            } else
+            {
+                this.door = null;
+                this.ctrlAudio = null;
+                this.ctrlVideo = null;
             }
         }
         else
         {
-            hitGameObject = null;
+            this.door = null;
             this.ctrlAudio = null;
             this.ctrlVideo = null;
         }
+        #endregion raycast
 
+        #region triggerEvents
         if (Input.GetAxis("RightTrigger") > 0.8f)
         {
             if (this.ctrlAudio != null && !triggerActivated)
@@ -56,13 +75,35 @@ public class ObjectInteraction : MonoBehaviour
             {
                 this.ctrlVideo.switchOn = !this.ctrlVideo.switchOn;
             }
+            else if (this.door != null && !triggerActivated)
+            {
+                switch (this.door.name)
+                {
+                    case "mPositive":
+                        this.bs.MoveRoom(BuildShow.MoveDirection.MPOS);
+                        break;
+                    case "mNegative":
+                        this.bs.MoveRoom(BuildShow.MoveDirection.MNEG);
+                        break;
+                    case "nPositive":
+                        this.bs.MoveRoom(BuildShow.MoveDirection.NPOS);
+                        break;
+                    case "nNegative":
+                        this.bs.MoveRoom(BuildShow.MoveDirection.NNEG);
+                        break;
+                    default:
+                        break;
+                }
+            }
             triggerActivated = true;
         }
         else
         {
             triggerActivated = false;
         }
+        #endregion triggerEvents
 
+        #region mediaScrubbing
         this.rightTrackpadAxis = Input.GetAxis("RightTrackpadHorizontalMovement");
 
         if (rightTrackpadAxis != 0)
@@ -117,6 +158,7 @@ public class ObjectInteraction : MonoBehaviour
         {
             //this.lastTrackpadPosition = 0;
         }
+        #endregion mediaScrubbing
     }
 
     bool CheckMediaAudio(GameObject go)

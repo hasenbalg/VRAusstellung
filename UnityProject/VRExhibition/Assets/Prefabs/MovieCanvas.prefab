@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 4855937820712242}
   m_Layer: 0
   m_Name: MovieCanvas
-  m_TagString: Untagged
+  m_TagString: ShowObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -366,6 +366,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   switchOn: 0
+  vp: {fileID: 0}
 --- !u!328 &328954807263108738
 VideoPlayer:
   m_ObjectHideFlags: 1

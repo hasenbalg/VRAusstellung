@@ -209,7 +209,7 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 45f3431f0103c41611e8d4eec3d439df UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingRenderer
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:Valve.VR.InteractionSystem.ArrowheadRotation
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:Valve.VR.InteractionSystem.DebugUI
-f2664e5ba17d66c4fe9f24186bcf543b Assembly-CSharp.dll:.BuildShow
+94ff3ecf0c640e40318c69b9b9735e14 Assembly-CSharp.dll:.BuildShow
 9de3a22eca9aefadba2d10d5987cefe3 UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
 d9da636e28346f2dc995a65758029e0e Assembly-CSharp.dll:Valve.VR.InteractionSystem.AllowTeleportWhileAttachedToHand
 e8c3f0ff62b447ee56e7793fdf494db2 Assembly-CSharp.dll:Valve.VR.InteractionSystem.ItemPackageReference

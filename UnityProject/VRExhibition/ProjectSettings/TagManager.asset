@@ -7,6 +7,9 @@ TagManager:
   - AudioController
   - CanvasVideo
   - CanvasAudio
+  - ShowObject
+  - Door
+  - TeleportArea
   layers:
   - Default
   - TransparentFX
