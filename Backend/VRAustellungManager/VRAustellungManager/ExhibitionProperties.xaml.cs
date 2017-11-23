@@ -1,5 +1,6 @@
 ﻿using LibVRAusstellung;
 using System;
+using System.Windows;
 using System.Windows.Controls;
 
 
@@ -49,6 +50,17 @@ namespace VRAustellungManager
 
         }
 
-       
+        private void exhibDimensionhTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string width = exhibWidthTextBox.Text.Trim();
+            string height = exhibHeightTextBox.Text.Trim();
+            if (width != String.Empty && height != String.Empty)
+            {
+                (Window.GetWindow(this) as MainWindow).SetGridDimensions(
+                Int32.Parse(width),
+                Int32.Parse(height)
+                );
+            }
+        }
     }
 }

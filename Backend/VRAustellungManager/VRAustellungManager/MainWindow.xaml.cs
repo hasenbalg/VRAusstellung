@@ -70,6 +70,65 @@ namespace VRAustellungManager
           RefreshPiecesGrid();
         }
 
+        internal void SetGridDimensions(int width, int height)
+        {
+            //Console.WriteLine(width +" x "+ height);
+            //Console.WriteLine(exhib.pieces[0].Count + " X " + exhib.pieces.Count);
+            if (width < exhib.pieces[0].Count || height < exhib.pieces.Count)
+            {
+                string messageBoxText = "Sind Sie sich sicher, dass Sie die Ausstellungsgroesse reduzieren wollen?";
+                string caption = "Ausstellungsgroesse geaendert";
+                MessageBoxButton button = MessageBoxButton.YesNo;
+                MessageBoxImage icon = MessageBoxImage.Warning;
+                List<Piece> pieces2Delete = GetPieces2DeleteAfterGridResize(width, height);
+
+                foreach (Piece p in pieces2Delete)
+                {
+                    messageBoxText += "\n" + p.id + ": " + p.title;
+                }
+                MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
+
+                switch (result)
+                {
+                    case MessageBoxResult.Yes:
+                        ResizeGrid(width, height);
+                        break;
+                    default:
+                        RefreshExhibProperies();
+                        return;
+
+                }
+            }
+            else {
+                ResizeGrid(width, height);
+            }
+        }
+
+        private void ResizeGrid(int width, int height)
+        {
+            exhib.pieces = Exhibition.GetNewList(width, height, exhib.pieces);
+            exhib.width = width;
+            exhib.height = height;
+            RefreshPiecesGrid();
+            NoPiecePropertiesPanel();
+        }
+
+        private List<Piece> GetPieces2DeleteAfterGridResize(int width, int height)
+        {
+            List<Piece> toDelete = new List<Piece>();
+            for (int i = 0; i < exhib.pieces.Count; i++)
+            {
+                for (int j = 0; j < exhib.pieces[i].Count; j++)
+                {
+                    if (i >= height || j >= width)
+                    {
+                        toDelete.Add(exhib.pieces[i][j]);
+                    }
+                    
+                }
+            }
+            return toDelete;
+        }
 
         private void Save()
         {

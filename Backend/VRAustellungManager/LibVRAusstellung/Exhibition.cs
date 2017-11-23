@@ -29,21 +29,7 @@ namespace LibVRAusstellung
 
             exhib.width = exhib.height = 3;
 
-            exhib.pieces = new List<List<Piece>>();
-            int k = 0;
-            for (int i = 0; i < exhib.height; i++)
-            {
-                List<Piece> newRow = new List<Piece>();
-                for (int j = 0; j < exhib.width; j++)
-                {
-                    newRow.Add(new Text() {
-                        id = k++,
-                        title = "Neues Ausstellungsstueck",
-                        description = "Beschreibung des neuen Ausstellungsssteucks"
-                    });
-                }
-                exhib.pieces.Add(newRow);
-            }
+            exhib.pieces = GetNewList(exhib.width, exhib.height);
 
             return exhib;
         }
@@ -100,6 +86,45 @@ namespace LibVRAusstellung
             exhib.SetFilePath(fileName);
             file.Close();
             return exhib;
+        }
+
+        public static List<List<Piece>> GetNewList(int width, int height)
+        {
+            List<List<Piece>>pieces = new List<List<Piece>>();
+            int k = 0;
+            for (int i = 0; i < height; i++)
+            {
+                List<Piece> newRow = new List<Piece>();
+                for (int j = 0; j < width; j++)
+                {
+                    newRow.Add(new Text()
+                    {
+                        id = k++,
+                        title = "Neues Ausstellungsstueck",
+                        description = "Beschreibung des neuen Ausstellungsssteucks"
+                    });
+                }
+                pieces.Add(newRow);
+            }
+            return pieces;
+        }
+
+        public static List<List<Piece>> GetNewList(int width, int height, List<List<Piece>> oldPieces)
+        {
+            List<List<Piece>> emptyPieces = GetNewList(width, height);
+
+            for (int i = 0; i < oldPieces.Count; i++)
+            {
+                for (int j = 0; j < oldPieces[i].Count; j++)
+                {
+                    if (i < emptyPieces.Count && j < emptyPieces[i].Count)
+                    {
+                        emptyPieces[i][j] = oldPieces[i][j];
+                    }  
+                }
+            }
+
+            return emptyPieces;
         }
     }
 }

@@ -27,9 +27,9 @@
 
         <Label Content="Groesse" Grid.Column="0" Grid.Row="2"/>
         <TextBlock Grid.Column="1"  Grid.Row="2">
-                <TextBox x:Name="exhibWidthTextBox"/>
+                <TextBox x:Name="exhibWidthTextBox" TextChanged="exhibDimensionhTextBox_TextChanged"/>
                 x
-                <TextBox x:Name="exhibHeightTextBox"/>
+                <TextBox x:Name="exhibHeightTextBox" TextChanged="exhibDimensionhTextBox_TextChanged"/>
         </TextBlock>
     </Grid>
 </UserControl>
