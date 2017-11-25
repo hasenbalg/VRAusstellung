@@ -18,6 +18,8 @@ namespace LibVRAusstellung
 
         public List<List<Piece>> pieces { get; set; }
 
+        public Color[] colorSchema;
+
         private string dir;
         private string xmlFileName;
 
@@ -30,6 +32,13 @@ namespace LibVRAusstellung
             exhib.width = exhib.height = 3;
 
             exhib.pieces = GetNewList(exhib.width, exhib.height);
+
+            exhib.colorSchema = new Color[]{
+                new Color(0, 0, 0),
+                new Color(5, 5, 5),
+                new Color(15, 15, 15)
+            };
+           
 
             return exhib;
         }

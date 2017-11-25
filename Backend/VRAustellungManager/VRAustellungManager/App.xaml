@@ -4,6 +4,9 @@
              xmlns:local="clr-namespace:VRAustellungManager"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style x:Key="multiLine" TargetType="TextBox">
+            <Setter Property="Height" Value="250" />
+        </Style>
     </Application.Resources>
+
 </Application>
