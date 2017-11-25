@@ -1,0 +1,12 @@
+﻿<Application x:Class="VRAustellungManager.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:VRAustellungManager"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <Style x:Key="multiLine" TargetType="TextBox">
+            <Setter Property="Height" Value="250" />
+        </Style>
+    </Application.Resources>
+
+</Application>

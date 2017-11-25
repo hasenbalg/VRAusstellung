@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="VRAustellungManager.ExhibitionProperties"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VRAustellungManager"
+            xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <StackPanel>
+        <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Label Content="Titel" Grid.Row="0" Grid.Column="0"/>
+        <TextBox x:Name="exhibTitleTextBox" Grid.Row="0" Grid.Column="1" TextChanged="exhibPropertyTextBox_TextChanged"/>
+
+        <Label Content="Beschreibung" Grid.Row="1" Grid.Column="0"/>
+        <TextBox x:Name="exhibDescriptionTextBox"  Grid.Row="1" Grid.Column="1"/>
+
+        <Label Content="Groesse" Grid.Column="0" Grid.Row="2"/>
+        <TextBlock Grid.Column="1"  Grid.Row="2">
+                <TextBox x:Name="exhibWidthTextBox" TextChanged="exhibDimensionhTextBox_TextChanged"/>
+                x
+                <TextBox x:Name="exhibHeightTextBox" TextChanged="exhibDimensionhTextBox_TextChanged"/>
+        </TextBlock>
+    </Grid>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+            <xctk:ColorPicker x:Name="firstColor" Grid.Column="0" SelectedColorChanged="Color_SelectedColorChanged"/>
+            <xctk:ColorPicker x:Name="secondColor" Grid.Column="1" SelectedColorChanged="Color_SelectedColorChanged"/>
+            <xctk:ColorPicker x:Name="thirdColor" Grid.Column="2" SelectedColorChanged="Color_SelectedColorChanged"/>
+        </Grid>
+    </StackPanel>
+</UserControl>

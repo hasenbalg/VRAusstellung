@@ -1,0 +1,5 @@
+C:\Users\fr\Documents\VRAusstellung\Backend\VRAustellungManager\LibVRAusstellung\bin\Debug\LibVRAusstellung.dll
+C:\Users\fr\Documents\VRAusstellung\Backend\VRAustellungManager\LibVRAusstellung\bin\Debug\LibVRAusstellung.pdb
+C:\Users\fr\Documents\VRAusstellung\Backend\VRAustellungManager\LibVRAusstellung\obj\Debug\LibVRAusstellung.csprojResolveAssemblyReference.cache
+C:\Users\fr\Documents\VRAusstellung\Backend\VRAustellungManager\LibVRAusstellung\obj\Debug\LibVRAusstellung.dll
+C:\Users\fr\Documents\VRAusstellung\Backend\VRAustellungManager\LibVRAusstellung\obj\Debug\LibVRAusstellung.pdb
