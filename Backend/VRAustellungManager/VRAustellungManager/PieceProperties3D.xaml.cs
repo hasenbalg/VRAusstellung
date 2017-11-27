@@ -34,16 +34,21 @@ namespace VRAustellungManager
             pieceComboBox.SelectionChanged -= PieceComboBox_SelectionChanged;
             pieceNameTextBox.TextChanged -= PiecePropertyChanged;
             pieceDescriptionTextBox.TextChanged -= PiecePropertyChanged;
+            pieceHeightTextBox.TextChanged -= PiecePropertyChanged;
 
             pieceComboBox.SelectedValue = GetDisplayNameOfPiece(currentPiece.GetType());
             pieceIdTextBox.Text = currentPiece.id.ToString();
             pieceNameTextBox.Text = currentPiece.title;
             pieceDescriptionTextBox.Text = currentPiece.description;
             pieceFileSelectURLTextBlock.Text = currentPiece.filePath;
+            pieceHeightTextBox.Text = currentPiece.height.ToString();
+
 
             pieceComboBox.SelectionChanged += PieceComboBox_SelectionChanged;
             pieceNameTextBox.TextChanged += PiecePropertyChanged;
             pieceDescriptionTextBox.TextChanged += PiecePropertyChanged;
+            pieceHeightTextBox.TextChanged += PiecePropertyChanged;
+
             SetPreview(currentPiece.filePath);
         }
 
@@ -72,6 +77,10 @@ namespace VRAustellungManager
             currentPiece.title = pieceNameTextBox.Text;
             currentPiece.description = pieceDescriptionTextBox.Text;
             currentPiece.filePath = pieceFileSelectURLTextBlock.Text;
+            if (!string.IsNullOrEmpty(pieceHeightTextBox.Text))
+            {
+                currentPiece.height = float.Parse(pieceHeightTextBox.Text.Replace(',', '.'));
+            }
             SendBackToMainWindow(currentPiece);
         }
 
@@ -90,6 +99,7 @@ namespace VRAustellungManager
             pieceNameTextBox.Text = string.Empty;
             pieceDescriptionTextBox.Text = string.Empty;
             pieceFileSelectURLTextBlock.Text = string.Empty;
+            pieceHeightTextBox.Text = string.Empty;
             piece3DPreview.Children.Clear();
         }
         protected void PieceFileSelectButton_Click(object sender, RoutedEventArgs e)

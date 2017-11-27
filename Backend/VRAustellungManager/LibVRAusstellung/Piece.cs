@@ -32,7 +32,7 @@ namespace LibVRAusstellung
     [DisplayName("Bild")]
     public class Image: PieceWithFile
     {
-        
+        public float height;
     }
 
     [DisplayName("Video")]
@@ -50,6 +50,6 @@ namespace LibVRAusstellung
     [DisplayName("3D-Modell")]
     public class ThreeDModel : PieceWithFile
     {
-        
+        public float height;
     }
 }

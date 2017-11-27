@@ -17,6 +17,9 @@
         <Label Content="Beschreibung"/>
         <TextBox x:Name="pieceDescriptionTextBox" TextChanged="PiecePropertyChanged"/>
 
+        <Label Content="Groesse in m"/>
+        <TextBox x:Name="pieceHeightTextBox" TextChanged="PiecePropertyChanged"/>
+
         <Button Content="Datei waehlen" x:Name="pieceFileSelectButton" Click="PieceFileSelectButton_Click"/>
         <TextBlock x:Name="pieceFileSelectURLTextBlock" />
 
