@@ -1,0 +1,2 @@
+C:\Users\fr\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\bin\Release\VRAustellungManager.exe.config
+C:\Users\fr\Documents\VRAusstellung\Backend\VRAustellungManager\VRAustellungManager\obj\Release\VRAustellungManager.pdb
