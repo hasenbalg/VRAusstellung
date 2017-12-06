@@ -7,6 +7,7 @@ public abstract class Control : MonoBehaviour {
 
     protected bool isPlaying = false;
     public bool switchOn = false;
+    public bool isUpdatingMarkerPos = true;
 
     protected GameObject timeLine, timeMarker;
 
@@ -18,11 +19,15 @@ public abstract class Control : MonoBehaviour {
 
     public void SetMarkerPos(float playProgress)
     {
-        Vector3 markerPos = markerPos = timeLine.transform.TransformPoint(Vector3.up * (-1));
-        if (!System.Single.IsNaN(playProgress)){
-            markerPos = timeLine.transform.TransformPoint(Vector3.up * (playProgress * 2 - 1));//https://docs.unity3d.com/ScriptReference/Transform.TransformPoint.html
+        if (isUpdatingMarkerPos)
+        {
+            Vector3 markerPos = markerPos = timeLine.transform.TransformPoint(Vector3.up * (-1));
+            if (!System.Single.IsNaN(playProgress))
+            {
+                markerPos = timeLine.transform.TransformPoint(Vector3.up * (playProgress * 2 - 1));//https://docs.unity3d.com/ScriptReference/Transform.TransformPoint.html
+            }
+
+            timeMarker.transform.position = markerPos;
         }
-       
-        timeMarker.transform.position = markerPos;
     }
 }

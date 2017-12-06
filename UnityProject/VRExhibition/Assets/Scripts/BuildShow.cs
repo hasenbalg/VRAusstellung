@@ -6,6 +6,11 @@ using UnityEngine;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using NReco.VideoConverter;
+using Valve.VR.InteractionSystem;
+
+// !!! NOTE !!!
+// Validation for mIndex and nIndex is missing so it's theoretically possible to move to non-existing rooms
+// but no doors to such should be able to spawn so no user interaction should allow this to happen! 
 
 public class BuildShow : MonoBehaviour {
     Exhibition exhibition;
@@ -13,10 +18,11 @@ public class BuildShow : MonoBehaviour {
     List<Piece> pieces;
 
     private float tileSize;
-    public GameObject prefabShowRoom, prefabDoor;
-    public Material matShowRoom;
+    public GameObject prefabShowRoom, prefabDoor, dontDestroyOnRoomSwitch;
+    public Material matShowRoom, matCanvas;
+    public Shader shaderDiffuse; //TEST : Need to attach needed shaders as assets since Shader.Find("XYZ") seems to not function after build
 
-    public GameObject prefabImageCanvas, prefabVideoCanvas, prefabAudioCanvas, prefab3DCanvas;
+    public GameObject prefabImageCanvas, prefabVideoCanvas, prefabAudioCanvas, prefab3DCanvas, prefabTable;
     public Texture2D audioFallbackTexture;
     public float groundOffset;
 
@@ -24,10 +30,30 @@ public class BuildShow : MonoBehaviour {
     public Texture2D showRoomDiff;
 
     private int listIndex, mIndex, nIndex; //m = width, n = height
+    private GameObject currentPiece;
+
+    private GameObject sceneControl;
+    public Vector3 sceneScale;
+    public bool cancelSteamVRTeleportHint; //For cancelling the TeleportHint and Vibration, very annoying for developement.
+    private AudioSource srcAudio;
+    private MediaType ? mediaType = null;
+    private Transform VolumeKnobAudio, VolumeKnobVideo;
+
+    public enum MoveDirection {MPOS, MNEG, NPOS, NNEG}
+    enum MediaType {Image, Video, Audio, Model}
 
     void Awake()
     {
-        tileSize = prefabShowRoom.transform.localScale.x;
+        Application.targetFrameRate = 120; //Max. 120fps for temp reasons
+        this.sceneControl = new GameObject();
+        this.sceneControl.name = "SceneControl"; //Enable scaling down the entire room for whatever purpose
+        //this.sceneScale = new Vector3(0.3f, 0.3f, 0.3f); //Set Scale of scene
+
+        //tileSize = prefabShowRoom.transform.localScale.x;
+        //tileSize = prefabShowRoom.GetComponent<Renderer>().bounds.size.x / 1.2f;
+        //tileSize = prefabShowRoom.transform.GetChild(0).GetComponent<Renderer>().bounds.size.x / 1.55f;
+        tileSize = GameObject.Find("Teleportarea").GetComponent<Renderer>().bounds.size.x / 1.265f;
+        //tileSize = GameObject.Find("Teleportarea").GetComponent<Renderer>().bounds.size.x;
 
         Debug.Log(Directory.GetParent(Application.dataPath));
 
@@ -58,8 +84,7 @@ public class BuildShow : MonoBehaviour {
         piece3.title = "Fahr Weiter";
         piece3.description = "Nochn Stueck, nochn Stueck, nochn Stueck, nochn Stueck...";
         this.pieces.Add(piece3);
-
-        /* Apparent issue with parsing .obj after building project.
+        
         Piece piece4 = new Piece();
         piece4.filePath = Directory.GetParent(Application.dataPath) + "/Testdata/Models/mittelfinger.obj";
         piece4.fileformat = ".obj";
@@ -67,7 +92,6 @@ public class BuildShow : MonoBehaviour {
         piece4.title = "Mittelfinger";
         piece4.description = "Ist der Mittelfinger oben...";
         this.pieces.Add(piece4);
-        */
 
         exhibition = new Exhibition();
         exhibition.width = 2;
@@ -80,13 +104,16 @@ public class BuildShow : MonoBehaviour {
         showRoomDiff = LoadPNG(exhibition.iconpath);
         matShowRoom.mainTexture = showRoomDiff;
 
-
+        this.VolumeKnobAudio = null;
+        this.VolumeKnobVideo = null;
+        this.srcAudio = null;
     }
 
     // Use this for initialization
     void Start() {
 
         //Build whole Show
+        /*
         int k = 0;
         for (int i = 0; i < exhibition.width; i++)
         {
@@ -124,49 +151,121 @@ public class BuildShow : MonoBehaviour {
                 k++;
             }
         }
+        */
         //Build only first Room
-        /*
         this.listIndex = 0;
         this.mIndex = 0;
         this.nIndex = 0;
         this.BuildExhibitionPiece();
-        */
     }
 
     // Update is called once per frame
     void Update() {
-
+        //Debug.Log(GameObject.Find("TimeMarker").transform.parent.parent.Find("Canvas").GetComponent<ControlAudio>());
+        //Could well be inefficient, might reenable for release, annoying for developement though.
+        if (cancelSteamVRTeleportHint)
+        {
+            GameObject.Find("Teleporting").GetComponent<Teleport>().CancelTeleportHint(); //Cancel Teleport Hint (annoying while testing)
+        }
+        if(this.srcAudio != null)
+        {
+            if(this.mediaType == MediaType.Video)
+            {
+                this.srcAudio.volume = this.VolumeKnobVideo.rotation.eulerAngles.z / 360f;
+            } else if(this.mediaType == MediaType.Audio)
+            {
+                this.srcAudio.volume = this.VolumeKnobAudio.rotation.eulerAngles.z / 360f;
+            }
+        }
     }
 
-    public void SwitchRoom(int mIndex, int nIndex) {
+    //Switches to room with explicitly defined mIndex and nIndex
+    public void SwitchRoom(int mIndex, int nIndex)
+    {
         this.mIndex = mIndex;
         this.nIndex = nIndex;
         this.listIndex = nIndex * this.exhibition.width + mIndex;
+        Debug.Log(this.mIndex + " " + this.nIndex);
+        BuildExhibitionPiece();
     }
 
-    public void BuildExhibitionPiece() {
+    public int[] GetCurrentRoom()
+    {
+        return new int[] {this.mIndex, this.nIndex};
+    }
+
+    //Moves to an adjacent room without the need to know mIndex and nIndex
+    public void MoveRoom(BuildShow.MoveDirection md)
+    {
+        switch (md)
+        {
+            case MoveDirection.MPOS: this.mIndex++;
+                break;
+            case MoveDirection.MNEG: this.mIndex--;
+                break;
+            case MoveDirection.NPOS: this.nIndex++;
+                break;
+            case MoveDirection.NNEG: this.nIndex--;
+                break;
+            default:
+                break;
+        }
+        this.listIndex = nIndex * this.exhibition.width + mIndex;
+        Debug.Log(this.mIndex + " " + this.nIndex);
+        BuildExhibitionPiece();
+    }
+
+    public void BuildExhibitionPiece()
+    {
+
+        this.sceneControl.transform.localScale = Vector3.one; //Reset scale before adding any objects to sceneControl
+        //Destroy objects from previous room if there are any.
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("ShowObject"))
+        {
+            GameObject.Destroy(go);
+        }
+        //And destroy doors, also
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Door"))
+        {
+            GameObject.Destroy(go);
+        }
+        
         if (exhibition.pieces.Count > this.listIndex && exhibition.pieces[this.listIndex].filePath != null)
         {
             Vector3 pos = new Vector3(0f, 0f, 0f);
             Instantiate(prefabShowRoom,
            pos,
            Quaternion.identity
-           );
+           ).transform.SetParent(this.sceneControl.transform);
 
             //Place Doors
             if (this.mIndex < this.exhibition.width-1) {
-                Instantiate(prefabDoor, new Vector3(pos.x + tileSize/2, pos.y, pos.z), Quaternion.Euler(0,0,0)).name = "mPositive";
+                if ((this.nIndex * this.exhibition.width + this.mIndex + 1) < this.exhibition.pieces.Count) //Check if next place is not empty (lines can be incomplete in exhibition)
+                {
+                    GameObject doorMP = Instantiate(prefabDoor, new Vector3(pos.x - tileSize / 2, pos.y, pos.z), Quaternion.Euler(0, 0, 0));
+                    doorMP.name = "mPositive";
+                    doorMP.transform.SetParent(this.sceneControl.transform);
+                }
             }
             if (this.mIndex > 0) {
-                Instantiate(prefabDoor, new Vector3(pos.x - tileSize/2, pos.y, pos.z), Quaternion.Euler(0, 180, 0)).name = "mNegative";
+                GameObject doorMN = Instantiate(prefabDoor, new Vector3(pos.x + tileSize / 2, pos.y, pos.z), Quaternion.Euler(0, 180, 0));
+                doorMN.name = "mNegative";
+                doorMN.transform.SetParent(this.sceneControl.transform);
             }
             if(this.nIndex < this.exhibition.height-1)
             {
-                Instantiate(prefabDoor, new Vector3(pos.x, pos.y, pos.z + tileSize/2), Quaternion.Euler(0, 270, 0)).name = "nPositive";
+                if ((this.nIndex + 1 * this.exhibition.width + this.mIndex) < this.exhibition.pieces.Count) //Check if next place is not empty (lines can be incomplete in exhibition)
+                {
+                    GameObject doorNP = Instantiate(prefabDoor, new Vector3(pos.x, pos.y, pos.z + tileSize / 2), Quaternion.Euler(0, 270, 0));
+                    doorNP.name = "nPositive";
+                    doorNP.transform.SetParent(this.sceneControl.transform);
+                }
             }
             if(this.nIndex > 0)
             {
-                Instantiate(prefabDoor, new Vector3(pos.x, pos.y, pos.z - tileSize/2), Quaternion.Euler(0, 90, 0)).name = "nNegative";
+                GameObject doorNN = Instantiate(prefabDoor, new Vector3(pos.x, pos.y, pos.z - tileSize/2), Quaternion.Euler(0, 90, 0));
+                doorNN.name = "nNegative";
+                doorNN.transform.SetParent(this.sceneControl.transform);
             }
 
             switch (exhibition.pieces[this.listIndex].fileformat)
@@ -174,26 +273,43 @@ public class BuildShow : MonoBehaviour {
                 case ".png":
                 case ".jpg":
                 case ".jpeg":
+                    this.mediaType = MediaType.Image;
                     InstantiateImageCanvas(pos, exhibition.pieces[this.listIndex].filePath);
                     break;
                 case ".mp4":
+                    GameObject.Find("Player").transform.position = new Vector3(0, 0, 2);
+                    GameObject.Find("Player").transform.rotation = Quaternion.Euler(0, 180, 0);
+                    this.mediaType = MediaType.Video;
                     InstantiateVideoCanvas(pos, exhibition.pieces[this.listIndex].filePath);
                     break;
                 case ".mp3":
                 case ".wav":
+                    GameObject.Find("Player").transform.position = new Vector3(0, 0, 2);
+                    GameObject.Find("Player").transform.rotation = Quaternion.Euler(0, 180, 0);
+                    this.mediaType = MediaType.Audio;
                     InstantiateAudioCanvas(pos, exhibition.pieces[this.listIndex].filePath);
                     break;
                 case ".obj":
+                    GameObject.Find("Player").transform.position = new Vector3(0, 0, 5);
+                    GameObject.Find("Player").transform.rotation = Quaternion.Euler(0, 180, 0);
+                    this.mediaType = MediaType.Model;
                     Instantiate3DCanvas(pos, exhibition.pieces[this.listIndex].filePath);
                     break;
                 default:
+                    GameObject.Find("Player").transform.position = new Vector3(0, 0, 5);
+                    GameObject.Find("Player").transform.rotation = Quaternion.Euler(0, 180, 0);
+                    this.mediaType = null;
                     break;
             }
         }
+
+        this.sceneControl.transform.localScale = this.sceneScale;
+        this.dontDestroyOnRoomSwitch.transform.localScale = this.sceneScale;
     }
 
     public void InstantiateImageCanvas(Vector3 pos, string filePath) {
-        Material mat = new Material(Shader.Find("Standard"));
+        //Material mat = new Material(Shader.Find("Standard"));
+        Material mat = this.matCanvas;
         Texture2D tex = LoadPNG(filePath);
         mat.mainTexture = tex;
         //mat.EnableKeyword("_EMISSION");
@@ -206,18 +322,25 @@ public class BuildShow : MonoBehaviour {
         liftUp.y = canvas.localScale.z * .5f + groundOffset;
         canvas.position = liftUp;
         canvas.GetComponent<Renderer>().material = mat;
+
+        this.srcAudio = null;
+        stand.transform.SetParent(this.sceneControl.transform);
     }
 
     public void InstantiateVideoCanvas(Vector3 pos, string filePath)
     {
         GameObject stand = Instantiate(prefabVideoCanvas, pos, Quaternion.identity);
-        Transform canvas = stand.transform.Find("Canvas");
-        Transform timeLine = stand.transform.Find("TimeLine");
-        Vector3 liftUp = canvas.position;
-        liftUp.y = canvas.localScale.z * .5f + groundOffset;
-        canvas.position = liftUp;
+        GameObject table = Instantiate(prefabTable, pos, Quaternion.identity);
+        // Transform canvas = stand.transform.Find("Canvas");
+        Transform canvas = stand.transform.GetChild(0).Find("Screen");
+        // Transform timeLine = stand.transform.Find("TimeLine");
+        Transform timeLine = stand.transform.GetChild(0).Find("TimeLine");
+        // Vector3 liftUp = canvas.position;
+        // liftUp.y = canvas.localScale.z * .5f + groundOffset;
+        // canvas.position = liftUp;
+        stand.transform.position = new Vector3(0, table.transform.GetChild(0).GetComponent<Renderer>().bounds.size.z, 0);
 
-        timeLine.position = liftUp + canvas.forward * 1f;
+        // timeLine.position = liftUp + canvas.forward * 1f;
 
         var videoPlayer = canvas.GetComponent<UnityEngine.Video.VideoPlayer>();
         videoPlayer.url = (new WWW(filePath).url);
@@ -230,31 +353,46 @@ public class BuildShow : MonoBehaviour {
 
        // canvas.localScale = new Vector3(videoPlayer.clip.width, 1, videoPlayer.clip.height).normalized;
         videoPlayer.Play();
+
+        this.srcAudio = canvas.GetComponent<AudioSource>();
+        this.VolumeKnobVideo = stand.transform.GetChild(0).Find("VolumeKnobVideo").transform;
+        stand.transform.SetParent(this.sceneControl.transform);
+        table.transform.SetParent(this.sceneControl.transform);
     }
 
     private void InstantiateAudioCanvas(Vector3 pos, string filePath)
     {
-        Material mat = new Material(Shader.Find("Standard"));
+        //Material mat = new Material(Shader.Find("Standard"));
+        Material mat = this.matCanvas;
         Texture2D tex = LoadAudioArtWork(filePath);
         mat.mainTexture = tex;
         //mat.EnableKeyword("_EMISSION");
         //mat.SetColor("_EmissionColor", new Color(.10f, .10f, .10f));
 
         GameObject stand = Instantiate(prefabAudioCanvas, pos, Quaternion.identity);
-        Transform canvas = stand.transform.Find("Canvas");
-        canvas.localScale = new Vector3(tex.width, 1, tex.height).normalized;
-        Vector3 liftUp = canvas.position;
-        liftUp.y = canvas.localScale.z * .5f + groundOffset;
-        canvas.position = liftUp;
-        canvas.GetComponent<Renderer>().material = mat;
+        GameObject table = Instantiate(prefabTable, pos, Quaternion.identity);
+        //Transform canvas = stand.transform.Find("Canvas");
+        Transform canvas = stand.transform.GetChild(0);
+        //canvas.localScale = new Vector3(tex.width, 1, tex.height).normalized;
+        //Vector3 liftUp = canvas.position;
+        //liftUp.y = canvas.localScale.z * .5f + groundOffset;
+        //canvas.position = liftUp;
+        stand.transform.position = new Vector3(0, table.transform.GetChild(0).GetComponent<Renderer>().bounds.size.z, 0);
+        //canvas.GetComponent<Renderer>().material = mat;
 
         AudioSource audioSource = canvas.GetComponent<AudioSource>();
         StartCoroutine(LoadAudio(audioSource, filePath));
+
+        this.srcAudio = canvas.GetComponent<AudioSource>();
+        this.VolumeKnobAudio = stand.transform.GetChild(0).Find("VolumeKnobAudio").transform;
+        stand.transform.SetParent(this.sceneControl.transform);
+        table.transform.SetParent(this.sceneControl.transform);
     }
 
     private void Instantiate3DCanvas(Vector3 pos, string filePath)
     {
-        Material mat = new Material(Shader.Find("Diffuse"));
+        // Material mat = new Material(Shader.Find("Diffuse")); //After building, Shader.Find("XYZ") appears to cause problems.
+        Material mat = new Material(this.shaderDiffuse); //Using shader from assets instead
 
         //mat.EnableKeyword("_EMISSION");
         //mat.SetColor("_EmissionColor", new Color(.10f, .10f, .10f));
@@ -270,6 +408,8 @@ public class BuildShow : MonoBehaviour {
         
         newPiece.GetComponent<Renderer>().materials = LoadMaterials(filePath);
 
+        newPiece.AddComponent<BoxCollider>();
+
         //GameObject stand = Instantiate(prefabAudioCanvas, pos, Quaternion.identity);
         //Transform canvas = stand.transform.Find("Canvas");
         //canvas.localScale = new Vector3(tex.width, 1, tex.height).normalized;
@@ -278,7 +418,8 @@ public class BuildShow : MonoBehaviour {
         //canvas.position = liftUp;
         //newPiece.GetComponent<Renderer>().material = mat;
 
-
+        this.srcAudio = null;
+        newPiece.transform.SetParent(this.sceneControl.transform);
     }
 
     private Material[] LoadMaterials( string filePath)
