@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 23224776363391042}
   m_Layer: 0
   m_Name: 3DCanvas
-  m_TagString: Untagged
+  m_TagString: ShowObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
