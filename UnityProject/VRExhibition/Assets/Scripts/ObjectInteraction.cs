@@ -39,7 +39,7 @@ public class ObjectInteraction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
         #region raycast
         Ray raycast = new Ray(transform.position, transform.forward);
         RaycastHit hit;
@@ -244,23 +244,27 @@ public class ObjectInteraction : MonoBehaviour
             switch (this.grabbedObject.name)
             {
                 case "VolumeKnobAudio":
+                    this.grabbedObject.transform.rotation = Quaternion.Euler(this.grabbedObject.transform.rotation.eulerAngles.x, this.grabbedObject.transform.rotation.eulerAngles.y,
+                        this.grabbedObject.transform.rotation.eulerAngles.z - (this.transform.rotation.eulerAngles.z - this.lastFrameControllerRotation));
+                    this.lastFrameControllerRotation = this.transform.rotation.eulerAngles.z;
+                    break;
                 case "VolumeKnobVideo":
                     this.grabbedObject.transform.rotation = Quaternion.Euler(this.grabbedObject.transform.rotation.eulerAngles.x, this.grabbedObject.transform.rotation.eulerAngles.y,
-                        this.grabbedObject.transform.rotation.eulerAngles.z + (this.transform.rotation.eulerAngles.z - this.lastFrameControllerRotation));
+                        this.grabbedObject.transform.rotation.eulerAngles.z - (this.transform.rotation.eulerAngles.z - this.lastFrameControllerRotation));
                     this.lastFrameControllerRotation = this.transform.rotation.eulerAngles.z;
                     break;
                 case "ScrubbingKnobAudio":
                     this.grabbedObject.transform.rotation = Quaternion.Euler(this.grabbedObject.transform.rotation.eulerAngles.x, this.grabbedObject.transform.rotation.eulerAngles.y,
-                        this.grabbedObject.transform.rotation.eulerAngles.z + (this.transform.rotation.eulerAngles.z - this.lastFrameControllerRotation));
+                        this.grabbedObject.transform.rotation.eulerAngles.z - (this.transform.rotation.eulerAngles.z - this.lastFrameControllerRotation));
                     this.lastFrameControllerRotation = this.transform.rotation.eulerAngles.z;
-                    this.srcAudio.time = Mathf.Clamp((this.srcAudio.time - (this.grabbedObject.transform.rotation.eulerAngles.z - lastFrameKnobRotation) / 15), 0, srcAudio.clip.length);
+                    this.srcAudio.time = Mathf.Clamp((this.srcAudio.time + (this.grabbedObject.transform.rotation.eulerAngles.z - lastFrameKnobRotation) / 15), 0.0f, srcAudio.clip.length);
                     this.lastFrameKnobRotation = this.grabbedObject.transform.rotation.eulerAngles.z;
                     break;
                 case "ScrubbingKnobVideo":
                     this.grabbedObject.transform.rotation = Quaternion.Euler(this.grabbedObject.transform.rotation.eulerAngles.x, this.grabbedObject.transform.rotation.eulerAngles.y,
-                        this.grabbedObject.transform.rotation.eulerAngles.z + (this.transform.rotation.eulerAngles.z - this.lastFrameControllerRotation));
+                        this.grabbedObject.transform.rotation.eulerAngles.z - (this.transform.rotation.eulerAngles.z - this.lastFrameControllerRotation));
                     this.lastFrameControllerRotation = this.transform.rotation.eulerAngles.z;
-                    this.srcVideo.frame = (long)Mathf.Clamp((this.srcVideo.frame - ((this.grabbedObject.transform.rotation.eulerAngles.z - lastFrameKnobRotation) * 10)), 0, this.srcVideo.frameCount - 1);
+                    this.srcVideo.frame = (long)Mathf.Clamp((this.srcVideo.frame + ((this.grabbedObject.transform.rotation.eulerAngles.z - lastFrameKnobRotation) * 10)), 1f, this.srcVideo.frameCount - 1);
                     this.lastFrameKnobRotation = this.grabbedObject.transform.rotation.eulerAngles.z;
                     break;
                 default:
@@ -269,8 +273,20 @@ public class ObjectInteraction : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        /* Moved to OnCollisionStay because OnCollisionExit & OnCollisionEnter are not necesserily called in the right order which makes some interactions not possible!
+        Debug.Log("Something is grabbable! : " + collision.gameObject.name);
+        if (collision.gameObject.CompareTag("Grabbable") || collision.gameObject.CompareTag("Door") && this.grabbedObject == null)
+        {
+            this.currentGrabbableObject = collision.gameObject;
+        }
+        */
+    }
+
     private void OnCollisionStay(Collision collision)
     {
+        
         Debug.Log("Something is grabbable! : " + collision.gameObject.name);
         if (collision.gameObject.CompareTag("Grabbable") || collision.gameObject.CompareTag("Door") && this.grabbedObject == null)
         {

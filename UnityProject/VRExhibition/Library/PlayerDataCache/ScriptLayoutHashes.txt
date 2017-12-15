@@ -150,8 +150,6 @@ dea1f50129720480e0f43a3e995ef93b Assembly-CSharp.dll:Valve.VR.InteractionSystem.
 6e83a87ced434693cbcbb73efeba1681 Assembly-CSharp.dll:Valve.VR.InteractionSystem.ControllerButtonHints
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:Valve.VR.InteractionSystem.DontDestroyOnLoad
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:Valve.VR.InteractionSystem.IgnoreTeleportTrace
-05524b8f659e7bfe5756d1335fec24ba UnityEngine.Advertisements.dll:UnityEngine.Advertisements.CallbackExecutor
-05524b8f659e7bfe5756d1335fec24ba UnityEngine.Advertisements.dll:UnityEngine.Advertisements.Editor.Placeholder
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:Valve.VR.InteractionSystem.Interactable
 01630b9e450f9e5d67fcd6e4af099264 Assembly-CSharp.dll:.SteamVR_GazeTracker
 73f9d5be89bfe8b6fe672de9550f1a0c Assembly-CSharp.dll:Valve.VR.InteractionSystem.ItemPackage
