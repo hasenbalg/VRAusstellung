@@ -3,3 +3,8 @@ C:\Users\fr\Documents\VRAusstellung\Backend\VRAustellungManager\LibVRAusstellung
 C:\Users\fr\Documents\VRAusstellung\Backend\VRAustellungManager\LibVRAusstellung\obj\Release\LibVRAusstellung.csprojResolveAssemblyReference.cache
 C:\Users\fr\Documents\VRAusstellung\Backend\VRAustellungManager\LibVRAusstellung\obj\Release\LibVRAusstellung.dll
 C:\Users\fr\Documents\VRAusstellung\Backend\VRAustellungManager\LibVRAusstellung\obj\Release\LibVRAusstellung.pdb
+C:\Users\fr\Desktop\VR\Backend\VRAustellungManager\LibVRAusstellung\bin\Release\LibVRAusstellung.dll
+C:\Users\fr\Desktop\VR\Backend\VRAustellungManager\LibVRAusstellung\bin\Release\LibVRAusstellung.pdb
+C:\Users\fr\Desktop\VR\Backend\VRAustellungManager\LibVRAusstellung\obj\Release\LibVRAusstellung.csprojResolveAssemblyReference.cache
+C:\Users\fr\Desktop\VR\Backend\VRAustellungManager\LibVRAusstellung\obj\Release\LibVRAusstellung.dll
+C:\Users\fr\Desktop\VR\Backend\VRAustellungManager\LibVRAusstellung\obj\Release\LibVRAusstellung.pdb

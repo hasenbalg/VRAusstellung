@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<Exhibition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <floorColor>
+    <R>89</R>
+    <G>48</G>
+    <B>48</B>
+  </floorColor>
+  <doorColor>
+    <R>0</R>
+    <G>0</G>
+    <B>0</B>
+  </doorColor>
+  <skyColor>
+    <R>0</R>
+    <G>0</G>
+    <B>0</B>
+  </skyColor>
+  <textColor>
+    <R>255</R>
+    <G>255</G>
+    <B>255</B>
+  </textColor>
+  <guideColor>
+    <R>255</R>
+    <G>255</G>
+    <B>255</B>
+  </guideColor>
+  <audioTimeLineColor>
+    <R>127</R>
+    <G>255</G>
+    <B>0</B>
+  </audioTimeLineColor>
+  <videoTimeLineColor>
+    <R>255</R>
+    <G>20</G>
+    <B>147</B>
+  </videoTimeLineColor>
+  <audioMarkerColor>
+    <R>255</R>
+    <G>140</G>
+    <B>0</B>
+  </audioMarkerColor>
+  <videoMarkerColor>
+    <R>64</R>
+    <G>224</G>
+    <B>208</B>
+  </videoMarkerColor>
+  <title>Steller's sea cow</title>
+  <description>Steller's sea cow (Hydrodamalis gigas) is an extinct sirenian discovered by Europeans in 1741. At that time, it was found only around the Commander Islands in the Bering Sea between Alaska and Russia; its range was more extensive during the Pleistocene epoch, and it is possible that the animal and humans previously interacted. Eighteenth century adults would reach weights of 8–10 metric tons (8.8–11.0 short tons) and lengths up to 9 meters (30 ft).</description>
+  <width>3</width>
+  <height>3</height>
+  <pieces>
+    <ArrayOfPiece>
+      <Piece xsi:type="Text">
+        <id>0</id>
+        <title>Steller's Sea Cows</title>
+        <description>Steller's sea cows grew to be 8 to 9 m (26 to 30 ft) long as adults, much larger than extant sirenians.[6] Georg Steller's writings contain two contradictory estimates of weight: 4 and 24.3 metric tons (4.4 and 26.8 short tons). The true value is estimated to fall between these figures, at about 8–10 metric tons (8.8–11.0 short tons).[7] This size made the sea cow one of the largest mammals of the Holocene epoch, aside from whales.[8] The sea cow's large size was likely an adaptation to reduce its surface-area-to-volume ratio and conserve heat.[9] Unlike other sirenians, Steller's sea cow was positively buoyant, meaning that it was unable to completely submerge. It had a very thick outer skin, 2.5 centimeters (1 in), to prevent injury from sharp rocks and ice, and possibly to prevent unsubmerged skin from drying out.[6][10] The sea cow's blubber was 8–10 centimeters (3–4 in) thick, another adaptation to the frigid climate of the Bering Sea where it lived.[11] Its skin was brownish-black, with white patches on some individuals. It was smooth along its back and rough on its sides, with crater-like depressions most likely caused by parasites. This rough texture led to the animal being nicknamed the "bark animal". Hair on its body was sparse, but the insides of the sea cow's flippers were covered in bristles.[5] The forelimbs were roughly 67 centimeters (26 in) long, and the tail fluke was forked.[5]
+
+The sea cow's head was small and short in comparison to its huge body. The animal's upper lip was large and broad, extending so far beyond the lower jaw that the mouth appeared to be located underneath the skull. Unlike other sirenians, Steller's sea cow was toothless and instead had a dense array of interlacing white bristles on its upper lip. The bristles were approximately 3.8 centimeters (1.5 in) in length and were used to tear seaweed stalks and hold food.[5] The sea cow also had two keratinous plates located on its palate and mandible used for chewing.[12] According to Steller, these plates (or "masticatory pads") were held together by interdental papillae, a part of the gums, and had many small holes containing nerves and arteries.[5]
+Side view of a brown-green dugong. It is similar to a manatee, in that the head is pointed downwards, the eyes are small, and the body is stocky. The arms are perpendicular to the body and bend backwards toward the tail. There are no fingernails. The tail is knotched, much like a dolphin tail.
+Model in the Natural History Museum of London
+
+As with all sirenians, the sea cow's snout pointed downwards, which allowed it to better grasp kelp. The sea cow's nostrils were roughly 5 centimeters (2 in) long and wide. In addition to those within its mouth, the sea cow also had stiff, 10–12.7 centimeters (3.9–5.0 in) long bristles protruding from its muzzle.[9][5] Steller's sea cow had small eyes located halfway between its nostrils and ears with black irises, livid eyeballs, and canthi which were not externally visible. The animal had no eyelashes, but like other diving creatures such as sea otters, Steller's sea cow had a nictitating membrane which covered its eyes to prevent injury while feeding. The tongue was small and remained in the back of the mouth, unable to reach the masticatory (chewing) pads.[9][5]
+
+The sea cow's spine is believed to have had 7 cervical (neck), 17 thoracic, 3 lumbar, and 34 caudal (tail) vertebrae. Its ribs were large, with 5 of 17 pairs making contact with the sternum; the sea cow had no clavicles.[5] As in all sirenians, the scapula of Steller's sea cow was fan-shaped, being larger on the posterior side and narrower towards the neck. The anterior border of the scapula was nearly straight, whereas those of modern sirenians are curved. Like other sirenians, the bones of Steller's sea cow were pachyosteosclerotic, meaning they were both bulky (pachyostotic) and dense (osteosclerotic).[9][13] In all collected skeletons of the sea cow, the manus is missing; since Dusisiren—the sister taxon of Hydrodamalis—had reduced phalanges (finger bones), it is possible that Steller's sea cow did not have a manus at all.[14]
+
+The sea cow's heart was 16 kilograms (35 lb) in weight; its stomach measured 1.8 metres (6 ft) long and 1.5 metres (5 ft) wide. The full length of its intestinal tract was about 151 metres (500 ft) long, equaling more than 20 times the animal's length. The sea cow had no gallbladder, but did have a wide common bile duct. Its anus was 10 centimeters (0.33 ft) in width, with its feces resembling that of horses. The male's penis was 80 centimeters (2.6 ft) long.[5]</description>
+      </Piece>
+      <Piece xsi:type="Image">
+        <id>1</id>
+        <title>The skull </title>
+        <description>The skull of a Steller's sea cow, Natural History Museum of London</description>
+        <filePath>Steller's_sea_cow_skull.jpeg</filePath>
+        <height>0</height>
+      </Piece>
+      <Piece xsi:type="Image">
+        <id>2</id>
+        <title>Dugong</title>
+        <description>The dugong (/ˈduːɡɒŋ/, /ˈdjuːɡɒŋ/; Dugong dugon) is a medium-sized marine mammal. It is one of four living species of the order Sirenia, which also includes three species of manatees. It is the only living representative of the once-diverse family Dugongidae; its closest modern relative, Steller's sea cow (Hydrodamalis gigas), was hunted to extinction in the 18th century. The dugong is the only strictly marine herbivorous mammal.
+
+The dugong is the only sirenian in its range, which spans the waters of some 40 countries and territories throughout the Indo-West Pacific. The dugong is largely dependent on seagrass communities for subsistence and is thus restricted to the coastal habitats which support seagrass meadows, with the largest dugong concentrations typically occurring in wide, shallow, protected areas such as bays, mangrove channels, the waters of large inshore islands and inter-reefal waters. The northern waters of Australia between Shark Bay and Moreton Bay are believed to be the dugong's contemporary stronghold.
+
+Like all modern sirenians, the dugong has a fusiform body with no dorsal fin or hind limbs. The forelimbs or flippers are paddle-like. The dugong is easily distinguished from the manatees by its fluked, dolphin-like tail, but also possesses a unique skull and teeth. Its snout is sharply downturned, an adaptation for feeding in benthic seagrass communities. The molar teeth are simple and peg-like unlike the more elaborate molar dentition of manatees.
+
+The dugong has been hunted for thousands of years for its meat and oil. Traditional hunting still has great cultural significance in several countries in its modern range, particularly northern Australia and the Pacific Islands. The dugong's current distribution is fragmented, and many populations are believed to be close to extinction. The IUCN lists the dugong as a species vulnerable to extinction, while the Convention on International Trade in Endangered Species limits or bans the trade of derived products. Despite being legally protected in many countries, the main causes of population decline remain anthropogenic and include fishing-related fatalities, habitat degradation and hunting. With its long lifespan of 70 years or more, and slow rate of reproduction, the dugong is especially vulnerable to extinction.</description>
+        <filePath>1280px-Dugong_Marsa_Alam_PLW_edit.jpg</filePath>
+        <height>1</height>
+      </Piece>
+    </ArrayOfPiece>
+    <ArrayOfPiece>
+      <Piece xsi:type="Image">
+        <id>3</id>
+        <title>Range</title>
+        <description>The range of Steller's sea cow at the time of its discovery was apparently restricted to the shallow seas around the Commander Islands, which include Bering and Copper Islands.[34][10][5] The Commander Islands remained uninhabited until 1825 when the Russian-American Company relocated Aleuts from Attu Island and Atka Island there.[35] The first fossils discovered outside the Commander Islands were found in interglacial Pleistocene deposits in Amchitka,[9] and further fossils dating to the late Pleistocene were found in Monterey Bay, California, and Honshu, Japan. This suggests that the sea cow had a far more extensive range in prehistoric times. It cannot be excluded that these fossils belong to other Hydrodamalis species.[10][36][37] The remains of three individuals were found preserved in the South Bight Formation of Amchitka; as late Pleistocene interglacial deposits are rare in the Aleutians, the discovery suggests that sea cows were abundant in that era. According to Steller, the sea cow often resided in the shallow, sandy shorelines and in the mouths of freshwater rivers.[9]
+
+Bone fragments and accounts by native Aleut people suggest that sea cows also historically inhabited the Near Islands,[38] potentially with viable populations that were in contact with humans in the western Aleutian Islands prior to Steller's discovery in 1741. A sea cow rib discovered in 1998 on Kiska Island was dated to around 1,000 years old, and is now in the possession of the Burke Museum in Seattle. The dating may be skewed due to the marine reservoir effect which causes radiocarbon-dated marine specimens to appear several hundred years older than they are. Marine reservoir effect is caused by the large reserves of C14 in the ocean, and it is more likely that the animal died between 1710 and 1785.[33]
+
+A 2004 study reported that sea cow bones discovered on Adak Island were around 1,700 years old, and sea cow bones discovered on Buldir Island were found to be around 1,600 years old.[39] It is possible the bones were from cetaceans and were misclassified.[33] Rib bones of a Steller's sea cow have also been found on St. Lawrence Island, and the specimen is thought to have lived between 800 and 920 CE.[34]</description>
+        <filePath>938da774a76c1a5edd91e88a63b29ff54f48032e.png</filePath>
+        <height>0</height>
+      </Piece>
+      <Piece xsi:type="Image">
+        <id>4</id>
+        <title>Interactions with humans</title>
+        <description>Steller's sea cow was quickly wiped out by fur traders, seal hunters, and others who followed Vitus Bering's route past its habitat to Alaska.[40] It was also hunted to collect its valuable subcutaneous fat. By 1768, just twenty-seven years after it had been discovered by Europeans, the species was extinct.[1][36][41] In 1887 Stejneger estimated that there had been fewer than 1,500 individuals remaining at the time of Steller's discovery, and argued there was already an immediate danger of the sea cow's extinction.[1]
+
+The first attempt to hunt the animal by Steller and the other crew members was unsuccessful due to its strength and thick hide. They had attempted to impale it and haul it to shore using a large hook and heavy cable, but the crew could not pierce its skin. In a second attempt a month later a harpooner speared an animal, and men on shore hauled it in while others repeatedly stabbed it with bayonets. It was dragged into shallow waters, and the crew waited until the tide receded and it was beached to butcher it.[26] After this, they were hunted with relative ease, the challenge being in hauling the animal back to shore. This bounty inspired maritime fur traders to detour to the Commander Islands and restock their food supplies during North Pacific expeditions.[9]</description>
+        <filePath>1966_CPA_3446.jpg</filePath>
+        <height>1</height>
+      </Piece>
+      <Piece xsi:type="Image">
+        <id>5</id>
+        <title>Media and Folklore</title>
+        <description>In the story The White Seal from The Jungle Book by Rudyard Kipling, which takes place in the Bering Sea, "Kotick" the rare white seal consults Sea Cow during his journey to find a new home.[49][50]
+
+Tales of a Sea Cow is a 2012 film by Icelandic-French artist Etienne de France "documenting" a fictional 2006 re-discovery of a population of Steller's sea cows off the coast of Greenland.[51] The film has been exhibited in art museums and universities in Europe.[52][53]
+
+Steller's sea cows appear in two books of poetry: Nach der Natur (1995) by Winfried Georg Sebald, and Species Evanescens (2009) by Russian poet Andrei Bronnikov. Bronnikov's book depicts the events of the Great Northern Expedition through the eyes of Steller;[54] Sebald's book looks at the conflict between man and nature, including the extinction of Steller's sea cow.[55]</description>
+        <filePath>T2JB367_-_illustration.jpg</filePath>
+        <height>1</height>
+      </Piece>
+    </ArrayOfPiece>
+    <ArrayOfPiece>
+      <Piece xsi:type="Video">
+        <id>6</id>
+        <title>SciShow Video</title>
+        <description>Learn some curious facts about the majestic manatee. Hosted by: Hank Green 
+Support SciShow by becoming a patron on Patreon: https://www.patreon.com/scishow 
+
+Dooblydoo thanks go to the following Patreon supporters -- we couldn't make SciShow without them! Shout out to Justin Ove, Coda Buchanan, Lucy McGlasson, Accalia Elementia, Mark Terrio-Cameron, Saul, Kathy &amp; Tim Philip, Kevin Bealer, Christopher Collins, Thomas J., charles george, Andreas Heydeck, Patrick D. Ashmore, Justin Lentz, Will and Sonja Marple, Ed Shelley, Chris Peters, Tim Curwick, Philippe von Bergen, Fatima Iqbal. 
+
+Like SciShow? Want to help support us, and also get things to put on your walls, cover your torso and hold your liquids? Check out our awesome products over at DFTBA Records: http://dftba.com/scishow</description>
+        <filePath>Life as a Sea Cow.mp4</filePath>
+      </Piece>
+      <Piece xsi:type="Video">
+        <id>7</id>
+        <title>Smithsonian's National Museum of Natural History</title>
+        <description>The Steller's Sea Cow is a large extinct marine mammal that inhabited the cold waters surrounding an island on the Bering Sea. This video is one of a series taken from the mobile app Skin &amp; Bones. The app brings animal skeletons to life through 3D imagery in the Bone Hall at the Smithsonian's National Museum of Natural History. Download on the App Store and enjoy the videos and 3D experience at the Museum or wherever you are.</description>
+        <filePath>Skin &amp; Bones - Animal Life Steller's Sea Cow.mp4</filePath>
+      </Piece>
+      <Piece xsi:type="Image">
+        <id>8</id>
+        <title>Dimension</title>
+        <description>The story of Hydrodamalis,‭ ‬better known as Steller’s sea cow is a sad one,‭ ‬as within twenty-seven years of the discovery of the last surviving population of Hydrodamalis around the uninhabited Commander Islands in‭ ‬1741,‭ ‬the remaining few were wiped out by sailors and hunters for its meat and fur.‭ ‬This was but the final nail in the coffin of this sea cow however as even before this time it is thought that‭ ‬hunting from‭ ‬indigenous peoples in other parts of the Pacific also contributed to their ultimate decline.‭ ‬Indirect hunting also seems to have affected them since sea otters are also thought to have been hunted and killed en masse.‭
+       This all comes down to sea cows like Hydrodamalis feeding upon kelp which seemed to be their preferred food.‭ ‬Kelp can be threatened by sea urchins which eat the root stems of kelp causing the kelp to drift away and die,‭ ‬but normally the numbers of sea urchins are kept in check by predators like sea otters.‭ ‬When human hunters began slaughtering sea otters however,‭ ‬the population of sea urchins exploded causing devastation to kelp forests as the sea urchins munched their way through.‭ ‬With this and early human hunting combined,‭ ‬Hydrodamalis became restricted to the one untouched area they could find‭; ‬the Commander islands.‭ ‬Here they were at least safe until their rediscovery in the eighteenth century.
+       Hydrodamalis got its more common name of Steller’s sea cow from the explorer and naturalist Georg Wilhelm Steller who discovered the last population of Hydrodamalis when he took part in an expedition led by Vitus Bering.‭ ‬Although the Hydrodamalis is now extinct,‭ ‬Steller’s notes and description of the living animal still serve as teaching about this sea cow.‭ ‬Steller noted that Hydrodamalis had thick black skin‭ ‬like‭ ‬the bark of a tree.‭ ‬Also Hydrodamalis spent all of its time in the water,‭ ‬never venturing onto land.‭ ‬Again,‭ ‬kelp was observed as being the preferred food,‭ ‬with remnants of kelp being washed on the shores of the Commander islands after Hydrodamalis had been feeding.‭ ‬Hydrodamalis fed upon kelp by trapping it between two large dental plates in the top and bottom jaw that would snip off kelp when the mouth closed.‭
+       Steller also noted two other things however,‭ ‬and these go quite some way to explaining why Hydrodamalis was such an easy target for hunters.‭ ‬One is that despite being an aquatic animal,‭ ‬Hydrodamalis was not a powerful swimmer,‭ ‬moving only very slowly and never actually submerging itself beneath the surface.‭ ‬The second is that the population around the‭ ‬Commander Islands was very tame and together these mean that not only Hydrodamalis couldn’t hide,‭ ‬but it didn’t even try to.</description>
+        <filePath>hydrodamalis-stellers-sea-cow-size.jpg</filePath>
+        <height>1</height>
+      </Piece>
+    </ArrayOfPiece>
+  </pieces>
+</Exhibition>

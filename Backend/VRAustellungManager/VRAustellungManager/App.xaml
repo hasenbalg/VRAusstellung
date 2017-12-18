@@ -6,6 +6,10 @@
     <Application.Resources>
         <Style x:Key="multiLine" TargetType="TextBox">
             <Setter Property="Height" Value="250" />
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="AcceptsReturn" Value="True"/>
+            <Setter Property="SpellCheck.IsEnabled" Value="True"/>
+            <Setter Property="MaxWidth" Value="400"/>
         </Style>
     </Application.Resources>
 

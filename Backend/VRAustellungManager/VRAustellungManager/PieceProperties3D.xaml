@@ -15,7 +15,7 @@
         <Label Content="Name"/>
         <TextBox x:Name="pieceNameTextBox" TextChanged="PiecePropertyChanged"/>
         <Label Content="Beschreibung"/>
-        <TextBox x:Name="pieceDescriptionTextBox" TextChanged="PiecePropertyChanged"/>
+        <TextBox x:Name="pieceDescriptionTextBox" Style="{StaticResource multiLine}" TextChanged="PiecePropertyChanged"/>
 
         <Label Content="Groesse in m"/>
         <TextBox x:Name="pieceHeightTextBox" TextChanged="PiecePropertyChanged"/>
@@ -23,6 +23,6 @@
         <Button Content="Datei waehlen" x:Name="pieceFileSelectButton" Click="PieceFileSelectButton_Click"/>
         <TextBlock x:Name="pieceFileSelectURLTextBlock" />
 
-        <helix:HelixViewport3D x:Name="piece3DPreview" MaxWidth="300"/>
+        <helix:HelixViewport3D x:Name="piece3DPreview" Width="400" Height="400"/>
     </StackPanel>
 </we:PiecePropertiesBase>

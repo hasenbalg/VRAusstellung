@@ -18,7 +18,7 @@ namespace LibVRAusstellung
 
         public List<List<Piece>> pieces { get; set; }
 
-        public Color[] colorSchema;
+        public Color floorColor, doorColor, skyColor, textColor, guideColor, audioTimeLineColor, videoTimeLineColor, audioMarkerColor, videoMarkerColor;
 
         private string dir;
         private string xmlFileName;
@@ -33,12 +33,15 @@ namespace LibVRAusstellung
 
             exhib.pieces = GetNewList(exhib.width, exhib.height);
 
-            exhib.colorSchema = new Color[]{
-                new Color(0, 0, 0),
-                new Color(5, 5, 5),
-                new Color(15, 15, 15)
-            };
-           
+            exhib.floorColor = new Color(0,0,0);
+            exhib.doorColor = new Color(0, 0, 0);
+            exhib.skyColor = new Color(0, 0, 0);
+            exhib.textColor = new Color(255, 255, 255);
+            exhib.guideColor = new Color(255, 255, 255);
+            exhib.audioTimeLineColor = new Color(255, 255, 255);
+            exhib.videoTimeLineColor = new Color(255, 255, 255);
+            exhib.audioMarkerColor = new Color(255, 255, 255);
+            exhib.videoMarkerColor = new Color(255, 255, 255);
 
             return exhib;
         }

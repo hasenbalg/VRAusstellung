@@ -14,7 +14,7 @@
         <Label Content="Name"/>
         <TextBox x:Name="pieceNameTextBox" TextChanged="PiecePropertyChanged"/>
         <Label Content="Beschreibung"/>
-        <TextBox x:Name="pieceDescriptionTextBox" TextChanged="PiecePropertyChanged"/>
+        <TextBox x:Name="pieceDescriptionTextBox" Style="{StaticResource multiLine}" TextChanged="PiecePropertyChanged"/>
 
         <Label Content="Groesse in m"/>
         <TextBox x:Name="pieceHeightTextBox" TextChanged="PiecePropertyChanged"/>

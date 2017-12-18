@@ -33,26 +33,44 @@ namespace VRAustellungManager
             exhibTitleTextBox.TextChanged -= exhibPropertyTextBox_TextChanged;
             exhibDescriptionTextBox.TextChanged -= exhibPropertyTextBox_TextChanged;
 
-            firstColor.SelectedColorChanged -= Color_SelectedColorChanged;
-            secondColor.SelectedColorChanged -= Color_SelectedColorChanged;
-            thirdColor.SelectedColorChanged -= Color_SelectedColorChanged;
+            floorColorPicker.SelectedColorChanged -= Color_SelectedColorChanged;
+            doorColorPicker.SelectedColorChanged -= Color_SelectedColorChanged;
+            skyColorPicker.SelectedColorChanged -= Color_SelectedColorChanged;
+            textColorPicker.SelectedColorChanged -= Color_SelectedColorChanged;
+            guideColorPicker.SelectedColorChanged -= Color_SelectedColorChanged;
+            audioTimeLineColorPicker.SelectedColorChanged -= Color_SelectedColorChanged;
+            videooTimeLineColorPicker.SelectedColorChanged -= Color_SelectedColorChanged;
+            audioTimeMarkerColorPicker.SelectedColorChanged -= Color_SelectedColorChanged;
+            videoTimeMarkerColorPicker.SelectedColorChanged -= Color_SelectedColorChanged;
 
             exhibTitleTextBox.Text = exhib.title;
             exhibDescriptionTextBox.Text = exhib.description;
             exhibWidthTextBox.Text = exhib.width.ToString();
             exhibHeightTextBox.Text = exhib.height.ToString();
 
-            firstColor.SelectedColor = (System.Windows.Media.Color)ColorConverter.ConvertFromString(LibVRAusstellung.Color.ToHex(exhib.colorSchema[0]));
-            secondColor.SelectedColor = (System.Windows.Media.Color)ColorConverter.ConvertFromString(LibVRAusstellung.Color.ToHex(exhib.colorSchema[1]));
-            thirdColor.SelectedColor = (System.Windows.Media.Color)ColorConverter.ConvertFromString(LibVRAusstellung.Color.ToHex(exhib.colorSchema[2]));
+            floorColorPicker.SelectedColor = (System.Windows.Media.Color)ColorConverter.ConvertFromString(LibVRAusstellung.Color.ToHex(exhib.floorColor));
+            doorColorPicker.SelectedColor = (System.Windows.Media.Color)ColorConverter.ConvertFromString(LibVRAusstellung.Color.ToHex(exhib.doorColor));
+            skyColorPicker.SelectedColor = (System.Windows.Media.Color)ColorConverter.ConvertFromString(LibVRAusstellung.Color.ToHex(exhib.skyColor));
+            textColorPicker.SelectedColor = (System.Windows.Media.Color)ColorConverter.ConvertFromString(LibVRAusstellung.Color.ToHex(exhib.textColor));
+            guideColorPicker.SelectedColor = (System.Windows.Media.Color)ColorConverter.ConvertFromString(LibVRAusstellung.Color.ToHex(exhib.guideColor));
+            audioTimeLineColorPicker.SelectedColor = (System.Windows.Media.Color)ColorConverter.ConvertFromString(LibVRAusstellung.Color.ToHex(exhib.audioTimeLineColor));
+            videooTimeLineColorPicker.SelectedColor = (System.Windows.Media.Color)ColorConverter.ConvertFromString(LibVRAusstellung.Color.ToHex(exhib.videoTimeLineColor));
+            audioTimeMarkerColorPicker.SelectedColor = (System.Windows.Media.Color)ColorConverter.ConvertFromString(LibVRAusstellung.Color.ToHex(exhib.audioMarkerColor));
+            videoTimeMarkerColorPicker.SelectedColor = (System.Windows.Media.Color)ColorConverter.ConvertFromString(LibVRAusstellung.Color.ToHex(exhib.videoMarkerColor));
 
             exhibTitleTextBox.TextChanged += exhibPropertyTextBox_TextChanged;
             exhibDescriptionTextBox.TextChanged += exhibPropertyTextBox_TextChanged;
 
 
-            firstColor.SelectedColorChanged += Color_SelectedColorChanged;
-            secondColor.SelectedColorChanged += Color_SelectedColorChanged;
-            thirdColor.SelectedColorChanged += Color_SelectedColorChanged;
+            floorColorPicker.SelectedColorChanged += Color_SelectedColorChanged;
+            doorColorPicker.SelectedColorChanged += Color_SelectedColorChanged;
+            skyColorPicker.SelectedColorChanged += Color_SelectedColorChanged;
+            textColorPicker.SelectedColorChanged += Color_SelectedColorChanged;
+            guideColorPicker.SelectedColorChanged += Color_SelectedColorChanged;
+            audioTimeLineColorPicker.SelectedColorChanged += Color_SelectedColorChanged;
+            videooTimeLineColorPicker.SelectedColorChanged += Color_SelectedColorChanged;
+            audioTimeMarkerColorPicker.SelectedColorChanged += Color_SelectedColorChanged;
+            videoTimeMarkerColorPicker.SelectedColorChanged += Color_SelectedColorChanged;
         }
 
         private void exhibPropertyTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -78,10 +96,17 @@ namespace VRAustellungManager
 
         private void Color_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
         {
-            Console.WriteLine((sender as ColorPicker).SelectedColor.ToString().Replace("#FF", "#"));
-            exhib.colorSchema[0] = LibVRAusstellung.Color.Hex2Color(firstColor.SelectedColor.ToString().Replace("#FF", "#"));
-            exhib.colorSchema[1] = LibVRAusstellung.Color.Hex2Color(secondColor.SelectedColor.ToString().Replace("#FF", "#"));
-            exhib.colorSchema[2] = LibVRAusstellung.Color.Hex2Color(thirdColor.SelectedColor.ToString().Replace("#FF", "#"));
+            //Console.WriteLine((sender as ColorPicker).SelectedColor.ToString().Replace("#FF", "#"));
+            exhib.floorColor = LibVRAusstellung.Color.Hex2Color(floorColorPicker.SelectedColor.ToString().Replace("#FF", "#"));
+            exhib.doorColor = LibVRAusstellung.Color.Hex2Color(doorColorPicker.SelectedColor.ToString().Replace("#FF", "#"));
+            exhib.skyColor = LibVRAusstellung.Color.Hex2Color(skyColorPicker.SelectedColor.ToString().Replace("#FF", "#"));
+            exhib.textColor = LibVRAusstellung.Color.Hex2Color(textColorPicker.SelectedColor.ToString().Replace("#FF", "#"));
+            exhib.guideColor = LibVRAusstellung.Color.Hex2Color(guideColorPicker.SelectedColor.ToString().Replace("#FF", "#"));
+            exhib.audioTimeLineColor = LibVRAusstellung.Color.Hex2Color(audioTimeLineColorPicker.SelectedColor.ToString().Replace("#FF", "#"));
+            exhib.videoTimeLineColor = LibVRAusstellung.Color.Hex2Color(videooTimeLineColorPicker.SelectedColor.ToString().Replace("#FF", "#"));
+            exhib.audioMarkerColor = LibVRAusstellung.Color.Hex2Color(audioTimeMarkerColorPicker.SelectedColor.ToString().Replace("#FF", "#"));
+            exhib.videoMarkerColor = LibVRAusstellung.Color.Hex2Color(videoTimeMarkerColorPicker.SelectedColor.ToString().Replace("#FF", "#"));
+
         }
     }
 }

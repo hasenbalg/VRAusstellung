@@ -12,7 +12,7 @@ namespace VRAustellungManager
     public partial class PiecePropertiesImage : PiecePropertiesBase
     {
         public LibVRAusstellung.Image currentPiece { get; set; }
-        protected string FILEFORMATS = "Image files (*.png;*.jpeg)|*.png;*.jpeg|All files (*.*)|*.*";
+        protected string FILEFORMATS = "Image files (*.png;*.jpeg;*.jpg)|*.png;*.jpeg;*.jpg|All files (*.*)|*.*";
 
         public PiecePropertiesImage()
         {
