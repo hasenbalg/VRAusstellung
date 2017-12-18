@@ -24,7 +24,7 @@
         <TextBox x:Name="exhibTitleTextBox" Grid.Row="0" Grid.Column="1" TextChanged="exhibPropertyTextBox_TextChanged"/>
 
         <Label Content="Beschreibung" Grid.Row="1" Grid.Column="0"/>
-        <TextBox x:Name="exhibDescriptionTextBox"  Grid.Row="1" Grid.Column="1"/>
+            <TextBox x:Name="exhibDescriptionTextBox"  Style="{StaticResource multiLine}" Grid.Row="1" Grid.Column="1"/>
 
         <Label Content="Groesse" Grid.Column="0" Grid.Row="2"/>
         <TextBlock Grid.Column="1"  Grid.Row="2">
@@ -35,13 +35,48 @@
     </Grid>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-            <xctk:ColorPicker x:Name="firstColor" Grid.Column="0" SelectedColorChanged="Color_SelectedColorChanged"/>
-            <xctk:ColorPicker x:Name="secondColor" Grid.Column="1" SelectedColorChanged="Color_SelectedColorChanged"/>
-            <xctk:ColorPicker x:Name="thirdColor" Grid.Column="2" SelectedColorChanged="Color_SelectedColorChanged"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label Content="Fussbodenfarbe" Grid.Column="0" Grid.Row="0"/>
+            <xctk:ColorPicker x:Name="floorColorPicker" Grid.Column="1" Grid.Row="0" SelectedColorChanged="Color_SelectedColorChanged"/>
+
+            <Label Content="Tuerrahmenfarbe" Grid.Column="0" Grid.Row="1"/>
+            <xctk:ColorPicker x:Name="doorColorPicker" Grid.Column="1" Grid.Row="1" SelectedColorChanged="Color_SelectedColorChanged"/>
+
+            <Label Content="Farbe des Himmels" Grid.Column="0" Grid.Row="2"/>
+            <xctk:ColorPicker x:Name="skyColorPicker" Grid.Column="1" Grid.Row="2" SelectedColorChanged="Color_SelectedColorChanged"/>
+
+            <Label Content="Textfarbe" Grid.Column="0" Grid.Row="3"/>
+            <xctk:ColorPicker x:Name="textColorPicker" Grid.Column="1" Grid.Row="3" SelectedColorChanged="Color_SelectedColorChanged"/>
+
+            <Label Content="Farbe der Tuerschilder" Grid.Column="0" Grid.Row="4"/>
+            <xctk:ColorPicker x:Name="guideColorPicker" Grid.Column="1" Grid.Row="4" SelectedColorChanged="Color_SelectedColorChanged"/>
+
+            <Label Content="Farbe der Audiozeitleiste" Grid.Column="0" Grid.Row="5"/>
+            <xctk:ColorPicker x:Name="audioTimeLineColorPicker" Grid.Column="1" Grid.Row="5" SelectedColorChanged="Color_SelectedColorChanged"/>
+          
+            <Label Content="Farbe der Videozeitleiste" Grid.Column="0" Grid.Row="6"/>
+            <xctk:ColorPicker x:Name="videooTimeLineColorPicker" Grid.Column="1" Grid.Row="6" SelectedColorChanged="Color_SelectedColorChanged"/>
+
+            <Label Content="Farbe der Audiozeitmarker" Grid.Column="0" Grid.Row="7"/>
+            <xctk:ColorPicker x:Name="audioTimeMarkerColorPicker" Grid.Column="1" Grid.Row="7" SelectedColorChanged="Color_SelectedColorChanged"/>
+
+            <Label Content="Farbe der Videozeitmarker" Grid.Column="0" Grid.Row="8"/>
+            <xctk:ColorPicker x:Name="videoTimeMarkerColorPicker" Grid.Column="1" Grid.Row="8" SelectedColorChanged="Color_SelectedColorChanged"/>
+
         </Grid>
     </StackPanel>
 </UserControl>
