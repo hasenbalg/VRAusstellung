@@ -9,6 +9,7 @@ TagManager:
   - TextPiece
   - Tuerschild
   - Text
+  - MapTile
   layers:
   - Default
   - TransparentFX
