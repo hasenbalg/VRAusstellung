@@ -26,7 +26,7 @@ neue Ausstellungen anzulegen und bereits estellte Ausstellungen zu veraendern.
 Das Backend ist in 2 grosse Bereiche gegliedert:
 
 ### Allgemeine Eingenschaften der Ausstellung
-Hier koennen Titel, Beschreibung und Groesse der Ausstellung/Anzahl der Ausstellungsstuecke festgelegt werden.
+Hier koennen Titel, Beschreibung und Groesse der Ausstellung/ Anzahl der Ausstellungsstuecke festgelegt werden.
 Im gleichen Bereich koennen auch die Farben der kompletten Ausstellungsumgebung festgelegt werden.
 
 Die Titel und der Beschreibung der Ausstellung werden im Eingang der Ausstellung angezeigt.
@@ -37,3 +37,10 @@ Klickt man bei einem Ausstellungsstueck im Raster auf den Aenderungs-Button, wer
 Bei der Festlegung des Types des Ausstellungsstuecks kann zwischen Video, Audio, Text, Bild und 3D-Objekt gewaehlt werden.
 
 ## Frontend
+
+
+## Entscheidungen nach der Version vom 13 Dez
+- Einer der Raume bietet Platz fuer die Metadaten der Ausstellung. Sonst gibt es keine sinnvolle Moeglichkeit, diese unterzubringen.
+- Die Namen der Ausstellungsstuecke wurden ueber die Tuerrahmen geschrieben, um die Uebersichtbarkeit zu verbessern.
+- Die Texte zu den Austellungsstuecken werden eingeblendet, wenn der Daumen auf dem Touchpad liegt. So kann der Text einfach ein- und ausgeblendet werden.
+- Medien, auf denen die Medien dargestellt werden, wurden gestrichen.
