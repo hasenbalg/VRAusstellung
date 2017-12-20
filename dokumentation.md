@@ -37,10 +37,23 @@ Klickt man bei einem Ausstellungsstueck im Raster auf den Aenderungs-Button, wer
 Bei der Festlegung des Types des Ausstellungsstuecks kann zwischen Video, Audio, Text, Bild und 3D-Objekt gewaehlt werden.
 
 ## Frontend
+Der Besucher der Ausstellung kann sich in den Ausstellungsraeumen frei bewegen und die Ausstellungsstuecke anschauen.
+Die Ausstellungsraeume sind sind bewusst abstrakt und simpel gehalten, um moeglichst wenig vom Ausstellungsstueck abzulenken. Aehnlich simpel soll auch die Bedienung nicht vom Ausstellungsstueck ablenken.
 
+### Bedienbarkeit
+Die Bedienung wurde auf einen HTC Vive Controller beschraenkt.
+- Die *Zeigerichtung* des Controllers waehlt den Raum aus.
+- *Trigger* wechselt den Raum.
+- *Touchpad* blendet Infotexte zu den Ausstellungsstuecken ein, wenn das das Ausstellungsstueck selbst kein text ist.
+- *Druck auf das Touchpad* scrollte den Text.
+- *Grip-Buttons* zeigen eine Uebersicht der Raume an, auf der auch ein Positionsmarker ist.
+- Die *Position* des Controllers in der Zeitleiste eines Videos oder eines Audio-Tracks ermoeglicht das Vor- und Zurueckspringen in der Wiedergabe.
 
 ## Entscheidungen nach der Version vom 13 Dez
 - Einer der Raume bietet Platz fuer die Metadaten der Ausstellung. Sonst gibt es keine sinnvolle Moeglichkeit, diese unterzubringen.
 - Die Namen der Ausstellungsstuecke wurden ueber die Tuerrahmen geschrieben, um die Uebersichtbarkeit zu verbessern.
 - Die Texte zu den Austellungsstuecken werden eingeblendet, wenn der Daumen auf dem Touchpad liegt. So kann der Text einfach ein- und ausgeblendet werden.
+- Die Text lassen sich ueber Druck auf dem Touchpad scrollen.
+- Lichter ueber den Tueren waehlen den naechsten Raum aus.
 - Medien, auf denen die Medien dargestellt werden, wurden gestrichen.
+
