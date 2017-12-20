@@ -59,6 +59,6 @@ Die Bedienung wurde auf einen HTC Vive Controller beschraenkt.
 
 ## Usertests
 |Alias|Datum|Aufgabenstellung|Ziel erreicht|Anmerkungen|
---------------------------------------------------------
+|-----|-----|----------------|-------------|-----------|
 |Robin|20.12|Finde den Raum hinten rechts|Ja||
 |...|...|...|...|...|
