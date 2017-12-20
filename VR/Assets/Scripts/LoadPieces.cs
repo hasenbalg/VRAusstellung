@@ -83,6 +83,7 @@ public class LoadPieces : MonoBehaviour
         return go;
     }
 
+    
     private GameObject GeneratePiece(Video p)
     {
         GameObject go = Instantiate(videoPrefab, new Vector3(), Quaternion.identity);
@@ -283,6 +284,7 @@ public class LoadPieces : MonoBehaviour
             exhib.audioMarkerColor.B / 255f
             );
     }
+
     public UnityEngine.Color GetVideoMarkerColor()
     {
         return new UnityEngine.Color(
@@ -290,6 +292,32 @@ public class LoadPieces : MonoBehaviour
             exhib.videoMarkerColor.G / 255f,
             exhib.videoMarkerColor.B / 255f
             );
+    }
+
+    public UnityEngine.Color GetVisitorMarkerColor()
+    {
+        return new UnityEngine.Color(
+            exhib.visitorMarkerColor.R / 255f,
+            exhib.visitorMarkerColor.G / 255f,
+            exhib.visitorMarkerColor.B / 255f
+            );
+    }
+
+
+    public int[] GetInitialRoom()
+    {
+        for (int i = 0; i < exhib.pieces.Count; i++)
+        {
+            for (int j = 0; j < exhib.pieces[i].Count; j++)
+            {
+                if (exhib.pieces[j][i] is Entrance)
+                {
+                    return new int[] {j, i };
+                }
+            }
+        }
+        return new int[2];
+
     }
 
 }

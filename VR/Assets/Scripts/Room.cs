@@ -61,6 +61,9 @@ public class Room : MonoBehaviour {
         {
             maxX = GetComponent<LoadPieces>().GetMaxX();
             maxY = GetComponent<LoadPieces>().GetMaxY();
+            int[] initPos = GetComponent<LoadPieces>().GetInitialRoom();
+            this.x = initPos[0];
+            this.y = initPos[1];
             SetNewRoom();
             roomNotSetYet = false;
         }

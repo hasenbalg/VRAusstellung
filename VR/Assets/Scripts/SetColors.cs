@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SetColors : MonoBehaviour {
 
-    public Material floor, door, sky, text, guide, audioTimeLine, videoTimeLine, audioMarker, videoMarker;
+    public Material floor, door, sky, text, guide, audioTimeLine, videoTimeLine, audioMarker, videoMarker, visitorMarker;
 
     UnityEngine.Color floorColor;
     UnityEngine.Color doorColor;
@@ -42,6 +42,7 @@ public class SetColors : MonoBehaviour {
             videoMarker.color = lp.GetVideoTimeLineColor();
             audioMarker.color = lp.GetAudioMarkerColor();
             videoMarker.color = lp.GetVideoMarkerColor();
+            visitorMarker.color = lp.GetVisitorMarkerColor();
             colorsSet = true;
         }
 
