@@ -8,7 +8,21 @@
              d:DesignHeight="300" d:DesignWidth="300">
 
     <UserControl.Resources>
-        <DataTemplate x:Key="DataTemplate_Level2">
+        <DataTemplate x:Key="DataTemplateEntrance">
+            <StackPanel Width="90" Height="90" Margin="5" Background="#FF666666" >
+                <Grid>
+                    <!--https://stackoverflow.com/a/29698994-->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="40" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{Binding  title}" Margin="2.5"  Grid.Row="0" HorizontalAlignment="Center" TextWrapping="Wrap" PreviewMouseDown = "PreviewMouseMove" Drop = "Drop" AllowDrop="True" Cursor="SizeAll"/>
+                    
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="DataTemplatePiece">
             <StackPanel Width="90" Height="90" Margin="5" Background="#FF939393" >
                 <Grid>
                     <!--https://stackoverflow.com/a/29698994-->
@@ -22,9 +36,10 @@
                 </Grid>
             </StackPanel>
         </DataTemplate>
+        <local:PieceDataTemplateSelector x:Key="myPieceDataTemplateSelector" />
 
         <DataTemplate x:Key="DataTemplate_Level1">
-            <ItemsControl ItemsSource="{Binding}" ItemTemplate="{DynamicResource DataTemplate_Level2}">
+            <ItemsControl ItemsSource="{Binding}" ItemTemplateSelector="{StaticResource myPieceDataTemplateSelector}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal"/>

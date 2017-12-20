@@ -101,4 +101,23 @@ namespace VRAustellungManager
 
 
     }
+
+    public class PieceDataTemplateSelector : DataTemplateSelector
+    {
+        //http://dotnetpattern.com/wpf-listview-itemtemplateselector
+        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        {
+            FrameworkElement elemnt = container as FrameworkElement;
+           
+
+            if (item is Entrance)
+            {
+                Console.WriteLine("Entrance");
+                return elemnt.FindResource("DataTemplateEntrance") as DataTemplate;
+            }
+            else {
+                return elemnt.FindResource("DataTemplatePiece") as DataTemplate;
+            }
+        }
+    }
 }
