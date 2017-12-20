@@ -57,3 +57,8 @@ Die Bedienung wurde auf einen HTC Vive Controller beschraenkt.
 - Lichter ueber den Tueren waehlen den naechsten Raum aus.
 - Medien, auf denen die Medien dargestellt werden, wurden gestrichen.
 
+## Usertests
+|Alias|Datum|Aufgabenstellung|Ziel erreicht|Anmerkungen|
+--------------------------------------------------------
+|Robin|20.12|Finde den Raum hinten rechts|Ja||
+|...|...|...|...|...|
