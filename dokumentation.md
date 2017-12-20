@@ -9,21 +9,23 @@ Prof. Dr.-Ing. Michael Teistler, HS Flensburg
 Es soll eine Ausstellung mit VR-Techniken mit Unity erstellt werden.
 
 Um auswaehlen zu koennen, welche Ausstellungsstuecke in der VR-Ausstellung ausgestellt werden,
-benoetigt man ein Werkzeug. Kuratoren koennen damit Austellungen erstellen
-und die Ausstellungsflaeche anpassen.
+benoetigt man ein **Werkzeug**. Kuratoren koennen damit Austellungen erstellen
+und die Ausstellungsflaeche anpassen. Dieses Werkzeug wird im Folgenden **Backend** genannt.
 
-Eine Ausstellung besteht aus Raumen, in denen jeweils ein Ausstellungsstueck steht. Dieses Ausstellungsstueck kann entweder
-ein Video, ein Audio-File, ein Text, ein Bild oder ein 3D-Objekt sein.
+Eine Ausstellung besteht aus VR-Raumen, in denen jeweils ein Ausstellungsstueck steht. Dieses Ausstellungsstueck kann entweder
+ein **Video**, ein **Audio**-File, ein **Text**, ein **Bild** oder ein **3D-Objekt** sein.
 Jedes Ausstellungsstueck kann mit einem Titel und einer Beschreibung versehen werden.
 
 Die Ausstellungsraeume sind in einem Raster angeordnet, wobei ein Raum den Eingang in die Ausstellung darstellt.
 Der Besucher wechselt die Raeume, in dem er, analog zur Realitaet, Tueren benutzt.
 
+Dieser Teil, also der Teil, den der Besucher sieht, wird im Weiteren mit **Frontend** bezeichnet.
+
 
 ## Backend
 Das Backend wurde mit WPF realisiert und ist unabhaengig von der VR-Anwendung. Es ermoeglicht
 neue Ausstellungen anzulegen und bereits estellte Ausstellungen zu veraendern.
-Das Backend ist in 2 grosse Bereiche gegliedert:
+Das Backend ist in **2 Bereiche** gegliedert:
 
 ### Allgemeine Eingenschaften der Ausstellung
 Hier koennen Titel, Beschreibung und Groesse der Ausstellung/ Anzahl der Ausstellungsstuecke festgelegt werden.
@@ -38,16 +40,16 @@ Bei der Festlegung des Types des Ausstellungsstuecks kann zwischen Video, Audio,
 
 ## Frontend
 Der Besucher der Ausstellung kann sich in den Ausstellungsraeumen frei bewegen und die Ausstellungsstuecke anschauen.
-Die Ausstellungsraeume sind sind bewusst abstrakt und simpel gehalten, um moeglichst wenig vom Ausstellungsstueck abzulenken. Aehnlich simpel soll auch die Bedienung nicht vom Ausstellungsstueck ablenken.
+Die Ausstellungsraeume sind sind bewusst abstrakt und simpel gehalten, um moeglichst wenig vom Ausstellungsstueck abzulenken. Aehnlich simpel soll auch die **Bedienung** nicht vom Ausstellungsstueck ablenken.
 
 ### Bedienbarkeit
 Die Bedienung wurde auf einen HTC Vive Controller beschraenkt.
-- Die *Zeigerichtung* des Controllers waehlt den Raum aus.
-- *Trigger* wechselt den Raum.
-- *Touchpad* blendet Infotexte zu den Ausstellungsstuecken ein, wenn das das Ausstellungsstueck selbst kein text ist.
-- *Druck auf das Touchpad* scrollte den Text.
-- *Grip-Buttons* zeigen eine Uebersicht der Raume an, auf der auch ein Positionsmarker ist.
-- Die *Position* des Controllers in der Zeitleiste eines Videos oder eines Audio-Tracks ermoeglicht das Vor- und Zurueckspringen in der Wiedergabe.
+- Die **Zeigerichtung** des Controllers waehlt den Raum aus.
+- **Trigger** wechselt den Raum.
+- **Touchpad** blendet Infotexte zu den Ausstellungsstuecken ein, wenn das das Ausstellungsstueck selbst kein text ist.
+- **Druck auf das Touchpad** scrollte den Text.
+- **Grip-Buttons** zeigen eine Uebersicht der Raume an, auf der auch ein Positionsmarker ist.
+- Die **Position** des Controllers in der Zeitleiste eines Videos oder eines Audio-Tracks ermoeglicht das Vor- und Zurueckspringen in der Wiedergabe.
 
 ## Entscheidungen nach der Version vom 13 Dez
 - Einer der Raume bietet Platz fuer die Metadaten der Ausstellung. Sonst gibt es keine sinnvolle Moeglichkeit, diese unterzubringen.
