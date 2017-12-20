@@ -18,7 +18,7 @@ namespace LibVRAusstellung
 
         public List<List<Piece>> pieces { get; set; }
 
-        public Color floorColor, doorColor, skyColor, textColor, guideColor, audioTimeLineColor, videoTimeLineColor, audioMarkerColor, videoMarkerColor;
+        public Color floorColor, doorColor, skyColor, textColor, guideColor, audioTimeLineColor, videoTimeLineColor, audioMarkerColor, videoMarkerColor, visitorMarkerColor;
 
         private string dir;
         private string xmlFileName;
@@ -42,6 +42,7 @@ namespace LibVRAusstellung
             exhib.videoTimeLineColor = new Color(255, 255, 255);
             exhib.audioMarkerColor = new Color(255, 255, 255);
             exhib.videoMarkerColor = new Color(255, 255, 255);
+            exhib.visitorMarkerColor = new Color(0, 0, 0);
 
             return exhib;
         }
@@ -109,12 +110,23 @@ namespace LibVRAusstellung
                 List<Piece> newRow = new List<Piece>();
                 for (int j = 0; j < width; j++)
                 {
-                    newRow.Add(new Text()
+                    if (k == 0)
                     {
-                        id = k++,
-                        title = "Neues Ausstellungsstueck",
-                        description = "Beschreibung des neuen Ausstellungsssteucks"
-                    });
+                        newRow.Add(new Entrance()
+                        {
+                            id = k++,
+                            title = "Neue Ausstellung",
+                            description = "Beschreibung der neuen Ausstellung"
+                        });
+                    }else{
+                        newRow.Add(new Text()
+                        {
+                            id = k++,
+                            title = "Neues Ausstellungsstueck",
+                            description = "Beschreibung des neuen Ausstellungsssteucks"
+                        });
+                    }
+                   
                 }
                 pieces.Add(newRow);
             }

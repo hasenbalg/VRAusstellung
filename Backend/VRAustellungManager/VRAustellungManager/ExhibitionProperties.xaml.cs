@@ -1,5 +1,6 @@
 ﻿using LibVRAusstellung;
 using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -42,6 +43,7 @@ namespace VRAustellungManager
             videooTimeLineColorPicker.SelectedColorChanged -= Color_SelectedColorChanged;
             audioTimeMarkerColorPicker.SelectedColorChanged -= Color_SelectedColorChanged;
             videoTimeMarkerColorPicker.SelectedColorChanged -= Color_SelectedColorChanged;
+            visitorMarkerColorPicker.SelectedColorChanged -= Color_SelectedColorChanged;
 
             exhibTitleTextBox.Text = exhib.title;
             exhibDescriptionTextBox.Text = exhib.description;
@@ -57,6 +59,7 @@ namespace VRAustellungManager
             videooTimeLineColorPicker.SelectedColor = (System.Windows.Media.Color)ColorConverter.ConvertFromString(LibVRAusstellung.Color.ToHex(exhib.videoTimeLineColor));
             audioTimeMarkerColorPicker.SelectedColor = (System.Windows.Media.Color)ColorConverter.ConvertFromString(LibVRAusstellung.Color.ToHex(exhib.audioMarkerColor));
             videoTimeMarkerColorPicker.SelectedColor = (System.Windows.Media.Color)ColorConverter.ConvertFromString(LibVRAusstellung.Color.ToHex(exhib.videoMarkerColor));
+            visitorMarkerColorPicker.SelectedColor = (System.Windows.Media.Color)ColorConverter.ConvertFromString(LibVRAusstellung.Color.ToHex(exhib.visitorMarkerColor));
 
             exhibTitleTextBox.TextChanged += exhibPropertyTextBox_TextChanged;
             exhibDescriptionTextBox.TextChanged += exhibPropertyTextBox_TextChanged;
@@ -71,6 +74,7 @@ namespace VRAustellungManager
             videooTimeLineColorPicker.SelectedColorChanged += Color_SelectedColorChanged;
             audioTimeMarkerColorPicker.SelectedColorChanged += Color_SelectedColorChanged;
             videoTimeMarkerColorPicker.SelectedColorChanged += Color_SelectedColorChanged;
+            visitorMarkerColorPicker.SelectedColorChanged += Color_SelectedColorChanged;
         }
 
         private void exhibPropertyTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -79,6 +83,10 @@ namespace VRAustellungManager
             exhib.description = exhibDescriptionTextBox.Text;
             exhib.width = Int32.Parse(exhibWidthTextBox.Text);
             exhib.height = Int32.Parse(exhibHeightTextBox.Text);
+
+            Entrance entrance = exhib.pieces.SelectMany(p => p).OfType<Entrance>().First();
+            entrance.title = exhib.title;
+            entrance.description = exhib.description;
         }
 
         private void exhibDimensionhTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -106,6 +114,7 @@ namespace VRAustellungManager
             exhib.videoTimeLineColor = LibVRAusstellung.Color.Hex2Color(videooTimeLineColorPicker.SelectedColor.ToString().Replace("#FF", "#"));
             exhib.audioMarkerColor = LibVRAusstellung.Color.Hex2Color(audioTimeMarkerColorPicker.SelectedColor.ToString().Replace("#FF", "#"));
             exhib.videoMarkerColor = LibVRAusstellung.Color.Hex2Color(videoTimeMarkerColorPicker.SelectedColor.ToString().Replace("#FF", "#"));
+            exhib.visitorMarkerColor = LibVRAusstellung.Color.Hex2Color(visitorMarkerColorPicker.SelectedColor.ToString().Replace("#FF", "#"));
 
         }
     }

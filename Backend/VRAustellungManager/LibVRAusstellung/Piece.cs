@@ -3,6 +3,7 @@ using System.Xml.Serialization;
 
 namespace LibVRAusstellung
 {
+    [XmlInclude(typeof(Entrance))]
     [XmlInclude(typeof(Text))]
     [XmlInclude(typeof(Image))]
     [XmlInclude(typeof(Video))]
@@ -18,6 +19,12 @@ namespace LibVRAusstellung
 
     [DisplayName("Text")]
     public class Text : Piece
+    {
+        
+    }
+
+    [DisplayName("Entrance")]
+    public class Entrance : Text
     {
 
     }

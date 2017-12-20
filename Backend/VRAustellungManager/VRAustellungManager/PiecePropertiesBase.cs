@@ -22,7 +22,11 @@ namespace VRAustellungManager
             List<string> types = new List<string>();
             foreach (Type type in GetTypesOfPieces())
             {
-                types.Add(GetDisplayNameOfPiece(type));
+                string displayName = GetDisplayNameOfPiece(type);
+                if (displayName != "Entrance")
+                {
+                    types.Add(displayName);
+                }
             }
 
             comboBox.ItemsSource = types;
