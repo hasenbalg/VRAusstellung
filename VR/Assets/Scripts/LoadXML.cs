@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using System;
+using System.Text;
 
 public class LoadXML : MonoBehaviour {
     Exhibition exhib;
@@ -15,8 +16,32 @@ public class LoadXML : MonoBehaviour {
         currentpath = Path.GetFullPath(Path.Combine(Application.dataPath, @"..\"));
         extractDir = Path.Combine(currentpath, "VRExhibData");
         //DeleteRestFromLastTime();
-        if (!Directory.Exists(extractDir))
+        bool shouldUnzip = true;
+        if (Directory.Exists(extractDir))
         {
+            string[] filesInDir = Directory.GetFiles(extractDir);
+
+            foreach (string file in filesInDir)
+            {
+                if (Path.GetExtension(file) == ".xml")
+                {
+                    //If there is already an XML File in the target directory, we'll assume there's already an exhibition extracted there
+                    shouldUnzip = false;
+                }
+            }
+        }
+        else
+        {
+            Directory.CreateDirectory(extractDir);
+        }
+
+        if (shouldUnzip)
+        {
+            //http://community.sharpdevelop.net/forums/t/21795.aspx
+            // ZipConstants.DefaultCodePage = 0; //Sets CodePage to system default code page. 
+            ZipConstants.DefaultCodePage = Encoding.UTF8.CodePage; //Sets CodePage to UTF-8 encoding
+            // Without either of these, unzipping files does not work after building the project.
+
             Unzip();
         }
         exhib = Exhibition.Deserialize(FindXMLFile(extractDir));
@@ -106,7 +131,7 @@ public class LoadXML : MonoBehaviour {
 
     private void OnApplicationQuit()
     {
-        //DeleteRestFromLastTime();
+        DeleteRestFromLastTime();
     }
 
     private void DeleteRestFromLastTime()

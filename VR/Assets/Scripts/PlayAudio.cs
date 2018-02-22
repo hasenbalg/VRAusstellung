@@ -9,8 +9,7 @@ public class PlayAudio : MonoBehaviour {
     private bool clipIsLoaded = false;
 
     //public bool shouldPlay = true;
-
-
+    
 
     // Update is called once per frame
     void Update()

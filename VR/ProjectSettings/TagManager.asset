@@ -10,6 +10,7 @@ TagManager:
   - Tuerschild
   - Text
   - MapTile
+  - MapNametag
   layers:
   - Default
   - TransparentFX

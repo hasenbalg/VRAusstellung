@@ -22,7 +22,8 @@ GameObject:
   - component: {fileID: 114993295250688620}
   - component: {fileID: 33227646918202564}
   - component: {fileID: 23728557248307350}
-  m_Layer: 0
+  - component: {fileID: 114052060666161548}
+  m_Layer: 2
   m_Name: ThreeDPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,6 +84,17 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1252075796345752}
   m_Mesh: {fileID: 0}
+--- !u!114 &114052060666161548
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1252075796345752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42df0fd4de440104880c02120fd2f066, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114993295250688620
 MonoBehaviour:
   m_ObjectHideFlags: 1

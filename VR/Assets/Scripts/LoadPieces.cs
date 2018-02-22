@@ -67,9 +67,11 @@ public class LoadPieces : MonoBehaviour
         GameObject stand = Instantiate(imagePrefab, new Vector3(), Quaternion.identity);
         Debug.Log(stand.transform.Find("Canvas").GetType());
         Transform c = stand.transform.Find("Canvas");
-        c.localScale = new Vector3(tex.width, 1, tex.height).normalized * .1f;
+        c.localScale = new Vector3(tex.width, 1, tex.height).normalized  * 0.1f;
+        float scaleFactor = p.height / c.GetComponent<MeshRenderer>().bounds.size.y;
+        c.localScale *= scaleFactor;
         Vector3 liftUp = c.position;
-        liftUp.y = c.localScale.z * .5f + 1; //offset
+        liftUp.y = c.GetComponent<MeshRenderer>().bounds.size.y * .5f + 0.3f; //offset
         c.position = liftUp;
         c.GetComponent<Renderer>().material = mat;
         //stand.transform.localScale = new Vector3(p.height * .1f, p.height * .1f, p.height * .1f);
@@ -79,6 +81,12 @@ public class LoadPieces : MonoBehaviour
     private GameObject GeneratePiece(Audio p)
     {
         GameObject go = Instantiate(audioPrefab, new Vector3(), Quaternion.identity);
+
+        GameObject timeLine = go.transform.Find("Zeitleiste").gameObject;
+        GameObject timeLineMarker = timeLine.transform.Find("Zeiger").gameObject;
+        timeLine.GetComponent<MeshRenderer>().materials[0].color = GetAudioTimeLineColor();
+        timeLineMarker.GetComponent<MeshRenderer>().materials[0].color = GetAudioMarkerColor();
+
         StartCoroutine(LoadAudio(go.GetComponent<AudioSource>(), p.filePath));
         return go;
     }
@@ -88,6 +96,12 @@ public class LoadPieces : MonoBehaviour
     {
         GameObject go = Instantiate(videoPrefab, new Vector3(), Quaternion.identity);
         GameObject canvas = go.transform.Find("Canvas").gameObject;
+
+        GameObject timeLine = go.transform.Find("Zeitleiste").gameObject;
+        GameObject timeLineMarker = timeLine.transform.Find("Zeiger").gameObject;
+        timeLine.GetComponent<MeshRenderer>().materials[0].SetColor("_Color", GetVideoTimeLineColor());
+        timeLineMarker.GetComponent<MeshRenderer>().materials[0].SetColor("_Color", GetVideoMarkerColor());
+
         //canvas.transform.localScale = new Vector3(tex.width, 1, tex.height).normalized;
         Vector3 liftUp = canvas.transform.position;
         //liftUp.y = canvas.transform.localScale.z * .5f + groundOffset;
@@ -107,7 +121,8 @@ public class LoadPieces : MonoBehaviour
         Material mat = new Material(shaderDiffuse); //Using shader from assets instead
 
 
-        GameObject newPiece = Instantiate(ThreeDPrefab, new Vector3(), Quaternion.identity);
+        // GameObject newPiece = Instantiate(ThreeDPrefab, new Vector3(), Quaternion.identity);
+        GameObject newPiece = Instantiate(ThreeDPrefab, Vector3.zero, Quaternion.identity);
 
         Mesh holderMesh = new Mesh();
         ObjImporter newMesh = new ObjImporter();
@@ -120,6 +135,11 @@ public class LoadPieces : MonoBehaviour
 
         newPiece.AddComponent<BoxCollider>();
 
+        float desiredHeight = p.height;
+        float actualHeight = newPiece.GetComponent<Renderer>().bounds.size.y;
+        float factor = desiredHeight / actualHeight;
+        newPiece.transform.localScale *= factor;
+
         return newPiece;
     }
 
@@ -127,15 +147,18 @@ public class LoadPieces : MonoBehaviour
     {
         string materialPath = Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath)) + ".mtl";
         Debug.Log(materialPath);
-        string texPathMarker = "map_Kd";
+        const string texPathMarker = "map_Kd";
+        const string newMatMarker = "newmtl";
 
-        List<Material> materials = new List<Material>();
+        //Original List<Material> materials = new List<Material>(); 
+        LinkedList<Material> materials = new LinkedList<Material>();
         if (File.Exists(materialPath))
         {
             foreach (string line in File.ReadAllLines(materialPath))
             {
                 string[] tokens = line.Split(' ');
 
+                /* Original
                 if (tokens[0] == texPathMarker)
                 {
                     string texFileName = tokens[1];
@@ -146,6 +169,68 @@ public class LoadPieces : MonoBehaviour
                     Debug.Log(Path.Combine(Path.GetDirectoryName(materialPath), texFileName));
                     materials.Add(newMat);
                 }
+                */
+
+                switch (tokens[0])
+                {
+                    case newMatMarker:
+                        string matName = String.Join(" ", tokens);
+                        matName = matName.Substring(matName.IndexOf(" "));
+                        Material newMat = new Material(Shader.Find("Standard"));
+                        newMat.name = matName;
+                        materials.AddLast(newMat);
+                        break;
+
+                    case texPathMarker:
+                        string texFileName = tokens[1];
+                        Debug.Log("tex found: " + texFileName);
+                        materials.Last.Value.mainTexture = LoadPNG(Path.Combine(Path.GetDirectoryName(materialPath), texFileName));
+                        Debug.Log(Path.Combine(Path.GetDirectoryName(materialPath), texFileName));
+                        break;
+
+                    case "Kd":
+                        //Diffuse Color
+                        materials.Last.Value.SetColor("_Color", new UnityEngine.Color(float.Parse(tokens[1]), float.Parse(tokens[2]), float.Parse(tokens[3])));
+                        break;
+
+                    case "Ke":
+                        //Emission
+                        materials.Last.Value.SetColor("_EmissionColor", new UnityEngine.Color(float.Parse(tokens[1]), float.Parse(tokens[2]), float.Parse(tokens[3]), 0.5f));
+                        break;
+
+                    case "d":
+                        //Alpha
+                        UnityEngine.Color colWithAlpha = materials.Last.Value.GetColor("_Color");
+                        colWithAlpha.a = float.Parse(tokens[1]);
+                        materials.Last.Value.SetColor("_Color", colWithAlpha);
+                        break;
+
+                    #region unused_cases
+                    //These cases are unused as at the time of writing this, I don't know if you can manipulate the material's according properties at runtime from a script.
+                    case "Ns":
+                        //Specular Exponent
+                        break;
+
+                    case "Ka":
+                        //Ambient Color
+                        break;
+
+                    case "Ks":
+                        //Specular Color
+                        break;
+
+                    case "Ni":
+                        //For refraction
+                        break;
+
+                    case "illum":
+                        //https://www.opengl.org/discussion_boards/showthread.php/170682-mtl-file-to-opengl
+                        //Illumination Modes : 0 Ambient, 1 Ambient+Diffuse, 3 Ambient+Diffuse+Specular
+                        break;
+                    #endregion unused_cases
+                }
+
+                // materials.Add(newMat);
             }
         }
         return materials.ToArray();

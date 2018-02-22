@@ -8,3 +8,8 @@ C:\Users\fr\Desktop\VR\Backend\VRAustellungManager\LibVRAusstellung\bin\Debug\Li
 C:\Users\fr\Desktop\VR\Backend\VRAustellungManager\LibVRAusstellung\obj\Debug\LibVRAusstellung.csprojResolveAssemblyReference.cache
 C:\Users\fr\Desktop\VR\Backend\VRAustellungManager\LibVRAusstellung\obj\Debug\LibVRAusstellung.dll
 C:\Users\fr\Desktop\VR\Backend\VRAustellungManager\LibVRAusstellung\obj\Debug\LibVRAusstellung.pdb
+C:\Users\Benno\Desktop\VRAusstellung\Backend\VRAustellungManager\LibVRAusstellung\bin\Debug\LibVRAusstellung.dll
+C:\Users\Benno\Desktop\VRAusstellung\Backend\VRAustellungManager\LibVRAusstellung\bin\Debug\LibVRAusstellung.pdb
+C:\Users\Benno\Desktop\VRAusstellung\Backend\VRAustellungManager\LibVRAusstellung\obj\Debug\LibVRAusstellung.csprojResolveAssemblyReference.cache
+C:\Users\Benno\Desktop\VRAusstellung\Backend\VRAustellungManager\LibVRAusstellung\obj\Debug\LibVRAusstellung.dll
+C:\Users\Benno\Desktop\VRAusstellung\Backend\VRAustellungManager\LibVRAusstellung\obj\Debug\LibVRAusstellung.pdb

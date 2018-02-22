@@ -130,13 +130,13 @@ namespace LibVRAusstellung
                 }
                 pieces.Add(newRow);
             }
+
             return pieces;
         }
 
         public static List<List<Piece>> GetNewList(int width, int height, List<List<Piece>> oldPieces)
         {
             List<List<Piece>> emptyPieces = GetNewList(width, height);
-
             for (int i = 0; i < oldPieces.Count; i++)
             {
                 for (int j = 0; j < oldPieces[i].Count; j++)
@@ -144,7 +144,17 @@ namespace LibVRAusstellung
                     if (i < emptyPieces.Count && j < emptyPieces[i].Count)
                     {
                         emptyPieces[i][j] = oldPieces[i][j];
-                    }  
+                    }
+                }
+            }
+
+            int k = 0;
+            foreach(List<Piece> row in emptyPieces)
+            {
+                foreach(Piece p in row)
+                {
+                    p.id = k;
+                    k++;
                 }
             }
 

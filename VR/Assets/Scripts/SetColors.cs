@@ -38,10 +38,13 @@ public class SetColors : MonoBehaviour {
             Camera.main.backgroundColor = lp.GetSkyColor();
             //text.color = lp.GetTextColor();
             audioTimeLine.color = lp.GetAudioTimeLineColor();
+            audioTimeLine.SetColor("_EmissionColor", lp.GetAudioTimeLineColor());
             videoTimeLine.color = lp.GetVideoTimeLineColor();
-            videoMarker.color = lp.GetVideoTimeLineColor();
+            videoTimeLine.SetColor("_EmissionColor", lp.GetVideoTimeLineColor());
             audioMarker.color = lp.GetAudioMarkerColor();
-            videoMarker.color = lp.GetVideoMarkerColor();
+            audioMarker.SetColor("_EmissionColor", lp.GetAudioMarkerColor());
+            videoMarker.color = lp.GetVideoTimeLineColor();
+            videoMarker.SetColor("_EmissionColor", lp.GetVideoMarkerColor());
             visitorMarker.color = lp.GetVisitorMarkerColor();
             colorsSet = true;
         }

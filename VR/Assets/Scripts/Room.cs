@@ -57,6 +57,11 @@ public class Room : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        #region DEBUG_KeyboardControls
+        if (Input.GetKeyDown(KeyCode.UpArrow)) { SetNewRoom(this.x, this.y++); }
+        if (Input.GetKeyDown(KeyCode.DownArrow)) { SetNewRoom(this.x, this.y--); }
+        #endregion DEBUG_KeyboardControls
+
         if (GetComponent<LoadPieces>().ExhibitionIsLoaded() && roomNotSetYet)
         {
             maxX = GetComponent<LoadPieces>().GetMaxX();

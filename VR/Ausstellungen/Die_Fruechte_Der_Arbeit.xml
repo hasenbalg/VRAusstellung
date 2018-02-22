@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<Exhibition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <floorColor>
+    <R>220</R>
+    <G>220</G>
+    <B>220</B>
+  </floorColor>
+  <doorColor>
+    <R>160</R>
+    <G>82</G>
+    <B>45</B>
+  </doorColor>
+  <skyColor>
+    <R>30</R>
+    <G>144</G>
+    <B>255</B>
+  </skyColor>
+  <textColor>
+    <R>255</R>
+    <G>255</G>
+    <B>255</B>
+  </textColor>
+  <guideColor>
+    <R>255</R>
+    <G>255</G>
+    <B>255</B>
+  </guideColor>
+  <audioTimeLineColor>
+    <R>230</R>
+    <G>230</G>
+    <B>250</B>
+  </audioTimeLineColor>
+  <videoTimeLineColor>
+    <R>230</R>
+    <G>230</G>
+    <B>250</B>
+  </videoTimeLineColor>
+  <audioMarkerColor>
+    <R>0</R>
+    <G>0</G>
+    <B>0</B>
+  </audioMarkerColor>
+  <videoMarkerColor>
+    <R>0</R>
+    <G>0</G>
+    <B>0</B>
+  </videoMarkerColor>
+  <title>Die Fruechte der Arbeit</title>
+  <description>Ausstellung einiger Arbeitsresultate unserer Gruppe.</description>
+  <width>3</width>
+  <height>2</height>
+  <pieces>
+    <ArrayOfPiece>
+      <Piece xsi:type="Text">
+        <id>0</id>
+        <title>Tutorial</title>
+        <description>Herzlich Willkommen zur Ausstellung "Fruechte der Arbeit".
+
+Steuerung
+
+Um die Beschreibung eines Ausstellungsobjektes zu sehen, berühren Sie das Trackpad des rechten Controllers. Durch Druck oben oder unten auf selbiges können Sie durch den Beschreibungstext scrollen.
+
+Text-Exponate sind auf gleichem Wege scrollbar.
+
+Um die Karte der Ausstellung anzuzeigen, halten Sie eine der Grip-Tasten des rechten Controllers gedrückt.
+
+Um durch eine Tür zu gehen, zielen Sie mit ihrem rechten Controller auf sie und betätigen den rechten Trigger.
+
+Audio- und Video-Exponate lassen sich mithilfe der unter ihnen abgebildeten Zeitleiste durchspulen - Hierfür einfach die Zeitleiste an der gewünschten Position mit dem rechten Controller berühren.
+
+Vielen Dank und viel Vergnügen mit der Ausstellung.</description>
+      </Piece>
+      <Piece xsi:type="Image">
+        <id>1</id>
+        <title>[Bild] The Button</title>
+        <description>"The Button" soll dem Betrachter die Bedrohung durch Nordkorea ins Gedächtnis rufen und ihm klarmachen, dass eine Eskalation des Konfliktes fatal wäre.
+
+Ich wollte nicht einfach einen roten Kreis auf heller Fläche abbilden, da könnten einige zum Beispiel an die japanische Flagge denken; die Assoziation zum Knopf ist mit etwas Perspektive viel eher gegeben, deswegen habe ich einen roten Kreis etwas gestaucht und unter ihn eine dunklere Fläche von gleicher Form gelegt; die dem Licht abgewandte Seite des Knopfes aus Perspektive des Betrachters. Weiterhin sollte der Knopf einen kleinen Schatten bekommen; so sollte er noch mehr Präsenz bekommen; vor allem räumliche Präsenz.
+Auch der Grundfläche wollte ich Perspektive verleihen, so habe ich am unteren Rand des Plakates eine dunkelgraue Fläche an sie gehängt um sie abgewinkelt darzustellen.
+Auf dieser abgewinkelten Fläche habe ich die Nachricht platziert; ich wollte möglichst wenig im Bild, was von dem roten Knopf ablenkt, deshalb ist er auch das einzig farbige auf dem Plakat.
+Wie im ersten Plakat verläuft alles bildlich von oben nach unten; einerseits verleitet so der Knopf dazu, auch den unteren Teil des Plakates und somit die geschriebene Nachricht wahrzunehmen, andererseits soll man so auch leicht das Gefühl kriegen, dass alles auf einen zukommt. 
+Hierdurch soll eine größere emotionale Reaktion (Angst) provoziert und die Wirkung des Plakates gesteigert werden.
+
+Benjamin Pfaff</description>
+        <filePath>C:\Users\Benno\Desktop\VRAusstellung\VR\VRExhibData\The Button Final.png</filePath>
+        <height>4</height>
+      </Piece>
+      <Piece xsi:type="Audio">
+        <id>2</id>
+        <title>[Audio] Platzhalter - Thunderstruck</title>
+        <description>Description sollte hier sein!</description>
+        <filePath>D:\Meine Dateien\Meine Musik\AC-DC - Thunderstruck.mp3</filePath>
+      </Piece>
+    </ArrayOfPiece>
+    <ArrayOfPiece>
+      <Piece xsi:type="Video">
+        <id>3</id>
+        <title>[Video] Volleyball</title>
+        <description>Das Ziel war es, ein kommentiertes Volleyball-Spiel zu animieren.
+Die Animation wurde in Blender erstellt; Petersen erstellte die pinke Figur, Smith die grüne und Pfaff den Kommentator.
+
+Sandra Petersen, Benjamin Pfaff, Sheridan Smith</description>
+        <filePath>C:\Users\Benno\Desktop\VRAusstellung\VR\VRExhibData\Sequenz 01.mp4</filePath>
+      </Piece>
+      <Piece xsi:type="ThreeDModel">
+        <id>4</id>
+        <title>[3D] Donut of Doom</title>
+        <description>Dieser Donut entstand im Verlaufe einer 3D-Rendering Aufgabe.
+Sein deliziöses Aussehen sollte jedoch nicht für bare Münze genommen werden - Es ist der berüchtigte Donut of Doom. 
+In den 1940er Jahren entwickelt von einer Allianz der mächtigsten Bösewichte der Welt, um die schwachen Süßwarenliebhaber zu verführen und sie zu unterwerfen.</description>
+        <filePath>C:\Users\Benno\Desktop\VRAusstellung\VR\VRExhibData\DoomDonut.obj</filePath>
+        <height>4</height>
+      </Piece>
+      <Piece xsi:type="Video">
+        <id>5</id>
+        <title>[Video] Le dilemme d'officier Charleaut</title>
+        <description>Le dilemme d'officier Charleut ist ein Meisterwerk der Animation erstellt von Sandra Petersen in Kollaboration mit Benjamin Pfaff, aus einem gewissen Bild, in diesem Fall einem bestimmten Panel eines Comics, sollte eine Animation erstellt werden.
+Officier Charleut ist eine temperamentvoller Verkehrspolizist der sich nicht immer selbst kontrollieren kann und kämpft mit seinen Problemen nicht nur für sich, sondern aufgrund seines Berufes auch in der Öffentlichkeit. Begleiten Sie Officier Charleut auf seinem Weg durch die Pariser Innenstadt und bangen Sie um die Sicherheit aller, wenn seine Wut zum Kochen gebracht wird.
+
+Sandra Petersen, Benjamin Pfaff</description>
+        <filePath>C:\Users\Benno\Desktop\VRAusstellung\VR\VRExhibData\Petersen_Pfaff-Ueberarbeitet.mp4</filePath>
+      </Piece>
+    </ArrayOfPiece>
+  </pieces>
+</Exhibition>

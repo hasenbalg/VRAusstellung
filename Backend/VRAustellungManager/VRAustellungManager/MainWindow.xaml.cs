@@ -82,9 +82,21 @@ namespace VRAustellungManager
                 MessageBoxImage icon = MessageBoxImage.Warning;
                 List<Piece> pieces2Delete = GetPieces2DeleteAfterGridResize(width, height);
 
+                bool changeDeletesEntrance = false;
                 foreach (Piece p in pieces2Delete)
                 {
                     messageBoxText += "\n" + p.id + ": " + p.title;
+
+                    if(p is Entrance)
+                    {
+                        changeDeletesEntrance = true;
+                    }
+                }
+
+                if (changeDeletesEntrance)
+                {
+                    messageBoxText = "Aenderung wuerde Eingangsraum entfernen!\nBitte erst den Eingangsraum verschieben!";
+                    button = MessageBoxButton.OK;
                 }
                 MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
 
@@ -283,7 +295,10 @@ namespace VRAustellungManager
                             ZipAudio(zip, p);
                         }
                         else {
-                            zip.AddFile(p.filePath, string.Empty);
+                            try
+                            {
+                                zip.AddFile(p.filePath, string.Empty);
+                            } catch (ArgumentException ae) { }
                             Console.WriteLine("Added " + p.filePath + " to Zip");
                             p.filePath = newPath;
                         }
@@ -318,10 +333,33 @@ namespace VRAustellungManager
         {
             string filePath = p.filePath;
             string tmpAiffPath = Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(filePath)+ ".aiff");
+
             var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
-            ffMpeg.ConvertMedia(filePath, tmpAiffPath, Format.aiff);
+            bool removeExe = true;
+            try {
+                ffMpeg.ConvertMedia(filePath, tmpAiffPath, Format.aiff);
+            } catch (ArgumentException argex) {
+                //ArgumentException is thrown if ffmpeg.exe already exists in directory where FFMpegConverter tries to copy its own to.
+                removeExe = false; //If there was already an ffmpeg.exe present, it should be kept after the export
+
+                //Rename existing ffmpeg.exe
+                string exeName = ffMpeg.FFMpegExeName;
+                string toolPath = ffMpeg.FFMpegToolPath;
+                string exePath = Path.Combine(toolPath, exeName);
+                string tempPathOriginal = Path.Combine(toolPath, Path.GetRandomFileName() + ".exe");
+                File.Move(exePath, tempPathOriginal);
+
+                //Copies its own ffmpeg.exe to tool directory
+                ffMpeg.ConvertMedia(filePath, tmpAiffPath, Format.aiff);
+
+                //Delete converter's exe and restore old exe to ffmpeg.exe
+                File.Delete(exePath);
+                File.Move(tempPathOriginal, Path.Combine(toolPath, exeName));
+            }
+            
             zip.AddFile(tmpAiffPath, string.Empty);
             tmpFiles2Delete.Add(tmpAiffPath);
+            if (removeExe) { tmpFiles2Delete.Add(Path.Combine(ffMpeg.FFMpegToolPath, ffMpeg.FFMpegExeName)); }
             p.filePath = Path.GetFileName(tmpAiffPath);
         }
 

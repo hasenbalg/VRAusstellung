@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4709687789741168}
   - component: {fileID: 114849887548941802}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ImagePrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 33215314209710106}
   - component: {fileID: 64379326097534258}
   - component: {fileID: 23273660078019562}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4633675043245952}
   - component: {fileID: 23680841273901370}
   - component: {fileID: 102547810576853444}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Text
   m_TagString: TextPiece
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4860615889274624}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: TextPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -36,7 +36,7 @@
                     <MenuItem Header="_Neu" Command="ApplicationCommands.New" InputGestureText="Ctrl+N"/>
                     <MenuItem Header="_Oeffnen" Command="ApplicationCommands.Open" InputGestureText="Ctrl+O"/>
                     <MenuItem Header="_Speichern" Command="ApplicationCommands.Save" InputGestureText="Ctrl+S"/>
-                    <MenuItem Header="_Speichern unter" Command="ApplicationCommands.Save" InputGestureText="Ctrl+Shift+S"/>
+                    <MenuItem Header="_Speichern unter" Command="ApplicationCommands.SaveAs" InputGestureText="Ctrl+Shift+S"/>
                     <MenuItem Header="_Importieren"  Command="local:CustomCommands.Import" InputGestureText="Ctrl+I"/>
                     <MenuItem Header="_Exportieren"  Command="local:CustomCommands.Export" InputGestureText="Ctrl+E"/>
                     <MenuItem Header="_Beenden" Command="local:CustomCommands.Exit" InputGestureText="Alt+F4"/>
@@ -65,17 +65,19 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <local:PiecesGrid x:Name="piecesGridControl" Grid.Column="0"/>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                    <ScrollViewer MaxHeight="520px" MaxWidth="820px" ScrollViewer.HorizontalScrollBarVisibility="Visible">
+                        <local:PiecesGrid x:Name="piecesGridControl" Grid.Column="0"/>
+                    </ScrollViewer>
                     <StackPanel x:Name="piecePropertiesControlHolderPanel" Grid.Column="1"/>
 
 
-                </Grid>
-                
-                
+                    </Grid>
+
+
             </TabItem>
         </TabControl>
         
